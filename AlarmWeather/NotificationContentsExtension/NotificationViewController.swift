@@ -123,7 +123,7 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
         let sortedWeatherPop = todayDetailWeather.sorted { $0.pop < $1.pop }
 
         if sortedWeatherPop.filter({ $0.pty != "0" }).count == 0 {
-            todayPopRangeMent?.text = "오늘은 비가 오지 않는대요 😊"
+            todayPopRangeMent?.text = ""
         } else if sortedWeatherPop.filter({ $0.pty == "4" }).count != 0 {
             todayPopRangeMent?.text = "소나기가 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
         } else if sortedWeatherPop.filter({ $0.pop != "0%" }).count != 0 {
