@@ -131,7 +131,7 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
         } else if sortedWeatherPop.filter({ $0.pty == "2" || $0.pty == "2" }).count != 0 {
             todayPopRangeMent?.text = "하얀 눈이 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
         } else {
-            todayPopRangeMent?.text = "오늘은 비가 오지 않는대요 😊"
+            todayPopRangeMent?.text = ""
         }
     }
     
