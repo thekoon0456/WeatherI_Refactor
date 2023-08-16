@@ -30,8 +30,8 @@ final class WetherAndDustStackView: UIStackView {
         
         weatherIcon.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.width.equalTo(140)
-            make.height.equalTo(140)
+            make.width.equalTo(120)
+            make.height.equalTo(120)
         }
         
         todayWeatherLabel.snp.makeConstraints { make in
@@ -72,8 +72,8 @@ final class WetherAndDustStackView: UIStackView {
         $0.addSubview(dustLabel)
         dustIcon.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.width.equalTo(140)
-            make.height.equalTo(140)
+            make.width.equalTo(120)
+            make.height.equalTo(120)
         }
         
         dustDetailLabel.snp.makeConstraints { make in
@@ -144,7 +144,7 @@ final class WetherAndDustStackView: UIStackView {
     
     private func configureUI() {
         axis = .horizontal
-        spacing = 10
+        spacing = 20
         distribution = .fillEqually
         alignment = .center
         

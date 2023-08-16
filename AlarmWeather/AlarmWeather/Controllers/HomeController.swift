@@ -51,14 +51,15 @@ final class HomeController: UIViewController {
     private var userLabel = UILabel().then {
         $0.text = "안녕하세요 유저님!"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 23, weight: .medium)
+        $0.font = UIFont.systemFont(ofSize: 21, weight: .medium)
+        $0.textAlignment = .left
     }
     
     private var stateLabel = UILabel().then {
         $0.text = "오늘은 맑은 날"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
-        $0.textAlignment = .center
+        $0.font = UIFont.systemFont(ofSize: 21, weight: .medium)
+        $0.textAlignment = .left
         $0.adjustsFontSizeToFitWidth = true
         $0.minimumScaleFactor = 0.6
     }
@@ -67,13 +68,14 @@ final class HomeController: UIViewController {
         $0.text = "미세먼지 보통입니다."
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        $0.textAlignment = .left
     }
     
     private var rainStateLabel = UILabel().then {
         $0.text = "오늘 강수 확률은 0% ~ 20% 입니다."
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 17, weight: .medium)
-        $0.textAlignment = .center
+        $0.textAlignment = .left
         $0.adjustsFontSizeToFitWidth = true
         $0.minimumScaleFactor = 0.6
     }
@@ -312,26 +314,32 @@ final class HomeController: UIViewController {
         userLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
             make.top.equalTo(contentView.snp.top)
+            make.left.equalTo(contentView.snp.left).offset(20)
+            make.right.equalTo(contentView.snp.right).offset(-20)
         }
         
         contentView.addSubview(stateLabel)
         stateLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
-            make.width.equalTo(contentView.snp.width).offset(-10)
             make.top.equalTo(userLabel.snp.bottom).offset(8)
+            make.left.equalTo(contentView.snp.left).offset(20)
+            make.right.equalTo(contentView.snp.right).offset(-20)
         }
         
         contentView.addSubview(dustStateLabel)
         dustStateLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
-            make.top.equalTo(stateLabel.snp.bottom).offset(8)
+            make.top.equalTo(stateLabel.snp.bottom).offset(10)
+            make.left.equalTo(contentView.snp.left).offset(20)
+            make.right.equalTo(contentView.snp.right).offset(-20)
         }
         
         contentView.addSubview(rainStateLabel)
         rainStateLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
-            make.width.equalTo(contentView.snp.width).offset(-10)
             make.top.equalTo(dustStateLabel.snp.bottom).offset(8)
+            make.left.equalTo(contentView.snp.left).offset(20)
+            make.right.equalTo(contentView.snp.right).offset(-20)
         }
         
         contentView.addSubview(regionLabel)
@@ -344,14 +352,14 @@ final class HomeController: UIViewController {
         weatherAndDustStackView.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
             make.top.equalTo(regionLabel.snp.bottom).offset(10)
-            make.left.equalTo(contentView.snp.left).offset(10)
-            make.right.equalTo(contentView.snp.right).offset(-10)
+            make.left.equalTo(contentView.snp.left).offset(20)
+            make.right.equalTo(contentView.snp.right).offset(-20)
             make.height.equalTo(200)
         }
         
         contentView.addSubview(todayWeatherLabel)
         todayWeatherLabel.snp.makeConstraints { make in
-            make.top.equalTo(weatherAndDustStackView.snp.bottom).offset(50)
+            make.top.equalTo(weatherAndDustStackView.snp.bottom).offset(30)
             make.left.equalTo(contentView.snp.left).offset(20)
         }
         
