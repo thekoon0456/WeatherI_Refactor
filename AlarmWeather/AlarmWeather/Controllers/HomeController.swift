@@ -336,7 +336,7 @@ final class HomeController: UIViewController {
         contentView.addSubview(dustStateLabel)
         dustStateLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
-            make.top.equalTo(stateLabel.snp.bottom).offset(10)
+            make.top.equalTo(stateLabel.snp.bottom).offset(8)
             make.left.equalTo(contentView.snp.left).offset(15)
             make.right.equalTo(contentView.snp.right).offset(-15)
         }
@@ -408,7 +408,7 @@ final class HomeController: UIViewController {
         
         contentView.addSubview(orginLabel)
         orginLabel.snp.makeConstraints { make in
-            make.top.equalTo(weeklyWeatherTableView.snp.bottom).offset(15)
+            make.top.equalTo(weeklyWeatherTableView.snp.bottom).offset(20)
             make.left.equalTo(contentView.snp.left).offset(25)
             make.bottom.equalTo(contentView.snp.bottom)
         }

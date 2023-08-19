@@ -25,16 +25,9 @@ final class WeatherRepository {
         setNxNy(nx: LocationService.shared.latitude ?? 0, ny: LocationService.shared.longitude ?? 0)
         
         guard let url = URL(string: weatherUrl) else { return }
-//
-//        // URLSessionConfiguration 객체를 생성하고 타임아웃 값을 5초로 설정
-//        let configuration = URLSessionConfiguration.default
-//        configuration.timeoutIntervalForRequest = DoubleConstant.networkRequest.rawValue
-//
-//        // URLSession 객체를 생성할 때 위에서 생성한 configuration을 사용
-//        let session = URLSession(configuration: configuration)
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            
+
+        let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
+        session.dataTask(with: url) { data, response, error in
             if error != nil {
                 print("네트워크 에러 \(String(describing: error?.localizedDescription))")
                 completion(.failure(.networkingError))

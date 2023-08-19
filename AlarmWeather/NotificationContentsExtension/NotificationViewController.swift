@@ -114,25 +114,8 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
         todayWeatherMent?.text = viewModel.todayWeatherMainMent
         todayDustMent?.text = dustViewModel.todayDustMainMent
         todayTempRangeMent?.text = "오늘의 온도는 \(sortedWeatherTmp.first!.tmp) ~ \(sortedWeatherTmp.last!.tmp) 입니다"
+        todayPopRangeMent.text = viewModel.todayRainyWeatherMent
         todayItemMent?.text = viewModel.todayRecommendItems.isEmpty ? "" : "오늘의 추천 아이템:\(viewModel.todayRecommendItems.joined()) \(dustViewModel.todayDustIconName == "나쁨" ? " 😷" : "")"
-        
-        getRainyMent(model: todayDetailWeather)
-    }
-    
-    func getRainyMent(model: [TodayDetailWeatherModel]) {
-        let sortedWeatherPop = todayDetailWeather.sorted { $0.pop < $1.pop }
-
-        if sortedWeatherPop.filter({ $0.pty != "0" }).count == 0 {
-            todayPopRangeMent?.text = ""
-        } else if sortedWeatherPop.filter({ $0.pty == "4" }).count != 0 {
-            todayPopRangeMent?.text = "소나기가 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
-        } else if sortedWeatherPop.filter({ $0.pop != "0%" }).count != 0 {
-            todayPopRangeMent?.text = "오늘 비 올 확률은 \(sortedWeatherPop[0].pop) ~ \(sortedWeatherPop[sortedWeatherPop.count - 1 ].pop) 입니다 🌧️"
-        } else if sortedWeatherPop.filter({ $0.pty == "2" || $0.pty == "2" }).count != 0 {
-            todayPopRangeMent?.text = "하얀 눈이 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
-        } else {
-            todayPopRangeMent?.text = ""
-        }
     }
     
     func defaultImage() -> UIImage? {

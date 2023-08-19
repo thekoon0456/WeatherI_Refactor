@@ -63,7 +63,7 @@ final class WetherAndDustStackView: UIStackView {
     private var weatherLabel = UILabel().then {
         $0.text = "0" + " " + "℃"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 17)
+        $0.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
     }
     
     private lazy var dustView = UIStackView().then {
@@ -107,13 +107,13 @@ final class WetherAndDustStackView: UIStackView {
     private let dustLabel = UILabel().then {
         $0.text = "미세먼지"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 17)
+        $0.font = UIFont.systemFont(ofSize: 16)
     }
     
     private lazy var dustStateLabel = UILabel().then {
         $0.text = " 보통"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 17)
+        $0.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
     }
     
     private lazy var dustLabelView = UIStackView().then {

@@ -129,9 +129,7 @@ extension HomeViewModel {
     func getRainyMent(model: [TodayDetailWeatherModel]) {
         let sortedWeatherPop = model.sorted { $0.pop < $1.pop }
 
-        if sortedWeatherPop.filter({ $0.pty != "0" }).count == 0 {
-            todayRainyWeatherMent = ""
-        } else if sortedWeatherPop.filter({ $0.pty == "4" }).count != 0 {
+        if sortedWeatherPop.filter({ $0.pty == "4" }).count != 0 {
             todayRainyWeatherMent = "소나기가 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
         } else if sortedWeatherPop.filter({ $0.pop != "0%" }).count != 0 {
             todayRainyWeatherMent = "오늘 비 올 확률은 \(sortedWeatherPop[0].pop) ~ \(sortedWeatherPop[sortedWeatherPop.count - 1 ].pop) 입니다 🌧️"
