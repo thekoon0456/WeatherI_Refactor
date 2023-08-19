@@ -69,7 +69,8 @@ final class WetherAndDustStackView: UIStackView {
     private lazy var dustView = UIStackView().then {
         $0.addSubview(dustIcon)
         $0.addSubview(dustDetailLabel)
-        $0.addSubview(dustLabel)
+        $0.addSubview(dustLabelView)
+        
         dustIcon.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalTo(120)
@@ -81,15 +82,9 @@ final class WetherAndDustStackView: UIStackView {
             make.top.equalTo(dustIcon.snp.bottom).offset(10)
         }
         
-        dustLabel.snp.makeConstraints { make in
+        dustLabelView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(dustDetailLabel.snp.bottom).offset(15)
-        }
-        
-        dustDetailLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(dustDetailLabel.snp.bottom).offset(15)
-            make.left.equalTo(dustLabel.snp.right).offset(10)
         }
         
     }
@@ -121,6 +116,12 @@ final class WetherAndDustStackView: UIStackView {
         $0.font = UIFont.systemFont(ofSize: 17)
     }
     
+    private lazy var dustLabelView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 5
+        $0.addArrangedSubview(dustLabel)
+        $0.addArrangedSubview(dustStateLabel)
+    }
     
     //MARK: - Lifecycle
     
