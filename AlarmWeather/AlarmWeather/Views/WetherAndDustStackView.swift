@@ -85,6 +85,13 @@ final class WetherAndDustStackView: UIStackView {
             make.centerX.equalToSuperview()
             make.top.equalTo(dustDetailLabel.snp.bottom).offset(15)
         }
+        
+        dustDetailLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(dustDetailLabel.snp.bottom).offset(15)
+            make.left.equalTo(dustLabel.snp.right).offset(10)
+        }
+        
     }
     
     private lazy var dustIcon = UIImageView().then {
@@ -102,15 +109,15 @@ final class WetherAndDustStackView: UIStackView {
         $0.textColor = .white
     }
     
-    private lazy var dustLabel = UILabel().then {
+    private let dustLabel = UILabel().then {
         $0.text = "미세먼지"
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 17)
     }
     
     private lazy var dustStateLabel = UILabel().then {
-        $0.text = "좋음"
-        $0.textColor = dustViewModel?.todayDustMentColor
+        $0.text = " 보통"
+        $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 17)
     }
     
@@ -147,7 +154,7 @@ final class WetherAndDustStackView: UIStackView {
         dustDetailLabel.text = "PM10: " + (dustViewModel?.todayDust?.pm10Data ?? "")
         dustStateLabel.text = dustViewModel?.todayDust?.dustState ?? ""
         dustStateLabel.textColor = dustViewModel?.todayDustMentColor
-        dustLabel.text = "미세먼지 " + (dustStateLabel.text ?? "")
+//        dustLabel.text = "미세먼지 " + (dustStateLabel.text ?? "")
     }
     
     private func configureUI() {

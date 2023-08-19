@@ -46,7 +46,7 @@ final class DustViewModel {
         case "좋음":
             return UIColor.systemGreen
         case "보통":
-            return UIColor.white
+            return UIColor.systemRed
         case "나쁨", "매우 나쁨":
             return UIColor.systemRed
         default:

@@ -48,7 +48,7 @@ final class RootViewController: UIViewController {
     
     private let loadingMent = UILabel().then {
         $0.text = Ments.loadingMent.rawValue
-        $0.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
     
     

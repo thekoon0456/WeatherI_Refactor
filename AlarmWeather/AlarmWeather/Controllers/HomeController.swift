@@ -34,14 +34,14 @@ final class HomeController: UIViewController {
     private var todayDateLabel = UILabel().then {
         $0.text = "날짜"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        $0.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         $0.snp.makeConstraints { make in
             make.width.equalTo(200)
         }
     }
     
     private lazy var settingButton = UIButton().then {
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold)
         let image = UIImage(systemName: "gear", withConfiguration: imageConfig)
         $0.setImage(image, for: .normal)
         $0.tintColor = .white
@@ -51,14 +51,14 @@ final class HomeController: UIViewController {
     private var userLabel = UILabel().then {
         $0.text = "안녕하세요 유저님!"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 21, weight: .medium)
+        $0.font = UIFont.systemFont(ofSize: 22, weight: .medium)
         $0.textAlignment = .left
     }
     
     private var stateLabel = UILabel().then {
         $0.text = "오늘은 맑은 날"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 21, weight: .medium)
+        $0.font = UIFont.systemFont(ofSize: 22, weight: .medium)
         $0.textAlignment = .left
         $0.adjustsFontSizeToFitWidth = true
         $0.minimumScaleFactor = 0.6
@@ -83,7 +83,7 @@ final class HomeController: UIViewController {
     private var regionLabel = UILabel().then {
         $0.text = "서울특별시 충무로3가"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 17)
+        $0.font = UIFont.systemFont(ofSize: 15)
     }
     
     private lazy var weatherAndDustStackView = WetherAndDustStackView().then {
@@ -96,27 +96,7 @@ final class HomeController: UIViewController {
         $0.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
     }
     
-    private lazy var todayDetailCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 10
-        
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear
-        cv.showsHorizontalScrollIndicator = false
-        cv.delegate = self
-        cv.dataSource = self
-        cv.register(TodayWeatherCell.self, forCellWithReuseIdentifier: CellId.todayWeatherCellId.rawValue)
-        return cv
-    }()
-    
-    private let todayDetailWeatherLabel = UILabel().then {
-        $0.text = "시간별 날씨"
-        $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-    }
-    
-    private lazy var todayDeteilWeatherCollectionView: UICollectionView = {
+    private lazy var todayDetailWeatherCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -127,6 +107,26 @@ final class HomeController: UIViewController {
         cv.delegate = self
         cv.dataSource = self
         cv.register(TodayDetailWeatherCell.self, forCellWithReuseIdentifier: CellId.todayDetailWeatherCellId.rawValue)
+        return cv
+    }()
+    
+    private let todayTimeWeatherLabel = UILabel().then {
+        $0.text = "시간별 날씨"
+        $0.textColor = .white
+        $0.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+    }
+    
+    private lazy var todayTimeCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .clear
+        cv.showsHorizontalScrollIndicator = false
+        cv.delegate = self
+        cv.dataSource = self
+        cv.register(TodayTimeWeatherCell.self, forCellWithReuseIdentifier: CellId.todayTimeWeatherCellId.rawValue)
         return cv
     }()
     
@@ -143,6 +143,13 @@ final class HomeController: UIViewController {
         $0.delegate = self
         $0.dataSource = self
         $0.register(WeeklyWeatherCell.self, forCellReuseIdentifier: CellId.weeklyWeatherCellId.rawValue)
+    }
+    
+    private let orginLabel = UILabel().then {
+        $0.text = "데이터 출처: 기상청, 한국환경공단"
+        $0.textColor = .white
+        $0.font = UIFont.systemFont(ofSize: 10, weight: .light)
+        $0.textAlignment = .left
     }
     
     private lazy var backgoundImageView = UIImageView().then {
@@ -170,7 +177,7 @@ final class HomeController: UIViewController {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                todayDetailCollectionView.reloadData()
+                todayTimeCollectionView.reloadData()
                 print("DEBUG: todayDetailData Loading 성공")
             }
         }
@@ -314,32 +321,32 @@ final class HomeController: UIViewController {
         userLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
             make.top.equalTo(contentView.snp.top)
-            make.left.equalTo(contentView.snp.left).offset(20)
-            make.right.equalTo(contentView.snp.right).offset(-20)
+            make.left.equalTo(contentView.snp.left).offset(15)
+            make.right.equalTo(contentView.snp.right).offset(-15)
         }
         
         contentView.addSubview(stateLabel)
         stateLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
             make.top.equalTo(userLabel.snp.bottom).offset(8)
-            make.left.equalTo(contentView.snp.left).offset(20)
-            make.right.equalTo(contentView.snp.right).offset(-20)
+            make.left.equalTo(contentView.snp.left).offset(15)
+            make.right.equalTo(contentView.snp.right).offset(-15)
         }
         
         contentView.addSubview(dustStateLabel)
         dustStateLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
             make.top.equalTo(stateLabel.snp.bottom).offset(10)
-            make.left.equalTo(contentView.snp.left).offset(20)
-            make.right.equalTo(contentView.snp.right).offset(-20)
+            make.left.equalTo(contentView.snp.left).offset(15)
+            make.right.equalTo(contentView.snp.right).offset(-15)
         }
         
         contentView.addSubview(rainStateLabel)
         rainStateLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
             make.top.equalTo(dustStateLabel.snp.bottom).offset(8)
-            make.left.equalTo(contentView.snp.left).offset(20)
-            make.right.equalTo(contentView.snp.right).offset(-20)
+            make.left.equalTo(contentView.snp.left).offset(15)
+            make.right.equalTo(contentView.snp.right).offset(-15)
         }
         
         contentView.addSubview(regionLabel)
@@ -352,52 +359,58 @@ final class HomeController: UIViewController {
         weatherAndDustStackView.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
             make.top.equalTo(regionLabel.snp.bottom).offset(10)
-            make.left.equalTo(contentView.snp.left).offset(20)
-            make.right.equalTo(contentView.snp.right).offset(-20)
+            make.left.equalTo(contentView.snp.left).offset(15)
+            make.right.equalTo(contentView.snp.right).offset(-15)
             make.height.equalTo(200)
         }
         
         contentView.addSubview(todayWeatherLabel)
         todayWeatherLabel.snp.makeConstraints { make in
             make.top.equalTo(weatherAndDustStackView.snp.bottom).offset(30)
-            make.left.equalTo(contentView.snp.left).offset(20)
+            make.left.equalTo(contentView.snp.left).offset(15)
         }
         
-        contentView.addSubview(todayDeteilWeatherCollectionView)
-        todayDeteilWeatherCollectionView.snp.makeConstraints { make in
+        contentView.addSubview(todayDetailWeatherCollectionView)
+        todayDetailWeatherCollectionView.snp.makeConstraints { make in
             make.top.equalTo(todayWeatherLabel.snp.bottom)
-            make.left.equalTo(contentView.snp.left).offset(10)
-            make.right.equalTo(contentView.snp.right).offset(-10)
+            make.left.equalTo(contentView.snp.left).offset(15)
+            make.right.equalTo(contentView.snp.right).offset(-15)
             make.height.equalTo(200)
         }
         
-        contentView.addSubview(todayDetailWeatherLabel)
-        todayDetailWeatherLabel.snp.makeConstraints { make in
-            make.top.equalTo(todayDeteilWeatherCollectionView.snp.bottom).offset(30)
-            make.left.equalTo(contentView.snp.left).offset(20)
+        contentView.addSubview(todayTimeWeatherLabel)
+        todayTimeWeatherLabel.snp.makeConstraints { make in
+            make.top.equalTo(todayDetailWeatherCollectionView.snp.bottom).offset(30)
+            make.left.equalTo(contentView.snp.left).offset(15)
         }
         
-        contentView.addSubview(todayDetailCollectionView)
-        todayDetailCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(todayDetailWeatherLabel.snp.bottom).offset(20)
-            make.left.equalTo(contentView.snp.left).offset(10)
-            make.right.equalTo(contentView.snp.right).offset(-10)
+        contentView.addSubview(todayTimeCollectionView)
+        todayTimeCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(todayTimeWeatherLabel.snp.bottom).offset(20)
+            make.left.equalTo(contentView.snp.left).offset(15)
+            make.right.equalTo(contentView.snp.right).offset(-15)
             make.height.equalTo(120)
         }
         
         contentView.addSubview(weeklyWeatherLabel)
         weeklyWeatherLabel.snp.makeConstraints { make in
-            make.top.equalTo(todayDetailCollectionView.snp.bottom).offset(50)
-            make.left.equalTo(contentView.snp.left).offset(20)
+            make.top.equalTo(todayTimeCollectionView.snp.bottom).offset(50)
+            make.left.equalTo(contentView.snp.left).offset(15)
         }
         
         contentView.addSubview(weeklyWeatherTableView)
         weeklyWeatherTableView.snp.makeConstraints { make in
             make.top.equalTo(weeklyWeatherLabel.snp.bottom)
-            make.left.equalTo(contentView.snp.left).offset(10)
-            make.right.equalTo(contentView.snp.right).offset(-10)
+            make.left.equalTo(contentView.snp.left).offset(15)
+            make.right.equalTo(contentView.snp.right).offset(-15)
             make.height.equalTo(560)
-            make.bottom.equalTo(contentView.snp.bottom).offset(20)
+        }
+        
+        contentView.addSubview(orginLabel)
+        orginLabel.snp.makeConstraints { make in
+            make.top.equalTo(weeklyWeatherTableView.snp.bottom).offset(15)
+            make.left.equalTo(contentView.snp.left).offset(25)
+            make.bottom.equalTo(contentView.snp.bottom)
         }
     }
     
@@ -445,15 +458,15 @@ extension HomeController: WetherAndDustStackViewDelegate {
 
 extension HomeController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == todayDeteilWeatherCollectionView {
-            return CGSize(width: (view.frame.width - 20) / 2, height: 100)
+        if collectionView == todayDetailWeatherCollectionView {
+            return CGSize(width: (view.frame.width - 30) / 2, height: 100)
         } else {
             return CGSize(width: view.frame.width / 6, height: 120)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == todayDeteilWeatherCollectionView {
+        if collectionView == todayDetailWeatherCollectionView {
             return 4
         } else {
             return todayDetailWeather.count
@@ -461,13 +474,13 @@ extension HomeController: UICollectionViewDataSource, UICollectionViewDelegateFl
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == todayDeteilWeatherCollectionView {
+        if collectionView == todayDetailWeatherCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellId.todayDetailWeatherCellId.rawValue, for: indexPath) as! TodayDetailWeatherCell
             cell.viewModel = viewModel
             cell.setValue(item: indexPath.item)
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellId.todayWeatherCellId.rawValue, for: indexPath) as! TodayWeatherCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellId.todayTimeWeatherCellId.rawValue, for: indexPath) as! TodayTimeWeatherCell
             cell.viewModel = viewModel
             cell.setValue(item: indexPath.item)
             return cell

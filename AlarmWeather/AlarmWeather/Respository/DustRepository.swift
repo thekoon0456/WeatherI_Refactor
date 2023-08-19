@@ -15,15 +15,12 @@ final class DustRepository {
     var dataGubun = "HOUR"
 
     lazy var dustUrl = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
-
+    
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-
+        
         guard let url = URL(string: dustUrl) else { return }
         
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = DoubleConstant.networkRequest.rawValue
-        let session = URLSession(configuration: configuration)
-        
+        let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
         session.dataTask(with: url) { data, response, error in
             if error != nil {
                 print("네트워크 에러 \(String(describing: error?.localizedDescription))")
@@ -31,7 +28,7 @@ final class DustRepository {
                 self.retryRequest(completion: completion)
                 return
             }
-
+            
             guard let data = data else {
                 print("데이터 에러")
                 completion(.failure(.dataError))

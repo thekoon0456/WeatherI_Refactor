@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 enum CellId: String {
-    case todayWeatherCellId = "todayWeatherCell"
     case todayDetailWeatherCellId = "todayDetailWeatherCell"
+    case todayTimeWeatherCellId = "todayTimeWeatherCell"
     case weeklyWeatherCellId = "WeeklyWeatherCell"
     case alertTimeCell = "alertTimeCell"
 }
@@ -21,7 +21,7 @@ enum WeatherModelCount: Int {
 }
 
 enum DoubleConstant: Double {
-    case networkRequest = 5.0
+    case networkRequest = 12.0
 }
 
 enum NetworkError: Error {

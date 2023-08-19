@@ -32,6 +32,8 @@ final class HomeViewModel {
     var weeklyWeatherTemp: [WeeklyWeatherTempModel]?
     var weeklyWeatherIconName: [String] = []
     
+    //TODO: -오늘날씨 초단기 실황으로 변경
+    
     //서비스의 fetchNow -> 뷰모델 데이터로 변환
     func loadTodayWeather(completion: @escaping (WeatherModel) -> Void) {
         weatherService.fetchTodayWeather { [weak self] model in

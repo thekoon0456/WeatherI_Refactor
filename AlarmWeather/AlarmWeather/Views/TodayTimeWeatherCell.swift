@@ -11,7 +11,7 @@ import Then
 
 
 
-final class TodayWeatherCell: UICollectionViewCell {
+final class TodayTimeWeatherCell: UICollectionViewCell {
     
     //MARK: - Properties
     
@@ -81,14 +81,14 @@ final class TodayWeatherCell: UICollectionViewCell {
         weatherIcon.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-10)
+            make.left.equalToSuperview().offset(10)
+            make.right.equalToSuperview().offset(-10)
         }
 //        weatherAnimation(weatherIcon)
 
         probabilityLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(weatherIcon.snp.bottom).offset(15)
+            make.top.equalTo(weatherIcon.snp.bottom).offset(10)
         }
         
         tempLabel.snp.makeConstraints { make in
