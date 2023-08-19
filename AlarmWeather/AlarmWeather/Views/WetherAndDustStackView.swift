@@ -155,7 +155,6 @@ final class WetherAndDustStackView: UIStackView {
         dustDetailLabel.text = "PM10: " + (dustViewModel?.todayDust?.pm10Data ?? "")
         dustStateLabel.text = dustViewModel?.todayDust?.dustState ?? ""
         dustStateLabel.textColor = dustViewModel?.todayDustMentColor
-//        dustLabel.text = "미세먼지 " + (dustStateLabel.text ?? "")
     }
     
     private func configureUI() {
