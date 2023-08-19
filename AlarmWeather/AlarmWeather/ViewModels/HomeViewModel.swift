@@ -32,6 +32,8 @@ final class HomeViewModel {
     var weeklyWeatherTemp: [WeeklyWeatherTempModel]?
     var weeklyWeatherIconName: [String] = []
     
+    //TODO: -오늘날씨 초단기 실황으로 변경
+    
     //서비스의 fetchNow -> 뷰모델 데이터로 변환
     func loadTodayWeather(completion: @escaping (WeatherModel) -> Void) {
         weatherService.fetchTodayWeather { [weak self] model in
@@ -127,9 +129,7 @@ extension HomeViewModel {
     func getRainyMent(model: [TodayDetailWeatherModel]) {
         let sortedWeatherPop = model.sorted { $0.pop < $1.pop }
 
-        if sortedWeatherPop.filter({ $0.pty != "0" }).count == 0 {
-            todayRainyWeatherMent = ""
-        } else if sortedWeatherPop.filter({ $0.pty == "4" }).count != 0 {
+        if sortedWeatherPop.filter({ $0.pty == "4" }).count != 0 {
             todayRainyWeatherMent = "소나기가 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
         } else if sortedWeatherPop.filter({ $0.pop != "0%" }).count != 0 {
             todayRainyWeatherMent = "오늘 비 올 확률은 \(sortedWeatherPop[0].pop) ~ \(sortedWeatherPop[sortedWeatherPop.count - 1 ].pop) 입니다 🌧️"

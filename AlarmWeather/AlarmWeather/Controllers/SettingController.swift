@@ -19,6 +19,7 @@ final class SettingController: UIViewController {
     private var lastRefreshDate: Date = Date() //백그라운드에서 오래 있으면 홈뷰로
     
     var settingMenus = ["유저 / 알림 설정하기", "개발자 피드백 보내기"]
+    //TODO: - 여행 알림 설정하기 기능 추가
     
     lazy var backgoundImageView = UIImageView().then {
         $0.frame = view.bounds

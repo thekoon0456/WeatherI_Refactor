@@ -63,13 +63,14 @@ final class WetherAndDustStackView: UIStackView {
     private var weatherLabel = UILabel().then {
         $0.text = "0" + " " + "℃"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 18)
+        $0.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
     }
     
     private lazy var dustView = UIStackView().then {
         $0.addSubview(dustIcon)
         $0.addSubview(dustDetailLabel)
-        $0.addSubview(dustLabel)
+        $0.addSubview(dustLabelView)
+        
         dustIcon.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalTo(120)
@@ -81,10 +82,11 @@ final class WetherAndDustStackView: UIStackView {
             make.top.equalTo(dustIcon.snp.bottom).offset(10)
         }
         
-        dustLabel.snp.makeConstraints { make in
+        dustLabelView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(dustDetailLabel.snp.bottom).offset(15)
         }
+        
     }
     
     private lazy var dustIcon = UIImageView().then {
@@ -102,12 +104,24 @@ final class WetherAndDustStackView: UIStackView {
         $0.textColor = .white
     }
     
-    private var dustLabel = UILabel().then {
-        $0.text = "미세먼지 좋음"
+    private let dustLabel = UILabel().then {
+        $0.text = "미세먼지"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 18)
+        $0.font = UIFont.systemFont(ofSize: 16)
     }
     
+    private lazy var dustStateLabel = UILabel().then {
+        $0.text = " 보통"
+        $0.textColor = .white
+        $0.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+    }
+    
+    private lazy var dustLabelView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 5
+        $0.addArrangedSubview(dustLabel)
+        $0.addArrangedSubview(dustStateLabel)
+    }
     
     //MARK: - Lifecycle
     
@@ -139,7 +153,9 @@ final class WetherAndDustStackView: UIStackView {
         weatherLabel.text = (viewModel?.todayWeather?.tmp ?? "0") + "º"
         dustIcon.image = UIImage(systemName: dustViewModel?.todayDustIconName ?? "")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         dustDetailLabel.text = "PM10: " + (dustViewModel?.todayDust?.pm10Data ?? "")
-        dustLabel.text = "미세먼지 " + (dustViewModel?.todayDust?.dustState ?? "")
+        dustStateLabel.text = dustViewModel?.todayDust?.dustState ?? ""
+        dustStateLabel.textColor = dustViewModel?.todayDustMentColor
+//        dustLabel.text = "미세먼지 " + (dustStateLabel.text ?? "")
     }
     
     private func configureUI() {

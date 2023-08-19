@@ -19,6 +19,7 @@ final class HomeViewModel {
     var todayWeatherMainMent = "" //홈 메인 멘트
     var todayWeatherIconName = "sun.max.trianglebadge.exclamationmark" //홈 메인 아이콘, 오류시 느낌표
     var todayWeatherLabel = "" //홈 메인 아이콘 아래 날씨
+    var todayRainyWeatherMent = ""
     var todayBackgroundImage = BackGroundImage.rainyNight[3] //배경화면 사진 //배경화면 사진
     var todayRecommendItems: [String] = [] //추천 아이템
     
@@ -45,6 +46,7 @@ final class HomeViewModel {
             guard let self = self else { return }
             todayDetailWeather = model
             todayDetailWeatherIcon(model: model)
+            getRainyMent(model: model)
             todayRecommendItems = getTodayRecommendItems(model: model)
             print("DEBUG: detailWeatherIconArr: \(todayDetailWeatherIconName)")
             completion(todayDetailWeather ?? model)
@@ -78,6 +80,20 @@ extension HomeViewModel {
         }
         
         return Array(weatherItemArr)
+    }
+    
+    func getRainyMent(model: [TodayDetailWeatherModel]) {
+        let sortedWeatherPop = model.sorted { $0.pop < $1.pop }
+
+        if sortedWeatherPop.filter({ $0.pty == "4" }).count != 0 {
+            todayRainyWeatherMent = "소나기가 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
+        } else if sortedWeatherPop.filter({ $0.pop != "0%" }).count != 0 {
+            todayRainyWeatherMent = "오늘 비 올 확률은 \(sortedWeatherPop[0].pop) ~ \(sortedWeatherPop[sortedWeatherPop.count - 1 ].pop) 입니다 🌧️"
+        } else if sortedWeatherPop.filter({ $0.pty == "2" || $0.pty == "2" }).count != 0 {
+            todayRainyWeatherMent = "하얀 눈이 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
+        } else {
+            todayRainyWeatherMent = ""
+        }
     }
     
     func todayWeatherMent(model: WeatherModel) -> String {

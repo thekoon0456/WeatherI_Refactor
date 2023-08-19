@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 final class DustViewModel {
     
@@ -13,6 +14,7 @@ final class DustViewModel {
     var todayDust: DustModel? //홈에서 사용하는 오늘날씨 데이터
     var todayDustIconName = "" //홈 메인 아이콘
     var todayDustMainMent = "" //홈 메인 멘트
+    var todayDustMentColor = UIColor.white
 
     //서비스의 fetchNow -> 뷰모델 데이터로 변환
     func loadTodayDust(completion: @escaping (DustModel) -> Void) {
@@ -21,6 +23,7 @@ final class DustViewModel {
             todayDust = model
             todayDustIconName = setDustMainIcon(model: model)
             todayDustMainMent = setDustMainMent(model: model)
+            todayDustMentColor = setDustMentColor(model: model)
             completion(self.todayDust ?? model)
         }
     }
@@ -35,6 +38,19 @@ final class DustViewModel {
             return "aqi.high"
         default:
             return ""
+        }
+    }
+    
+    func setDustMentColor(model: DustModel) -> UIColor {
+        switch model.dustState {
+        case "좋음":
+            return UIColor.systemGreen
+        case "보통":
+            return UIColor.systemRed
+        case "나쁨", "매우 나쁨":
+            return UIColor.systemRed
+        default:
+            return UIColor.white
         }
     }
     

@@ -36,8 +36,8 @@ final class RootViewController: UIViewController {
     
     //MARK: - Lottie
     private lazy var animationView = LottieAnimationView(name: LottieFiles.loadingView.rawValue).then {
-        $0.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width)
-        $0.contentMode = .scaleAspectFill
+        $0.frame = .init(x: 0, y: 0, width: view.frame.width, height: view.frame.width)
+        $0.contentMode = .scaleAspectFit
         $0.loopMode = .loop //애니메이션 반복재생
     }
     
@@ -48,7 +48,7 @@ final class RootViewController: UIViewController {
     
     private let loadingMent = UILabel().then {
         $0.text = Ments.loadingMent.rawValue
-        $0.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
     
     
@@ -231,7 +231,6 @@ extension RootViewController {
 
 extension RootViewController {
     func setAnimationView() {
-        //배경이미지 안 쓸때
         view.backgroundColor = .tertiarySystemBackground
         view.addSubview(animationView)
         animationView.snp.makeConstraints { make in
