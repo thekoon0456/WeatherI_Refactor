@@ -64,8 +64,14 @@ final class TodayTimeWeatherCell: UICollectionViewCell {
         }
         
         weatherIcon.image = UIImage(systemName: (viewModel?.todayDetailWeatherIconName[item]) ?? "")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        probabilityLabel.text = viewModel?.todayDetailWeather?[item].pop != "0%" ? viewModel?.todayDetailWeather?[item].pop : ""
-        tempLabel.text = viewModel?.todayDetailWeather?[item].tmp
+        if let pop = viewModel?.todayDetailWeather?[item].pop {
+            probabilityLabel.text = pop != "0" ? pop + "%" : ""
+        }
+        
+        if let tmp = viewModel?.todayDetailWeather?[item].tmp {
+            tempLabel.text = tmp + "º"
+        }
+
     }
     
     func configureUI() {
@@ -84,11 +90,15 @@ final class TodayTimeWeatherCell: UICollectionViewCell {
             make.left.equalToSuperview().offset(10)
             make.right.equalToSuperview().offset(-10)
         }
-//        weatherAnimation(weatherIcon)
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            weatherAnimation(weatherIcon)
+        }
 
         probabilityLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(weatherIcon.snp.bottom).offset(10)
+            make.top.equalTo(weatherIcon.snp.bottom).offset(15)
         }
         
         tempLabel.snp.makeConstraints { make in

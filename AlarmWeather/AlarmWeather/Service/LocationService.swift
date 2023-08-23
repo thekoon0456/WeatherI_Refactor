@@ -31,29 +31,39 @@ final class LocationService {
     
     func getLocation(location: CLLocation, completion: @escaping (CLLocation) -> Void) {
         // 위치 가져오기
-//        manager.requestWhenInUseAuthorization()
+        //        manager.requestWhenInUseAuthorization()
         //거리 정확도
         manager.desiredAccuracy = kCLLocationAccuracyHundredMeters //위치 정확도: 100미터
         //        manager.distanceFilter = 3000 // 3키로 이동할때마다 업데이트
         //        manager.allowsBackgroundLocationUpdates = true // 백그라운드 위치 업데이트 허용
         completion(location)
     }
-
+    
     func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location, preferredLocale: self.locale) { [weak self] placemarks, _ in
-            guard let self = self else { return }
+            guard let self = self,
+                  let placemarks = placemarks else { return }
             print("DEBUG: 현재 위치는 \(location)입니다.")
-//            print("DEBUG: 현재 지역은 \(placemarks)입니다.")
-            guard let placemarks = placemarks,
-                  let locality = placemarks.last?.locality,
-                  let subLocality =  placemarks.last?.subLocality,
-                  let administrative = placemarks.last?.administrativeArea else { return }
-            userRegion = locality + " " + subLocality
-            localityRegion = locality
-            subLocalityRegion = subLocality
-            administrativeArea = administrative
-            print("DEBUG: 현재 주소는 \(String(describing: locality + " " + subLocality))입니다.")
+            
+            //주소가 구 주소일때
+            if let locality = placemarks.last?.locality,
+               let subLocality =  placemarks.last?.subLocality,
+               let administrative = placemarks.last?.administrativeArea {
+                userRegion = locality + " " + subLocality
+                localityRegion = locality
+                subLocalityRegion = subLocality
+                administrativeArea = administrative
+                print("DEBUG: 현재 주소는 구 주소: \(String(describing: userRegion))입니다.")
+            } else {
+                //주소가 도로명 주소일때
+                if let administrative = placemarks.first?.administrativeArea,
+                   let name = placemarks.first?.name {
+                    userRegion = administrative + " " + name
+                    administrativeArea = administrative
+                    print("DEBUG: 현재 주소는 도로명: \(String(describing: userRegion))입니다.")
+                }
+            }
             
             let convertedXy = LocationService.shared.convertGRID_GPS(lat_X: latitude ?? 0, lng_Y: longitude ?? 0)
             convertedX = convertedXy.x

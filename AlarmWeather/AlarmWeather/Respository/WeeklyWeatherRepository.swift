@@ -71,9 +71,9 @@ final class WeeklyWeatherRepository {
         let currentLocalityRegion = LocationService.shared.localityRegion
 
         switch currentLocalityRegion {
-        case let region where WeeklyWeatherConst.gangwonWest.contains(region ?? "철원군"):
+        case let region where WeeklyWeatherConst.gangwonWest.contains(region ?? "철원"):
             return "강원도영서"
-        case let region where WeeklyWeatherConst.gangwonEast.contains(region ?? "강릉시"):
+        case let region where WeeklyWeatherConst.gangwonEast.contains(region ?? "강릉"):
             return "강원도영동"
         default:
             return ""
