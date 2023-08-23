@@ -76,9 +76,9 @@ final class WeeklyWeatherTempRepository {
         
         //MARK: - 언래핑 실패시 11B10101 서울코드로
         print("DEBUG: WeatherTempRegId \(String(describing: region))")
-        return region ?? notContainsRegion ?? "11B10101"
+        return region ?? notContainsRegion ?? "11B10101" //nil이면 서울시 지역 코드 사용
     }
-    
+
 }
 
 extension WeeklyWeatherTempRepository: RetryRequest { }
