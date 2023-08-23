@@ -105,6 +105,8 @@ final class DustService {
             return "gyeongnam"
         case "제주특별자치도":
             return "jeju"
+        case "제주도":
+            return "jeju"
         default:
             return "서울특별시"
         }

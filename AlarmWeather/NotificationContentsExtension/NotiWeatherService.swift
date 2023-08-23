@@ -70,8 +70,8 @@ final class WeatherService {
                                                         fcstTime: fcstTime,
                                                         sky: data.filter { $0.fcstTime == timeArr[i] && $0.category == Category.sky }.first?.fcstValue ?? "",
                                                         pty: data.filter { $0.fcstTime == timeArr[i] && $0.category == Category.pty }.first?.fcstValue ?? "",
-                                                        pop: (data.filter { $0.fcstTime == timeArr[i] && $0.category == Category.pop }.first?.fcstValue ?? "") + "%",
-                                                        tmp: (data.filter { $0.fcstTime == timeArr[i] && $0.category == Category.tmp }.first?.fcstValue ?? "") + "º")
+                                                        pop: (data.filter { $0.fcstTime == timeArr[i] && $0.category == Category.pop }.first?.fcstValue ?? ""),
+                                                        tmp: (data.filter { $0.fcstTime == timeArr[i] && $0.category == Category.tmp }.first?.fcstValue ?? ""))
                     completedModel.append(model)
                 }
                 

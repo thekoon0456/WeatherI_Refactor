@@ -26,10 +26,7 @@ final class WeatherRepository {
 
         guard let url = URL(string: weatherUrl) else { return }
 
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = DoubleConstant.networkRequest.rawValue
-        let session = URLSession(configuration: configuration)
-        
+        let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
         session.dataTask(with: url) { data, response, error in
             if error != nil {
                 print("네트워크 에러 \(String(describing: error?.localizedDescription))")

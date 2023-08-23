@@ -113,7 +113,10 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
         alertName.text = "날씨의 i ☀️"
         todayWeatherMent?.text = viewModel.todayWeatherMainMent
         todayDustMent?.text = dustViewModel.todayDustMainMent
-        todayTempRangeMent?.text = "오늘의 온도는 \(sortedWeatherTmp.first!.tmp) ~ \(sortedWeatherTmp.last!.tmp) 입니다"
+        if let tmpFirst = sortedWeatherTmp.first?.tmp,
+           let tmpLast = sortedWeatherTmp.last?.tmp {
+            todayTempRangeMent?.text = "오늘의 온도는 \(tmpFirst)º ~ \(tmpLast)º 입니다"
+        }
         todayPopRangeMent.text = viewModel.todayRainyWeatherMent
         todayItemMent?.text = viewModel.todayRecommendItems.isEmpty ? "" : "오늘의 추천 아이템:\(viewModel.todayRecommendItems.joined()) \(dustViewModel.todayDustIconName == "나쁨" ? " 😷" : "")"
     }
