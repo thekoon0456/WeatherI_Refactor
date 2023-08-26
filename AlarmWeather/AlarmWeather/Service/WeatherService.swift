@@ -113,8 +113,6 @@ final class WeatherService {
                 
                 print("DEBUG: todayDetailModel: \(completedModel)")
                 completion((completedModel, oneHourCompletedModel))
-                
-//                completion(completedModel) //기존 completion
             case .failure(let error):
                 print("DEBUG: fetchtodayDetailModel Error: \(error.localizedDescription)")
                 break
