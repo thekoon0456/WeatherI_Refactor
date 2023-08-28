@@ -27,11 +27,11 @@ struct DustBody: Codable {
 
 // MARK: - DustItem
 struct DustItem: Codable {
-    let daegu, chungnam, incheon, daejeon: String
-    let gyeongbuk, sejong, gwangju, jeonbuk: String
-    let gangwon, ulsan, jeonnam, seoul: String
-    let busan, jeju, chungbuk, gyeongnam: String
-    let dataTime, dataGubun, gyeonggi, itemCode: String
+    let daegu, chungnam, incheon, daejeon: String?
+    let gyeongbuk, sejong, gwangju, jeonbuk: String?
+    let gangwon, ulsan, jeonnam, seoul: String?
+    let busan, jeju, chungbuk, gyeongnam: String?
+    let dataTime, dataGubun, gyeonggi, itemCode: String?
 }
 
 // MARK: - DustHeader

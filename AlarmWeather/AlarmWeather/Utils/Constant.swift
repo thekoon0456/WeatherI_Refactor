@@ -17,7 +17,7 @@ enum CellId: String {
 
 enum WeatherModelCount: Int {
     case todayDetailWeatherCount = 30
-    case todayOneHourWeatherCount = 24
+    case todayOneHourWeatherCount = 15
 }
 
 enum DoubleConstant: Double {
@@ -48,6 +48,7 @@ enum Ments: String {
     case addUserView = "설정에 들어가시면\n유저와 날씨요정의 프로필 설정,\n날씨 알림 받으실 시간을 설정하실 수 있어요😊\n(출근 / 등교시간 10분 전을 추천드려요!)"
     case notificationView = "매일 원하시는 시간에\n설정하신 프로필의 날씨요정이\n오늘 날씨와 추천 날씨 아이템을 알려드려요☀️\n알림창을 짧게 누르면 앱에서,\n꾹 누르면 바로 날씨를 보실 수 있어요😊"
     case loadingMent = "날씨 데이터를 받아오는 중입니다..."
+    case loadingDelayMent = "통신이 늦어지네요😅 서버에 재요청 중입니다..."
 }
 
 enum NetworkQuery: String {
@@ -343,13 +344,20 @@ struct WeeklyWeatherConst {
         "전라남도 영암": "21F20802",
         "전라남도 신안": "21F20803",
         "전라남도 무안": "21F20804",
-        "강원도 성산": "11G00101",
+        "제주특별자치도 성산": "11G00101",
         "제주특별자치도 제주": "11G00201",
-        "강원도 성판악": "11G00302",
+        "제주특별자치도 성판악": "11G00302",
         "제주특별자치도 서귀포": "11G00401",
         "제주특별자치도 고산": "11G00501",
         "제주특별자치도 이어도": "11G00601",
         "제주특별자치도 추자도": "11G00800",
+        "제주도 성산": "11G00101",
+        "제주도 제주": "11G00201",
+        "제주도 성판악": "11G00302",
+        "제주도 서귀포": "11G00401",
+        "제주도 고산": "11G00501",
+        "제주도 이어도": "11G00601",
+        "제주도 추자도": "11G00800",
         "경상북도 울진": "11H10101",
         "경상북도 영덕": "11H10102",
         "경상북도 포항": "11H10201",

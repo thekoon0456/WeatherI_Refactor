@@ -110,11 +110,9 @@ final class WeatherService {
                                                         tmp: (data.filter { $0.fcstTime == oneHourTimeArr[i] && $0.category == Category.tmp }.first?.fcstValue ?? ""))
                     oneHourCompletedModel.append(model)
                 }
-                
                 print("DEBUG: todayDetailModel: \(completedModel)")
+                print("DEBUG: todayoneHourDetailModel: \(oneHourCompletedModel)")
                 completion((completedModel, oneHourCompletedModel))
-                
-//                completion(completedModel) //기존 completion
             case .failure(let error):
                 print("DEBUG: fetchtodayDetailModel Error: \(error.localizedDescription)")
                 break
