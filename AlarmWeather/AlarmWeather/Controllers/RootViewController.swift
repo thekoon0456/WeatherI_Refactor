@@ -33,6 +33,7 @@ final class RootViewController: UIViewController {
     var updateLocation = true //위치 필요할때만 true로 업데이트
     var isLoading = true //HomeController로 화면전환시 true로
     let isUserLogin = UserDefaults.standard
+    var loadingTimer: Timer? //로딩 지연시 안내멘트
     
     //MARK: - Lottie
     private lazy var animationView = LottieAnimationView(name: LottieFiles.loadingView.rawValue).then {
@@ -51,7 +52,7 @@ final class RootViewController: UIViewController {
         $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
     
-    private let loadingDelayMent = UILabel().then {
+    private var loadingDelayMent = UILabel().then {
         $0.text = Ments.loadingDelayMent.rawValue
         $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
@@ -84,7 +85,6 @@ final class RootViewController: UIViewController {
         //애니메이션 로딩뷰
         setAnimationView()
         animationView.play()
-        
     }
     
     //MARK: - Action
@@ -248,11 +248,7 @@ extension RootViewController {
             make.bottom.equalToSuperview().offset(-120)
         }
         
-        view.addSubview(loadingDelayMent)
-        loadingDelayMent.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(loadingMent.snp.bottom).offset(10)
-        }
+        loadingTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(setRetryMent), userInfo: nil, repeats: false)
         
         view.addSubview(blurView)
         blurView.snp.makeConstraints { make in
@@ -261,9 +257,29 @@ extension RootViewController {
         }
     }
     
+    //5초 경과시 재시도 문구 추가
+    @objc func setRetryMent() {
+        print("DEBUG: 로딩 5초 경과")
+        loadingMent.addSubview(loadingDelayMent)
+        loadingDelayMent.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(loadingMent.snp.bottom).offset(10)
+        }
+    }
+    
     func stopAnimation() {
         animationView.stop()
         animationView.removeFromSuperview()
+        
+        //멘트 제거
+        timerInvalidate()
+        loadingDelayMent.removeFromSuperview()
+    }
+    
+    func timerInvalidate() {
+        //타이머 해제
+        loadingTimer?.invalidate()
+        loadingTimer = nil
     }
     
 }
