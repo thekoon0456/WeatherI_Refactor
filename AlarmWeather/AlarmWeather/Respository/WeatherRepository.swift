@@ -17,7 +17,7 @@ final class WeatherRepository {
     //사용자 좌표구해서 쿼리 날림
     var nx = "0"
     var ny = "0"
-    
+
     lazy var weatherUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(nx)&ny=\(ny)"
     
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {

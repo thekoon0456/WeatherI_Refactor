@@ -24,8 +24,8 @@ final class DustService {
                 let model = DustModel(dustState: self.dustPm10DataToString(dustData: dicValue),
                                       pm10Data: dicValue,
                                       pm25Data: "PM10 사용중",
-                                      dustCode: data[0].itemCode,
-                                      dataTime: data[0].dataTime)
+                                      dustCode: data[0].itemCode ?? "서버정보없음",
+                                      dataTime: data[0].dataTime ?? "서버정보없음")
                 
                 print("DEBUG: DustModel: \(model)")
                 completion(model)
@@ -104,6 +104,8 @@ final class DustService {
         case "경상남도":
             return "gyeongnam"
         case "제주특별자치도":
+            return "jeju"
+        case "제주도":
             return "jeju"
         default:
             return "서울특별시"

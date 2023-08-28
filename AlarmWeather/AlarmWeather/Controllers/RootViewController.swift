@@ -51,6 +51,11 @@ final class RootViewController: UIViewController {
         $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
     
+    private let loadingDelayMent = UILabel().then {
+        $0.text = Ments.loadingDelayMent.rawValue
+        $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+    }
+    
     
     //MARK: - LifeCycle
     
@@ -241,6 +246,12 @@ extension RootViewController {
         loadingMent.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-120)
+        }
+        
+        view.addSubview(loadingDelayMent)
+        loadingDelayMent.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(loadingMent.snp.bottom).offset(10)
         }
         
         view.addSubview(blurView)

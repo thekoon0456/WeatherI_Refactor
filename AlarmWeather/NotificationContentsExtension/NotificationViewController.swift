@@ -185,7 +185,7 @@ extension NotificationViewController {
         animationBg.addSubview(loadingMent)
         loadingMent.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(animationView.snp.bottom).offset(-33)
+            make.top.equalTo(animationView.snp.bottom).offset(-32)
         }
         
         animationView.snp.makeConstraints { make in
