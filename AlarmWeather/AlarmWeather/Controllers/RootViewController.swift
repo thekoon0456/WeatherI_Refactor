@@ -34,6 +34,7 @@ final class RootViewController: UIViewController {
     var isLoading = true //HomeController로 화면전환시 true로
     let isUserLogin = UserDefaults.standard
     var loadingTimer: Timer? //로딩 지연시 안내멘트
+    var loadingAlertTimer: Timer?
     
     //MARK: - Lottie
     private lazy var animationView = LottieAnimationView(name: LottieFiles.loadingView.rawValue).then {
@@ -84,7 +85,10 @@ final class RootViewController: UIViewController {
         }
         //애니메이션 로딩뷰
         setAnimationView()
-        animationView.play()
+        animationView.play {_ in
+            //애니메이션 종료시 로딩 관련 타이머 해제
+            self.timerInvalidate()
+        }
     }
     
     //MARK: - Action
@@ -236,6 +240,18 @@ extension RootViewController {
 
 extension RootViewController {
     func setAnimationView() {
+        loadingTimer = Timer.scheduledTimer(timeInterval: DoubleConstant.loadingDelayMent.rawValue,
+                                            target: self,
+                                            selector: #selector(setRetryMent),
+                                            userInfo: nil,
+                                            repeats: false)
+        
+        loadingAlertTimer = Timer.scheduledTimer(timeInterval: DoubleConstant.showingLoadingAlert.rawValue,
+                                                 target: self,
+                                                 selector: #selector(showingAlert),
+                                                 userInfo: nil,
+                                                 repeats: false)
+        
         view.backgroundColor = .tertiarySystemBackground
         view.addSubview(animationView)
         animationView.snp.makeConstraints { make in
@@ -247,8 +263,6 @@ extension RootViewController {
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-120)
         }
-        
-        loadingTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(setRetryMent), userInfo: nil, repeats: false)
         
         view.addSubview(blurView)
         blurView.snp.makeConstraints { make in
@@ -267,12 +281,21 @@ extension RootViewController {
         }
     }
     
+    //15초 경과시 종료 알림 띄움
+    @objc func showingAlert() {
+        let alert = UIAlertController(title: "기상청 서버 응답 오류입니다😭", message: "잠시 후에 앱을 재실행해주세요🙏", preferredStyle: .alert)
+        let exitAction = UIAlertAction(title: "날씨의 i 종료하기", style: .cancel) { _ in
+            exit(0)
+        }
+        
+        alert.addAction(exitAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
     func stopAnimation() {
         animationView.stop()
         animationView.removeFromSuperview()
-        
         //멘트 제거
-        timerInvalidate()
         loadingDelayMent.removeFromSuperview()
     }
     
@@ -280,6 +303,9 @@ extension RootViewController {
         //타이머 해제
         loadingTimer?.invalidate()
         loadingTimer = nil
+        loadingAlertTimer?.invalidate()
+        loadingAlertTimer = nil
+        print("DEBUG: loadingTimer: \(String(describing: loadingTimer)), loadingAlertTimer: \(String(describing: loadingAlertTimer)) 해제")
     }
     
 }
