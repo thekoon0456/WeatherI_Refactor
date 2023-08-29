@@ -236,6 +236,12 @@ extension RootViewController {
 
 extension RootViewController {
     func setAnimationView() {
+        loadingTimer = Timer.scheduledTimer(timeInterval: DoubleConstant.loadingDelayMent.rawValue,
+                                            target: self,
+                                            selector: #selector(setRetryMent),
+                                            userInfo: nil,
+                                            repeats: false)
+        
         view.backgroundColor = .tertiarySystemBackground
         view.addSubview(animationView)
         animationView.snp.makeConstraints { make in
@@ -247,8 +253,6 @@ extension RootViewController {
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-120)
         }
-        
-        loadingTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(setRetryMent), userInfo: nil, repeats: false)
         
         view.addSubview(blurView)
         blurView.snp.makeConstraints { make in
