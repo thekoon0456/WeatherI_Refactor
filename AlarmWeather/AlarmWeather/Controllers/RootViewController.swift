@@ -32,9 +32,9 @@ final class RootViewController: UIViewController {
     
     var updateLocation = true //위치 필요할때만 true로 업데이트
     var isLoading = true //HomeController로 화면전환시 true로
-    let isUserLogin = UserDefaults.standard
-    var loadingTimer: Timer? //로딩 지연시 안내멘트
-    var loadingAlertTimer: Timer?
+    private let isUserLogin = UserDefaults.standard
+    private var loadingTimer: Timer? //로딩 지연시 안내멘트
+    private var loadingAlertTimer: Timer?
     
     //MARK: - Lottie
     private lazy var animationView = LottieAnimationView(name: LottieFiles.loadingView.rawValue).then {
@@ -57,6 +57,8 @@ final class RootViewController: UIViewController {
         $0.text = Ments.loadingDelayMent.rawValue
         $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
+    
+    private let alertController = UIAlertController(title: "기상청 서버 응답 오류입니다😭", message: "요청 재시도를 하시거나 \n잠시 후에 앱을 재실행해주세요🙏", preferredStyle: .alert)
     
     
     //MARK: - LifeCycle
@@ -85,9 +87,10 @@ final class RootViewController: UIViewController {
         }
         //애니메이션 로딩뷰
         setAnimationView()
-        animationView.play {_ in
+        animationView.play { [weak self]_ in
             //애니메이션 종료시 로딩 관련 타이머 해제
-            self.timerInvalidate()
+            self?.timerInvalidate()
+            self?.alertController.dismiss(animated: true)
         }
     }
     
@@ -283,13 +286,17 @@ extension RootViewController {
     
     //15초 경과시 종료 알림 띄움
     @objc func showingAlert() {
-        let alert = UIAlertController(title: "기상청 서버 응답 오류입니다😭", message: "잠시 후에 앱을 재실행해주세요🙏", preferredStyle: .alert)
-        let exitAction = UIAlertAction(title: "날씨의 i 종료하기", style: .cancel) { _ in
+        let exitAction = UIAlertAction(title: "종료하기", style: .destructive) { _ in
             exit(0)
         }
         
-        alert.addAction(exitAction)
-        present(alert, animated: true, completion: nil)
+        let retryAction = UIAlertAction(title: "재시도 하기", style: .default) { [weak self] _ in
+            self?.alertController.dismiss(animated: true)
+        }
+        
+        alertController.addAction(exitAction)
+        alertController.addAction(retryAction)
+        present(alertController, animated: true)
     }
     
     func stopAnimation() {
