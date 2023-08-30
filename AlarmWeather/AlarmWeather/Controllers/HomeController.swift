@@ -19,6 +19,8 @@ final class HomeController: UIViewController {
     
     private let realmManager = RealmService.shared
     
+    private var viewUpdate = false
+    
     //백그라운드 진입 5분 이후로 새로고침
     private var lastRefreshDate: Date = Date()
     
@@ -208,12 +210,25 @@ final class HomeController: UIViewController {
         super.viewDidLoad()
         setValue()
         configureUI()
-        autoDataUpdate()
+        //앱이 백그라운드에 있다가 다시 들어오면 데이터 업데이트
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshData),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         //홈뷰에 진입하면 가장 위 메인 화면으로 자동 스크롤
         scrollViewToTop()
+        
+        //처음엔 viewDidLoad는 실행하지 않아서 업데이트 중복 방지
+        if viewUpdate == true {
+            autoDataUpdate()
+        }
+        viewUpdate = true
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     
