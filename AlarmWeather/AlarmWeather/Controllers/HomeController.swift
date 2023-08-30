@@ -19,8 +19,6 @@ final class HomeController: UIViewController {
     
     private let realmManager = RealmService.shared
     
-    private var viewUpdate = false
-    
     //백그라운드 진입 5분 이후로 새로고침
     private var lastRefreshDate: Date = Date()
     
@@ -210,26 +208,13 @@ final class HomeController: UIViewController {
         super.viewDidLoad()
         setValue()
         configureUI()
-//        //앱이 백그라운드에 있다가 5분이 지나고 다시 들어오면 뷰 업데이트
-//        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground),
-//                                               name: UIApplication.willEnterForegroundNotification,
-//                                               object: nil)
+        autoDataUpdate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         //홈뷰에 진입하면 가장 위 메인 화면으로 자동 스크롤
         scrollViewToTop()
-        
-        //처음엔 viewDidLoad는 실행하지 않아서 업데이트 중복 방지
-        if viewUpdate == true {
-            autoDataUpdate()
-        }
-        viewUpdate = true
     }
-    
-//    deinit {
-//        NotificationCenter.default.removeObserver(self)
-//    }
 
     
     //MARK: - Actions
@@ -249,12 +234,8 @@ final class HomeController: UIViewController {
         //rootVc의 updateData 실행
         dataUpdateDelegate?.updateData()
         NotificationCenter.default.addObserver(forName: NSNotification.Name("데이터업데이트완료"), object: nil, queue: nil) { _ in
-//            guard let self = self else { return }
-//            //업데이트시 배경화면도 업데이트 가능
-//            backgoundImageView.image = UIImage(named: viewModel.todayBackgroundImage)
             print("DEBUG: 화면 업데이트 완료")
             NotificationCenter.default.removeObserver(self)
-//            self.refreshControl.endRefreshing() //업데이트 종료시 refresh종료할 수 있지만 조금 느림
         }
         
         //2.5초 뒤에 refreshable 종료
