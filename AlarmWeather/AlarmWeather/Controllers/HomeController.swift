@@ -210,10 +210,10 @@ final class HomeController: UIViewController {
         super.viewDidLoad()
         setValue()
         configureUI()
-//        //앱이 백그라운드에 있다가 5분이 지나고 다시 들어오면 뷰 업데이트
-//        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground),
-//                                               name: UIApplication.willEnterForegroundNotification,
-//                                               object: nil)
+        //앱이 백그라운드에 있다가 다시 들어오면 데이터 업데이트
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshData),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -227,9 +227,9 @@ final class HomeController: UIViewController {
         viewUpdate = true
     }
     
-//    deinit {
-//        NotificationCenter.default.removeObserver(self)
-//    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     
     //MARK: - Actions
@@ -249,12 +249,8 @@ final class HomeController: UIViewController {
         //rootVc의 updateData 실행
         dataUpdateDelegate?.updateData()
         NotificationCenter.default.addObserver(forName: NSNotification.Name("데이터업데이트완료"), object: nil, queue: nil) { _ in
-//            guard let self = self else { return }
-//            //업데이트시 배경화면도 업데이트 가능
-//            backgoundImageView.image = UIImage(named: viewModel.todayBackgroundImage)
             print("DEBUG: 화면 업데이트 완료")
             NotificationCenter.default.removeObserver(self)
-//            self.refreshControl.endRefreshing() //업데이트 종료시 refresh종료할 수 있지만 조금 느림
         }
         
         //2.5초 뒤에 refreshable 종료
@@ -271,7 +267,7 @@ final class HomeController: UIViewController {
     //백그라운드 진입 시간 5분 지나면 데이터 업데이트
     private func autoDataUpdate() {
         let elapsedTime = Date().timeIntervalSince(lastRefreshDate)
-        let refreshInterval: TimeInterval = 5 * 60 // 5분
+        let refreshInterval: TimeInterval = DoubleConstant.updateData.rawValue // 5분
         if elapsedTime >= refreshInterval {
             refreshData()
             // 백그라운드 진입 시간 업데이트
