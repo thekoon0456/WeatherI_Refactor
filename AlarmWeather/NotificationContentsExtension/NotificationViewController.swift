@@ -51,7 +51,7 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     
     private let loadingMent = UILabel().then {
         $0.text = Ments.loadingMent.rawValue
-        $0.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        $0.font = UIFont.systemFont(ofSize: 10, weight: .medium)
     }
     
     //MARK: - LifeCycle
@@ -186,7 +186,7 @@ extension NotificationViewController {
         animationBg.addSubview(loadingMent)
         loadingMent.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(animationView.snp.bottom).offset(-32)
+            make.top.equalTo(animationView.snp.bottom).offset(-28)
         }
         
         animationView.snp.makeConstraints { make in

@@ -112,6 +112,10 @@ class UpdateSettingViewController: UIViewController {
                                                object: nil)
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     
     //MARK: - Action
     
@@ -176,7 +180,7 @@ class UpdateSettingViewController: UIViewController {
     //백그라운드 진입 시간 1분 지나면 홈화면으로
     @objc private func appWillEnterForeground() {
         let elapsedTime = Date().timeIntervalSince(lastRefreshDate)
-        let refreshInterval: TimeInterval = DoubleConstant.updateData.rawValue // 5분
+        let refreshInterval: TimeInterval = DoubleConstant.updateData.rawValue
         if elapsedTime >= refreshInterval {
             //루트 뷰컨으로, 애니메이션x
             self.navigationController?.popToRootViewController(animated: false)

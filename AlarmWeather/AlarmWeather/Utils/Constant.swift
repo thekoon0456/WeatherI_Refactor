@@ -24,7 +24,7 @@ enum DoubleConstant: Double {
     case networkRequest = 7.0
     case loadingDelayMent = 5.0
     case showingLoadingAlert = 15.0
-    case updateData = 300
+    case updateData = 600 //10분
 }
 
 enum NetworkError: Error {
