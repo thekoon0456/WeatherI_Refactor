@@ -47,6 +47,7 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     private var todayWeather: WeatherModel?
     private var todayDust: DustModel?
     private var todayDetailWeather = [TodayDetailWeatherModel]()
+    private var todayRecommendItems: [String] = []
     
     private let loadingMent = UILabel().then {
         $0.text = Ments.loadingMent.rawValue
@@ -118,7 +119,7 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
             todayTempRangeMent?.text = "오늘의 온도는 \(tmpFirst)º ~ \(tmpLast)º 입니다"
         }
         todayPopRangeMent.text = viewModel.todayRainyWeatherMent
-        todayItemMent?.text = viewModel.todayRecommendItems.isEmpty ? "" : "오늘의 추천 아이템:\(viewModel.todayRecommendItems.joined()) \(dustViewModel.todayDustIconName == "나쁨" ? " 😷" : "")"
+        todayItemMent?.text = viewModel.todayRecommendItems.isEmpty ? "" : "오늘의 추천 아이템:\(viewModel.todayRecommendItems.joined()) \(dustViewModel.todayDustIconName == "aqi.high" ? " 😷" : "")"
     }
     
     func defaultImage() -> UIImage? {

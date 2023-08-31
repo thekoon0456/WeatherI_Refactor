@@ -61,9 +61,7 @@ extension HomeViewModel {
         var weatherItemArr: Set<String> = [] //중복 없애려고 set으로
         for i in 0..<model.count {
             switch model[i] {
-            case _ where model[i].pty == "4":
-                weatherItemArr.insert(" 🌂")
-            case _ where model[i].pop != "0%" :
+            case _ where model[i].pop != "0" :
                 weatherItemArr.insert(" 🌂")
             case _ where model[i].pty != "0":
                 weatherItemArr.insert(" 🌂")
