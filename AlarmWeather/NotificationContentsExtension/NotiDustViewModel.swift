@@ -13,6 +13,7 @@ final class DustViewModel {
     var todayDust: DustModel? //홈에서 사용하는 오늘날씨 데이터
     var todayDustIconName = "" //홈 메인 아이콘
     var todayDustMainMent = "" //홈 메인 멘트
+    var todayRecommendItems: [String] = [] //오늘 추천 아이템(미세먼지 높으면 마스크 추가)
 
     //서비스의 fetchNow -> 뷰모델 데이터로 변환
     func loadTodayDust(completion: @escaping (DustModel) -> Void) {
