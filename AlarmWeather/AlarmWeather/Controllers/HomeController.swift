@@ -211,7 +211,7 @@ final class HomeController: UIViewController {
         setValue()
         configureUI()
         //앱이 백그라운드에 있다가 다시 들어오면 데이터 업데이트
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshData),
+        NotificationCenter.default.addObserver(self, selector: #selector(autoDataUpdate),
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
     }
@@ -219,12 +219,6 @@ final class HomeController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         //홈뷰에 진입하면 가장 위 메인 화면으로 자동 스크롤
         scrollViewToTop()
-        
-        //처음엔 viewDidLoad는 실행하지 않아서 업데이트 중복 방지
-        if viewUpdate == true {
-            autoDataUpdate()
-        }
-        viewUpdate = true
     }
     
     deinit {
@@ -250,7 +244,6 @@ final class HomeController: UIViewController {
         dataUpdateDelegate?.updateData()
         NotificationCenter.default.addObserver(forName: NSNotification.Name("데이터업데이트완료"), object: nil, queue: nil) { _ in
             print("DEBUG: 화면 업데이트 완료")
-            NotificationCenter.default.removeObserver(self)
         }
         
         //2.5초 뒤에 refreshable 종료
@@ -265,9 +258,9 @@ final class HomeController: UIViewController {
     }
     
     //백그라운드 진입 시간 5분 지나면 데이터 업데이트
-    private func autoDataUpdate() {
+    @objc private func autoDataUpdate() {
         let elapsedTime = Date().timeIntervalSince(lastRefreshDate)
-        let refreshInterval: TimeInterval = DoubleConstant.updateData.rawValue // 5분
+        let refreshInterval: TimeInterval = DoubleConstant.updateData.rawValue
         if elapsedTime >= refreshInterval {
             refreshData()
             // 백그라운드 진입 시간 업데이트
