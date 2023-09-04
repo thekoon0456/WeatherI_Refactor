@@ -9,7 +9,7 @@ import Foundation
 
 final class DustRepository {
     
-    let serviceKey = NetworkQuery.serviceKey.rawValue
+    let serviceKey = NetworkQuery.serviceKey
     var itemCount = "1"
     var itemCode = "PM10" //"PM25"
     var dataGubun = "HOUR"

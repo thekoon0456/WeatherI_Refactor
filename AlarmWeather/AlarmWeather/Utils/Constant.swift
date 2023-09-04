@@ -54,8 +54,20 @@ enum Ments: String {
     case loadingDelayMent = "통신이 늦어지네요😅 서버에 재요청 중입니다..."
 }
 
-enum NetworkQuery: String {
-    case serviceKey = "TbPpUt4IgaF2hibAjqZwt8UIypQm23eXnUeWwU2eK%2F2aDuSttv5ToGxzKUThuLE7XkWWbkw9MqLG0fBC3Q7gPw%3D%3D"
+struct NetworkQuery {
+    static var serviceKey: String {
+        guard let filePath = Bundle.main.path(forResource: "API_KEY", ofType: "plist") else {
+            fatalError("Couldn't find file 'API_KEY.plist'.")
+        }
+        
+        let plist = NSDictionary(contentsOfFile: filePath)
+        
+        guard let value = plist?.object(forKey: "API_KEY") as? String else {
+            fatalError("Couldn't find key 'API_KEY' in 'API_KEY.plist'.")
+        }
+        
+        return value
+    }
 }
 
 struct CategoryIdentifier {
