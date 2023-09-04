@@ -74,7 +74,7 @@ final class WeeklyWeatherCell: UITableViewCell {
         lowTemperature.text = (viewModel?.weeklyWeatherTemp?[row].taMin ?? "") + "º"
         highTemperature.text = (viewModel?.weeklyWeatherTemp?[row].taMax ?? "") + "º"
         weatherIcon.image = UIImage(systemName: viewModel?.weeklyWeatherIconName[row] ?? "")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        probabilityLabel.text = (viewModel?.weeklyWeather?[row].rnSt ?? "") + "%"
+        probabilityLabel.text = (viewModel?.weeklyWeather?[row].rnSt ?? "") == "0" ? "" : (viewModel?.weeklyWeather?[row].rnSt ?? "") + "%"
         configureUI()
     }
     
