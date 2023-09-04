@@ -15,7 +15,7 @@ import Foundation
 
 final class WeeklyWeatherRepository {
 
-    let serviceKey = NetworkQuery.serviceKey.rawValue
+    let serviceKey = NetworkQuery.serviceKey
     var regId = "0"
     
     lazy var weatherUrl = "https://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?pageNo=1%E2%80%A8&regId=\(regId)&serviceKey=\(serviceKey)&numOfRows=100&tmFc=\(DateAndTime.currentTime >= "0600" ? DateAndTime.weeklyQuaryDate : DateAndTime.yesterdayweeklyQuaryDate)&dataType=JSON"

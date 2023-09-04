@@ -58,6 +58,7 @@
 		7C659A0C2A72366D00123B1B /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C659A0B2A72366D00123B1B /* UserService.swift */; };
 		7C6E788B2A7B6C7100341098 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6E788A2A7B6C7100341098 /* OnboardingViewController.swift */; };
 		7C7D47EB2A716EC40079A2CD /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7D47EA2A716EC40079A2CD /* UserEntity.swift */; };
+		7C7E8BD72AA5AB0A00B5822E /* API_KEY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */; };
 		7C7F119F2A6EA23C00C1DB05 /* SettingAddAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F119E2A6EA23C00C1DB05 /* SettingAddAlertViewController.swift */; };
 		7C7F11A12A6F8E8E00C1DB05 /* AlertTimeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F11A02A6F8E8E00C1DB05 /* AlertTimeCell.swift */; };
 		7C8275F12A5C2F1F000BEADC /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8275F02A5C2F1F000BEADC /* CustomTextField.swift */; };
@@ -191,6 +192,7 @@
 		7C6E788A2A7B6C7100341098 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		7C6E788E2A7B96D100341098 /* AlarmWeatherDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AlarmWeatherDebug.entitlements; sourceTree = "<group>"; };
 		7C7D47EA2A716EC40079A2CD /* UserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
+		7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = API_KEY.plist; sourceTree = "<group>"; };
 		7C7F119E2A6EA23C00C1DB05 /* SettingAddAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAddAlertViewController.swift; sourceTree = "<group>"; };
 		7C7F11A02A6F8E8E00C1DB05 /* AlertTimeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertTimeCell.swift; sourceTree = "<group>"; };
 		7C8275F02A5C2F1F000BEADC /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 				7C2364172A3314D70026C49A /* Assets.xcassets */,
 				7C2364192A3314D70026C49A /* LaunchScreen.storyboard */,
 				7C23641C2A3314D70026C49A /* Info.plist */,
+				7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */,
 			);
 			path = AlarmWeather;
 			sourceTree = "<group>";
@@ -611,6 +614,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C23641B2A3314D70026C49A /* LaunchScreen.storyboard in Resources */,
+				7C7E8BD72AA5AB0A00B5822E /* API_KEY.plist in Resources */,
 				7CA2DEC52A7C26500039906F /* location.json in Resources */,
 				7CA2DEC32A7C194E0039906F /* notification.json in Resources */,
 				7C2364182A3314D70026C49A /* Assets.xcassets in Resources */,
