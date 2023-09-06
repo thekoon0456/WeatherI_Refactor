@@ -19,13 +19,15 @@ class UpdateSettingViewController: UIViewController {
     private var textFieldViewModel = TextFieldViewModel()
     private var lastRefreshDate: Date = Date() //백그라운드에서 오래 있으면 홈뷰로
     
-    private lazy var backGroundTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+    private lazy var backGroundTapGesture = UITapGestureRecognizer(target: self,
+                                                                   action: #selector(handleTap))
     
     private var alertProfileImage: UIImage? //선택한 이미지
     
     lazy var backgoundImageView = UIImageView().then {
         $0.frame = view.bounds
-        $0.image = UIImage(named: weatherViewModel?.todayBackgroundImage ?? BackGroundImage.sunnyNight.randomElement()!)
+        $0.image = UIImage(named: weatherViewModel?.todayBackgroundImage
+                           ?? BackGroundImage.sunnyNight.randomElement()!)
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         //밝아서 검은 색 블러 추가
@@ -153,7 +155,11 @@ class UpdateSettingViewController: UIViewController {
     }
     
     func getAddedTime() {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("알림추가"), object: nil, queue: nil) { _ in
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("알림추가"),
+            object: nil,
+            queue: nil
+        ) { _ in
             self.alertTableView.reloadData()
             NotificationCenter.default.removeObserver(self)
         }
@@ -352,7 +358,7 @@ extension UpdateSettingViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell =  tableView.dequeueReusableCell(withIdentifier: CellId.alertTimeCell.rawValue, for: indexPath) as! AlertTimeCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellId.alertTimeCell.rawValue, for: indexPath) as! AlertTimeCell
         cell.viewModel = settingViewModel
         cell.setValue(row: indexPath.row)
         return cell

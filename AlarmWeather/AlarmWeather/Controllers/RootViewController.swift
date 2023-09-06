@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import CoreLocation
+
+import Lottie
 import SnapKit
 import Then
-import CoreLocation
-import Lottie
+
 
 protocol DataUpdateDelegate: AnyObject {
     func updateData()
@@ -58,7 +60,9 @@ final class RootViewController: UIViewController {
         $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
     
-    private let alertController = UIAlertController(title: "기상청 서버 응답 오류입니다😭", message: "요청 재시도를 하시거나 \n잠시 후에 앱을 재실행해주세요🙏", preferredStyle: .alert)
+    private let alertController = UIAlertController(title: "기상청 서버 응답 오류입니다😭",
+                                                    message: "요청 재시도를 하시거나 \n잠시 후에 앱을 재실행해주세요🙏",
+                                                    preferredStyle: .alert)
     
     
     //MARK: - LifeCycle
@@ -66,12 +70,16 @@ final class RootViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
-
+        
         //유저디폴트로 앱 첫 진입시 온보딩뷰로
         if shouldShowOnboarding() {
             DispatchQueue.main.async {
                 self.presentOnboardingController()
-                NotificationCenter.default.addObserver(forName: Notification.Name("온보딩뷰종료"), object: nil, queue: nil) { [weak self] _ in
+                NotificationCenter.default.addObserver(
+                    forName: Notification.Name("온보딩뷰종료"),
+                    object: nil,
+                    queue: nil
+                ) { [weak self] _ in
                     guard let self = self else { return }
                     //유저 디폴트 로그인값 true로
                     isUserLogin.set(true, forKey: "isUserLogin")
@@ -87,7 +95,7 @@ final class RootViewController: UIViewController {
         }
         //애니메이션 로딩뷰
         setAnimationView()
-        animationView.play { [weak self]_ in
+        animationView.play { [weak self] _ in
             //애니메이션 종료시 로딩 관련 타이머 해제
             self?.timerInvalidate()
             self?.alertController.dismiss(animated: true)

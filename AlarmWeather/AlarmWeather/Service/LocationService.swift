@@ -198,4 +198,5 @@ extension LocationService {
         public var x: Int
         public var y: Int
     }
+
 }
