@@ -65,7 +65,6 @@
 		7C7E8BE82AA5CAFC00B5822E /* WidgetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */; };
 		7C7E8BEA2AA5CAFD00B5822E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BE92AA5CAFD00B5822E /* Assets.xcassets */; };
 		7C7E8BEE2AA5CAFD00B5822E /* WidgetExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C7E8BDE2AA5CAFC00B5822E /* WidgetExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		7C7E8BFC2AA5CC9300B5822E /* WeatherWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7E8BFB2AA5CC9300B5822E /* WeatherWidget.swift */; };
 		7C7E8BFD2AA5D0E300B5822E /* WidgetExtensionLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7E8BE52AA5CAFC00B5822E /* WidgetExtensionLiveActivity.swift */; };
 		7C7F119F2A6EA23C00C1DB05 /* SettingAddAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F119E2A6EA23C00C1DB05 /* SettingAddAlertViewController.swift */; };
 		7C7F11A12A6F8E8E00C1DB05 /* AlertTimeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F11A02A6F8E8E00C1DB05 /* AlertTimeCell.swift */; };
@@ -216,7 +215,6 @@
 		7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetExtension.swift; sourceTree = "<group>"; };
 		7C7E8BE92AA5CAFD00B5822E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7C7E8BEB2AA5CAFD00B5822E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7C7E8BFB2AA5CC9300B5822E /* WeatherWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWidget.swift; sourceTree = "<group>"; };
 		7C7F119E2A6EA23C00C1DB05 /* SettingAddAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAddAlertViewController.swift; sourceTree = "<group>"; };
 		7C7F11A02A6F8E8E00C1DB05 /* AlertTimeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertTimeCell.swift; sourceTree = "<group>"; };
 		7C8275F02A5C2F1F000BEADC /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
@@ -324,9 +322,9 @@
 			isa = PBXGroup;
 			children = (
 				7C23640A2A3314D60026C49A /* AlarmWeather */,
+				7C7E8BE22AA5CAFC00B5822E /* WidgetExtension */,
 				7C2364242A3314D70026C49A /* AlarmWeatherTests */,
 				7C23642E2A3314D70026C49A /* AlarmWeatherUITests */,
-				7C7E8BE22AA5CAFC00B5822E /* WidgetExtension */,
 				7C23647C2A3319CE0026C49A /* Frameworks */,
 				7C6585512A74472300CA9620 /* NotificationContentsExtension */,
 				7C2364092A3314D60026C49A /* Products */,
@@ -496,8 +494,8 @@
 			children = (
 				7C7E8BE32AA5CAFC00B5822E /* WidgetExtensionBundle.swift */,
 				7C7E8BF82AA5CC6B00B5822E /* WeatherWidget */,
-				7C7E8BE52AA5CAFC00B5822E /* WidgetExtensionLiveActivity.swift */,
 				7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */,
+				7C7E8BE52AA5CAFC00B5822E /* WidgetExtensionLiveActivity.swift */,
 				7C7E8BE92AA5CAFD00B5822E /* Assets.xcassets */,
 				7C7E8BEB2AA5CAFD00B5822E /* Info.plist */,
 			);
@@ -509,7 +507,6 @@
 			children = (
 				7C7E8BFA2AA5CC8300B5822E /* ViewContent */,
 				7C7E8BF92AA5CC7C00B5822E /* Provider */,
-				7C7E8BFB2AA5CC9300B5822E /* WeatherWidget.swift */,
 			);
 			path = WeatherWidget;
 			sourceTree = "<group>";
@@ -780,7 +777,6 @@
 				7C7F11A12A6F8E8E00C1DB05 /* AlertTimeCell.swift in Sources */,
 				7C623FFD2A4CB98D00367B54 /* LocationService.swift in Sources */,
 				7CBBAF242A602A000053035C /* WeeklyWeatherEntity.swift in Sources */,
-				7C7E8BFC2AA5CC9300B5822E /* WeatherWidget.swift in Sources */,
 				7C1A1E5F2A41621100B97209 /* WeatherRepository.swift in Sources */,
 				7C23646E2A3318F60026C49A /* Constant.swift in Sources */,
 				7C1A1E612A41621D00B97209 /* DustRepository.swift in Sources */,

@@ -29,6 +29,22 @@ struct Provider: TimelineProvider {
     //WidgetKit은 Provider에게 TimeLine을 요청
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         var entries: [SimpleEntry] = []
+        
+        //context: TimelineProviderContext
+        //TimelineProviderContext는 Widget이 렌더링되는 방법에 대한 세부 정보가 포함된 객체에요.
+        /*
+         isPreview: 프리뷰 상황에서 그려줌
+         family: WidgetFamily. switch로 분기처리해서 사용
+         displaySize: Widget의 point size
+         environmentVariantes: Widget이 표시될 때 설정될 수 있는 모든 environment values. ex) .colorScheme
+         */
+        /* ex)
+         if context.isPreview {
+             entry = SimpleEntry(date: Date(), title: "Preview")
+         } else {
+             entry = SimpleEntry(date: Date())
+         }
+         */
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
@@ -59,18 +75,29 @@ struct SimpleEntry: TimelineEntry {
 //MARK: - 위젯에 표시되는 뷰
 
 struct WidgetExtensionEntryView : View {
+    @Environment(\.widgetFamily) private var widgetFamily
     var entry: Provider.Entry
+    lazy var widgetView = VStack {
+        Text(entry.date, style: .time)
+        
+        //위젯 업데이트
+        Button {
+            WidgetCenter.shared.reloadAllTimelines()
+        } label: {
+            Text("새로고침")
+        }
+    }
     
     var body: some View {
-        VStack {
-            Text(entry.date, style: .time)
-            
-            //위젯 업데이트
-            Button {
-                WidgetCenter.shared.reloadAllTimelines()
-            } label: {
-                Text("새로고침")
-            }
+        switch widgetFamily {
+        case .systemSmall:
+            Text("systemSmall")
+        case .systemMedium:
+            Text("systemMedium")
+        case .systemLarge:
+            Text("systemLarge")
+        @unknown default:
+            Text("unknown")
         }
     }
 }
@@ -84,10 +111,10 @@ struct WidgetExtension: Widget {
     private let supportedFamilies:[WidgetFamily] = {
         if #available(iOSApplicationExtension 16.0, *) { //잠금화면 위젯은 iOS16부터
             // iOS 16, 높은 버전 이용자
-            return [.systemSmall, .systemMedium, .accessoryCircular, .accessoryRectangular]
+            return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryRectangular]
         } else {
             // iOS 16, 낮은 버전 이용자
-            return [.systemSmall, .systemMedium]
+            return [.systemSmall, .systemMedium, .systemLarge]
         }
     }()
     
