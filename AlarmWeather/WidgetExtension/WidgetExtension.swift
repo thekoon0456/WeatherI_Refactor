@@ -7,6 +7,7 @@
 
 import WidgetKit
 import SwiftUI
+import CoreLocation
 
 //MARK: - TimelineProvider
 /*
@@ -17,18 +18,58 @@ import SwiftUI
  */
 
 struct Provider: TimelineProvider {
+//    var viewModel: HomeViewModel = HomeViewModel()
+//    var dustViewModel: DustViewModel = DustViewModel()
+//
+//    func getData(completion: @escaping (WeatherModel?, DustModel?) -> Void) {
+//        let dispatchGroup = DispatchGroup()
+//        var todayWeather: WeatherModel?
+//        var todayDust: DustModel?
+//
+//        dispatchGroup.enter()
+//        viewModel.loadTodayWeather { model in
+//            todayWeather = model
+//            print("DEBUG: loadTodayWeather 완료")
+//            dispatchGroup.leave()
+//        }
+//
+//        dispatchGroup.enter()
+//        dustViewModel.loadTodayDust { model in
+//            todayDust = model
+//            print("DEBUG: loadTodayDust 완료")
+//            dispatchGroup.leave()
+//        }
+//
+//        dispatchGroup.notify(queue: .main) {
+//            print("DEBUG: loadData완료")
+//            completion(todayWeather, todayDust)
+//        }
+//    }
+    
+    // 데이터를 불러오기 전(getSnapshot)에 보여줄 placeholder
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date()) //현재 시간
     }
-
+    
+    // 위젯 갤러리에서 위젯을 고를 때 보이는 샘플 데이터를 보여줄때 해당 메소드 호출
+    // API를 통해서 데이터를 fetch하여 보여줄때 딜레이가 있는 경우 여기서 샘플 데이터를 하드코딩해서 보여주는 작업도 가능
+    // context.isPreview가 true인 경우 위젯 갤러리에 위젯이 표출되는 상태
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date())
-        completion(entry)
+//        getData { weatherModel, dustModel in
+            let entry = SimpleEntry(date: Date())
+            completion(entry)
+//        }
     }
-
+    
     //WidgetKit은 Provider에게 TimeLine을 요청
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
+//        getData { WeatherModel, dustModel in
+            let currentDate = Date()
+            let entry = SimpleEntry(date: currentDate)
+            let nextRefresh = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
+            let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
+            completion(timeline)
+//        }
         
         //context: TimelineProviderContext
         //TimelineProviderContext는 Widget이 렌더링되는 방법에 대한 세부 정보가 포함된 객체에요.
@@ -47,15 +88,17 @@ struct Provider: TimelineProvider {
          */
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 2 { //2시간마다 업데이트
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate)
-            entries.append(entry)
-        }
-
-        let timeline = Timeline(entries: entries, policy: .atEnd) //.atEnd 위젯 끝나면 다시 타임라인 요청
-        completion(timeline)
+//        var entries: [SimpleEntry] = []
+//        let currentDate = Date()
+//
+//        for hourOffset in 0 ..< 5 { //1시간씩
+//            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
+//            let entry = SimpleEntry(date: entryDate, )
+//            entries.append(entry)
+//        }
+//
+//        let timeline = Timeline(entries: entries, policy: .atEnd) //policy: TimelineReloadPolicy, .atEnd 위젯 끝나면 다시 타임라인 요청
+//        completion(timeline)
     }
 }
 
@@ -69,6 +112,8 @@ struct Provider: TimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
+//    var todayWeather: WeatherModel?
+//    var todayDust: DustModel?
 }
 
 
@@ -77,28 +122,31 @@ struct SimpleEntry: TimelineEntry {
 struct WidgetExtensionEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
     var entry: Provider.Entry
-    lazy var widgetView = VStack {
-        Text(entry.date, style: .time)
-        
-        //위젯 업데이트
-        Button {
-            WidgetCenter.shared.reloadAllTimelines()
-        } label: {
-            Text("새로고침")
-        }
-    }
     
     var body: some View {
-        switch widgetFamily {
-        case .systemSmall:
-            Text("systemSmall")
-        case .systemMedium:
-            Text("systemMedium")
-        case .systemLarge:
-            Text("systemLarge")
-        @unknown default:
-            Text("unknown")
+//        switch widgetFamily {
+//        case .systemSmall:
+//            Text("systemSmall")
+//        case .systemMedium:
+//            Text("systemMedium")
+//        case .systemLarge:
+//            Text("systemLarge")
+//        @unknown default:
+//            Text("unknown")
+//        }
+        VStack {
+            
+//            Text(entry.todayWeather?.pty ?? "")
+//            Text(entry.todayDust?.pm10Data ?? "")
+            
+            //위젯 업데이트
+            Button {
+                WidgetCenter.shared.reloadAllTimelines()
+            } label: {
+                Text("새로고침")
+            }
         }
+
     }
 }
 
@@ -135,3 +183,4 @@ struct WidgetExtension_Previews: PreviewProvider {
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
+

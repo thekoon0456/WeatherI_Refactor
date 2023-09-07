@@ -14,6 +14,17 @@ import CoreLocation
 //단기예보 카테고리
 
 struct WeatherModel: Codable {
+    static let defaultWeatherModel = WeatherModel(fcstTime: "",
+                                                  sky: "",
+                                                  tmp: "",
+                                                  tmn: "",
+                                                  tmx: "",
+                                                  pop: "",
+                                                  pty: "",
+                                                  pcp: "",
+                                                  reh: "",
+                                                  wsd: "",
+                                                  sno: "")
     //날씨, 온도
     var fcstTime: String //예보시각 //0500
     var sky: String //하늘 상태 //코드값

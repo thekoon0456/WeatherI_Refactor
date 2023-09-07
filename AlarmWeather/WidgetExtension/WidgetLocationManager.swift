@@ -1,84 +1,75 @@
 //
-//  LocationService.swift
-//  AlarmWeather
+//  WidgetLocationManager.swift
+//  WidgetExtension
 //
-//  Created by Deokhun KIM on 2023/06/29.
+//  Created by Deokhun KIM on 2023/09/08.
 //
 
-import Foundation
 import CoreLocation
+import Foundation
 
-final class LocationService {
-    static let shared = LocationService()
-    
-    private init() { }
-    
-    var manager = CLLocationManager()
-    var location: CLLocation?
-    
-    lazy var longitude: Double? = location?.coordinate.longitude
-    lazy var latitude: Double? = location?.coordinate.latitude
-    
+class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+    private var locationManager = CLLocationManager()
+    @Published var userLocation: CLLocation?
     //noti로 보낼 x,y 값
-    var convertedX = 0
-    var convertedY = 0
+    @Published var convertedX = 0
+    @Published var convertedY = 0
     
-    let locale = Locale(identifier: "Ko-kr")
-    var userRegion: String? //메인화면에 나오는 현재 유저 위치 주소
-    var administrativeArea: String? //강원도 //noti로 보낼 dust 값
-    var localityRegion: String? //춘천시
-    var subLocalityRegion: String? //동면
+    var updateLocation = true //위치 한번만 요청
     
-    func getLocation(location: CLLocation, completion: @escaping (CLLocation) -> Void) {
-        // 위치 가져오기
-        //        manager.requestWhenInUseAuthorization()
-        //거리 정확도
-        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters //위치 정확도: 100미터
-        //        manager.distanceFilter = 3000 // 3키로 이동할때마다 업데이트
-        //        manager.allowsBackgroundLocationUpdates = true // 백그라운드 위치 업데이트 허용
-        completion(location)
+    override init() {
+        super.init()
+        setupLocationManager()
     }
     
-    func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
-        let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location, preferredLocale: self.locale) { [weak self] placemarks, _ in
-            guard let self = self,
-                  let placemarks = placemarks else { return }
-            print("DEBUG: 현재 위치는 \(location)입니다.")
-            
-            //주소가 구 주소일때
-            if let locality = placemarks.last?.locality,
-               let subLocality =  placemarks.last?.subLocality,
-               let administrative = placemarks.last?.administrativeArea {
-                userRegion = locality + " " + subLocality
-                localityRegion = locality
-                subLocalityRegion = subLocality
-                administrativeArea = administrative
-                print("DEBUG: 현재 주소는 구 주소: \(String(describing: userRegion))입니다.")
-            } else {
-                //주소가 도로명 주소일때
-                if let administrative = placemarks.first?.administrativeArea,
-                   let name = placemarks.first?.name {
-                    userRegion = administrative + " " + name
-                    administrativeArea = administrative
-                    print("DEBUG: 현재 주소는 도로명: \(String(describing: userRegion))입니다.")
-                }
-            }
-            
-            let convertedXy = LocationService.shared.convertGRID_GPS(lat_X: latitude ?? 0, lng_Y: longitude ?? 0)
+    func setupLocationManager() {
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+//        locationManager.startUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        //위치 필요할때만 true로 요청
+        guard updateLocation else { return }
+        updateLocation = false
+        
+        if let location = locations.last {
+            userLocation = location
+            let convertedXy = convertGRID_GPS(
+                lat_X: location.coordinate.latitude,
+                lng_Y: location.coordinate.longitude
+            )
             convertedX = convertedXy.x
             convertedY = convertedXy.y
-            print("converted: \(convertedX), \(convertedY)")
-            completion()
+        }
+        
+        locationManager.stopUpdatingLocation()
+        print("DEBUG: 위치 업데이트 완료")
+    }
+    
+    // 위도 경도 받아오기 에러
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("DEBUG: 위치서비스 에러 \(error.localizedDescription)")
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        //위치서비스는 background스레드에서 실행
+        DispatchQueue.global().async { [weak self] in
+            guard let self else { return }
+            if CLLocationManager.locationServicesEnabled() {
+                print("DEBUG: 위치 서비스 동의 On")
+                locationManager.startUpdatingLocation() //위치 시작
+            } else {
+                print("DEBUG: 위치 서비스 동의 Off")
+            }
         }
     }
 }
 
-
-
 //MARK: - 위도, 경도를 기상청 X,Y 좌표로 변환
 
-extension LocationService {
+extension LocationManager {
     func convertGRID_GPS(mode: Int = 0, lat_X: Double, lng_Y: Double) -> LatXLngY {
         let RE = 6371.00877 // 지구 반경(km)
         let GRID = 5.0 // 격자 간격(km)

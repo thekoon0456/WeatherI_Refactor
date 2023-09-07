@@ -356,8 +356,6 @@ extension RootViewController: CLLocationManagerDelegate {
             }
         }
     }
-    
-    
 }
 
 extension RootViewController: UNUserNotificationCenterDelegate {

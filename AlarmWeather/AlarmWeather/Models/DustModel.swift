@@ -8,6 +8,12 @@
 import Foundation
 
 struct DustModel {
+    static let defaultDustModel = DustModel(dustState: "",
+                                            pm10Data: "",
+                                            pm25Data: "",
+                                            dustCode: "",
+                                            dataTime: "")
+    
     var dustState: String //"좋음"
     var pm10Data: String //68 미세먼지 농도, "seoul"
     var pm25Data: String //
