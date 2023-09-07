@@ -5,9 +5,10 @@
 //  Created by Deokhun KIM on 2023/09/04.
 //
 
-import WidgetKit
-import SwiftUI
+import Combine
 import CoreLocation
+import SwiftUI
+import WidgetKit
 
 //MARK: - TimelineProvider
 /*
@@ -20,31 +21,23 @@ import CoreLocation
 struct Provider: TimelineProvider {
 //    var viewModel: HomeViewModel = HomeViewModel()
 //    var dustViewModel: DustViewModel = DustViewModel()
-//
-//    func getData(completion: @escaping (WeatherModel?, DustModel?) -> Void) {
-//        let dispatchGroup = DispatchGroup()
-//        var todayWeather: WeatherModel?
-//        var todayDust: DustModel?
-//
-//        dispatchGroup.enter()
-//        viewModel.loadTodayWeather { model in
-//            todayWeather = model
-//            print("DEBUG: loadTodayWeather 완료")
-//            dispatchGroup.leave()
-//        }
-//
-//        dispatchGroup.enter()
-//        dustViewModel.loadTodayDust { model in
-//            todayDust = model
-//            print("DEBUG: loadTodayDust 완료")
-//            dispatchGroup.leave()
-//        }
-//
-//        dispatchGroup.notify(queue: .main) {
-//            print("DEBUG: loadData완료")
-//            completion(todayWeather, todayDust)
-//        }
-//    }
+    
+    var weatherNetwork = WeatherNetwork()
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    mutating func getData(completion: @escaping (WeatherModel?) -> Void) {
+        weatherNetwork
+            .fetchWeatherData()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { error in
+                print("DEBUG: \(error)")
+                completion(nil)
+            }, receiveValue: { model in
+                completion(model)
+            })
+            .store(in: &cancellables)
+    }
     
     // 데이터를 불러오기 전(getSnapshot)에 보여줄 placeholder
     func placeholder(in context: Context) -> SimpleEntry {
@@ -112,7 +105,7 @@ struct Provider: TimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
-//    var todayWeather: WeatherModel?
+    var todayWeather: WeatherModel?
 //    var todayDust: DustModel?
 }
 

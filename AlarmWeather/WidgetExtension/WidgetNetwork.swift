@@ -6,17 +6,47 @@
 //
 
 import Combine
-import Foundation
+import SwiftUI
+
+struct WeatherModel: Decodable {
+    //날씨, 온도
+    var fcstTime: String //예보시각 //0500
+    var sky: String //하늘 상태 //코드값
+    let tmp: String //1시간 기온 //c
+    let tmn: String //일 최저 기온 //c
+    let tmx: String //일 최고 기온 //c
+    
+    //비
+    let pop: String //강수 확률 %
+    var pty: String //강수 형태 //코드값
+    let pcp: String //1시간 강수량 //1mm
+    
+    //습도, 풍속
+    let reh: String //습도 //%
+    let wsd: String //풍속 //m/s
+    
+    //눈
+    let sno: String //1시간 신적설 //1cm
+}
 
 class WeatherNetwork {
     //todayWeather
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "500"
     //사용자 좌표구해서 쿼리 날림
-    var nx = "0"
-    var ny = "0"
-
-    lazy var weatherUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(nx)&ny=\(ny)"
+    
+    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(LocationManager.shared.convertedX ?? 0)&ny=\(LocationManager.shared.convertedY ?? 0)"
+    
+    func fetchWeatherData() -> AnyPublisher<WeatherModel, Error> {
+        guard let url = URL(string: weatherURL) else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
+        
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
+            .decode(type: WeatherModel.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+    }
 }
 
 class DustNetwork {
@@ -28,7 +58,7 @@ class DustNetwork {
 
     lazy var dustUrl = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
     
-//    let userRegion: String = getDustRegion(region: LocationService.shared.administrativeArea ?? "")
+    lazy var userRegion: String = getDustRegion(region: LocationManager.shared.administrativeArea ?? "")
 //
     func getDustRegion(region: String) -> String {
         switch region {

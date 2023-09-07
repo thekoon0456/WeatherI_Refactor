@@ -8,16 +8,22 @@
 import CoreLocation
 import Foundation
 
-class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+class LocationManager: NSObject, CLLocationManagerDelegate {
+    static let shared = LocationManager()
+    
     private var locationManager = CLLocationManager()
-    @Published var userLocation: CLLocation?
-    //noti로 보낼 x,y 값
-    @Published var convertedX = 0
-    @Published var convertedY = 0
+    var userLocation: CLLocation?
+    var convertedX: Int?
+    var convertedY: Int?
+    let locale = Locale(identifier: "Ko-kr")
+    var userRegion: String? //메인화면에 나오는 현재 유저 위치 주소
+    var administrativeArea: String? //강원도 //noti로 보낼 dust 값
+    var localityRegion: String? //춘천시
+    var subLocalityRegion: String? //동면
     
     var updateLocation = true //위치 한번만 요청
     
-    override init() {
+    private override init() {
         super.init()
         setupLocationManager()
     }
@@ -36,16 +42,12 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         if let location = locations.last {
             userLocation = location
-            let convertedXy = convertGRID_GPS(
-                lat_X: location.coordinate.latitude,
-                lng_Y: location.coordinate.longitude
-            )
-            convertedX = convertedXy.x
-            convertedY = convertedXy.y
+            locationToString(location: location) { [weak self] in
+                guard let self else { return }
+                locationManager.stopUpdatingLocation()
+                print("DEBUG: 위치 업데이트 완료")
+            }
         }
-        
-        locationManager.stopUpdatingLocation()
-        print("DEBUG: 위치 업데이트 완료")
     }
     
     // 위도 경도 받아오기 에러
@@ -63,6 +65,46 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             } else {
                 print("DEBUG: 위치 서비스 동의 Off")
             }
+        }
+    }
+}
+
+//MARK: - Location To 주소변환
+extension LocationManager {
+    func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location, preferredLocale: self.locale) { [weak self] placemarks, _ in
+            guard let self = self,
+                  let placemarks = placemarks else { return }
+            print("DEBUG: 현재 위치는 \(location)입니다.")
+            
+            //주소가 구 주소일때
+            if let locality = placemarks.last?.locality,
+               let subLocality =  placemarks.last?.subLocality,
+               let administrative = placemarks.last?.administrativeArea {
+                userRegion = locality + " " + subLocality
+                localityRegion = locality
+                subLocalityRegion = subLocality
+                administrativeArea = administrative
+                print("DEBUG: 현재 주소는 구 주소: \(String(describing: userRegion))입니다.")
+            } else {
+                //주소가 도로명 주소일때
+                if let administrative = placemarks.first?.administrativeArea,
+                   let name = placemarks.first?.name {
+                    userRegion = administrative + " " + name
+                    administrativeArea = administrative
+                    print("DEBUG: 현재 주소는 도로명: \(String(describing: userRegion))입니다.")
+                }
+            }
+            
+            let convertedXy = convertGRID_GPS(
+                lat_X: location.coordinate.latitude,
+                lng_Y: location.coordinate.longitude
+            )
+            convertedX = convertedXy.x
+            convertedY = convertedXy.y
+            print("converted: \(String(describing: convertedX)), \(String(describing: convertedY))")
+            completion()
         }
     }
 }

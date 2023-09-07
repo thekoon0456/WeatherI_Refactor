@@ -497,9 +497,9 @@
 		7C7E8BE22AA5CAFC00B5822E /* WidgetExtension */ = {
 			isa = PBXGroup;
 			children = (
+				7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */,
 				7C7E8BE32AA5CAFC00B5822E /* WidgetExtensionBundle.swift */,
 				7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */,
-				7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */,
 				7C05CCA32AAA334D000063C7 /* WidgetLocationManager.swift */,
 				7C7E8BF82AA5CC6B00B5822E /* WeatherWidget */,
 				7C7E8BE52AA5CAFC00B5822E /* WidgetExtensionLiveActivity.swift */,
