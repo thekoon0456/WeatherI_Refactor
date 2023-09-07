@@ -17,7 +17,7 @@ enum CellId: String {
 
 enum WeatherModelCount: Int {
     case todayDetailWeatherCount = 30
-    case todayOneHourWeatherCount = 15
+    case todayOneHourWeatherCount = 12 //오늘 날씨예보 12시간 기준
 }
 
 enum DoubleConstant: Double {
