@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import Foundation
 
 struct WeatherModel: Decodable {
     //날씨, 온도
@@ -26,7 +27,39 @@ struct WeatherModel: Decodable {
     let wsd: String //풍속 //m/s
     
     //눈
-    let sno: String //1시간 신적설 //1cm
+    let sno: String //1시간 신적설 //1c
+    
+    private enum CoadingKeys: String, CodingKey {
+        case pcp = "PCP"
+        case pop = "POP"
+        case pty = "PTY"
+        case reh = "REH"
+        case sky = "SKY"
+        case sno = "SNO"
+        case tmn = "TMN"
+        case tmp = "TMP"
+        case tmx = "TMX"
+        case uuu = "UUU"
+        case vec = "VEC"
+        case vvv = "VVV"
+        case wav = "WAV"
+        case wsd = "WSD"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CoadingKeys.self)
+        fcstTime = "0200"
+        sky = try container.decode(String.self, forKey: .sky)
+        tmp = try container.decode(String.self, forKey: .tmp)
+        tmn = try container.decode(String.self, forKey: .tmn)
+        tmx = try container.decode(String.self, forKey: .tmx)
+        pop = try container.decode(String.self, forKey: .pop)
+        pty = try container.decode(String.self, forKey: .pty)
+        pcp = try container.decode(String.self, forKey: .pcp)
+        reh = try container.decode(String.self, forKey: .reh)
+        wsd = try container.decode(String.self, forKey: .wsd)
+        sno = try container.decode(String.self, forKey: .sno)
+    }
 }
 
 class WeatherNetwork {
@@ -34,8 +67,10 @@ class WeatherNetwork {
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "500"
     //사용자 좌표구해서 쿼리 날림
+    var x = UserDefaults.shared.integer(forKey: "convertedX")
+    var y = UserDefaults.shared.integer(forKey: "convertedY")
     
-    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(LocationManager.shared.convertedX ?? 0)&ny=\(LocationManager.shared.convertedY ?? 0)"
+    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x)&ny=\(y)"
     
     func fetchWeatherData() -> AnyPublisher<WeatherModel, Error> {
         guard let url = URL(string: weatherURL) else {
@@ -55,10 +90,11 @@ class DustNetwork {
     var itemCount = "1"
     var itemCode = "PM10" //"PM25"
     var dataGubun = "HOUR"
+    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? ""
 
     lazy var dustUrl = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
     
-    lazy var userRegion: String = getDustRegion(region: LocationManager.shared.administrativeArea ?? "")
+    lazy var userRegion: String = getDustRegion(region: administrativeArea)
 //
     func getDustRegion(region: String) -> String {
         switch region {

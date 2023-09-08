@@ -69,6 +69,11 @@ final class LocationService {
             convertedX = convertedXy.x
             convertedY = convertedXy.y
             print("converted: \(convertedX), \(convertedY)")
+            
+            //MARK: - Widget에 보내주는 데이터들
+            UserDefaults.shared.set(convertedX, forKey: "convertedX")
+            UserDefaults.shared.set(convertedY, forKey: "convertedY")
+            UserDefaults.shared.set(administrativeArea, forKey: "administrativeArea")
             completion()
         }
     }

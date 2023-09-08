@@ -10,8 +10,8 @@
 		7C0392F32A66B5AE00A533B2 /* TodayDetailWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0392F22A66B5AE00A533B2 /* TodayDetailWeatherCell.swift */; };
 		7C0392F52A67C8AC00A533B2 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0392F42A67C8AC00A533B2 /* RootViewController.swift */; };
 		7C05CCA12AAA2F2F000063C7 /* WidgetNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */; };
-		7C05CCA42AAA334D000063C7 /* WidgetLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C05CCA32AAA334D000063C7 /* WidgetLocationManager.swift */; };
 		7C05CCA52AAA3588000063C7 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23646D2A3318F60026C49A /* Constant.swift */; };
+		7C05CCA82AAAE5D2000063C7 /* WidgetLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C05CCA72AAAE5D2000063C7 /* WidgetLocationManager.swift */; };
 		7C1A1E552A3DD07400B97209 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E542A3DD07400B97209 /* SettingCell.swift */; };
 		7C1A1E5B2A4161E900B97209 /* WeatherEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E5A2A4161E900B97209 /* WeatherEntity.swift */; };
 		7C1A1E5D2A4161F600B97209 /* DustEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E5C2A4161F600B97209 /* DustEntity.swift */; };
@@ -165,7 +165,8 @@
 		7C0392F22A66B5AE00A533B2 /* TodayDetailWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayDetailWeatherCell.swift; sourceTree = "<group>"; };
 		7C0392F42A67C8AC00A533B2 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetNetwork.swift; sourceTree = "<group>"; };
-		7C05CCA32AAA334D000063C7 /* WidgetLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetLocationManager.swift; sourceTree = "<group>"; };
+		7C05CCA62AAAE2E3000063C7 /* WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetExtension.entitlements; sourceTree = "<group>"; };
+		7C05CCA72AAAE5D2000063C7 /* WidgetLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WidgetLocationManager.swift; sourceTree = "<group>"; };
 		7C1A1E542A3DD07400B97209 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		7C1A1E5A2A4161E900B97209 /* WeatherEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherEntity.swift; sourceTree = "<group>"; };
 		7C1A1E5C2A4161F600B97209 /* DustEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustEntity.swift; sourceTree = "<group>"; };
@@ -497,10 +498,11 @@
 		7C7E8BE22AA5CAFC00B5822E /* WidgetExtension */ = {
 			isa = PBXGroup;
 			children = (
+				7C05CCA62AAAE2E3000063C7 /* WidgetExtension.entitlements */,
 				7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */,
 				7C7E8BE32AA5CAFC00B5822E /* WidgetExtensionBundle.swift */,
 				7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */,
-				7C05CCA32AAA334D000063C7 /* WidgetLocationManager.swift */,
+				7C05CCA72AAAE5D2000063C7 /* WidgetLocationManager.swift */,
 				7C7E8BF82AA5CC6B00B5822E /* WeatherWidget */,
 				7C7E8BE52AA5CAFC00B5822E /* WidgetExtensionLiveActivity.swift */,
 				7C7E8BE92AA5CAFD00B5822E /* Assets.xcassets */,
@@ -857,11 +859,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C05CCA42AAA334D000063C7 /* WidgetLocationManager.swift in Sources */,
 				7CD10C662AA9FA5600D5DFB4 /* WidgetExtension.swift in Sources */,
 				7CD10C682AA9FA5B00D5DFB4 /* WidgetExtensionLiveActivity.swift in Sources */,
 				7C05CCA12AAA2F2F000063C7 /* WidgetNetwork.swift in Sources */,
 				7CD10C672AA9FA5900D5DFB4 /* WidgetExtensionBundle.swift in Sources */,
+				7C05CCA82AAAE5D2000063C7 /* WidgetLocationManager.swift in Sources */,
 				7C05CCA52AAA3588000063C7 /* Constant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1033,11 +1035,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AlarmWeather/AlarmWeatherDebug.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W6X76DS4Z7;
+				DEVELOPMENT_TEAM = W6X76DS4Z7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AlarmWeather/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "날씨의 i";
@@ -1059,7 +1060,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NotiWeather;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1078,11 +1078,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AlarmWeather/AlarmWeather.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W6X76DS4Z7;
+				DEVELOPMENT_TEAM = W6X76DS4Z7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AlarmWeather/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "날씨의 i";
@@ -1104,7 +1103,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NotiWeather;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1249,6 +1247,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = WidgetExtension/WidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W6X76DS4Z7;
@@ -1277,6 +1276,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = WidgetExtension/WidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W6X76DS4Z7;

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import Then
 import Lottie
 
@@ -107,3 +108,5 @@ extension UILabel {
         self.attributedText = attributedString
     }
 }
+
+

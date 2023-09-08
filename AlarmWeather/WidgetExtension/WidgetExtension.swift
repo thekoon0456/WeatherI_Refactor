@@ -18,7 +18,7 @@ import WidgetKit
  TimelineEntry과 마찬가지로 TimelineProvider 도 프로토콜입니다.
  */
 
-struct Provider: TimelineProvider {
+class Provider: TimelineProvider {
 //    var viewModel: HomeViewModel = HomeViewModel()
 //    var dustViewModel: DustViewModel = DustViewModel()
     
@@ -26,7 +26,7 @@ struct Provider: TimelineProvider {
     
     private var cancellables = Set<AnyCancellable>()
     
-    mutating func getData(completion: @escaping (WeatherModel?) -> Void) {
+    func getData(completion: @escaping (WeatherModel?) -> Void) {
         weatherNetwork
             .fetchWeatherData()
             .receive(on: DispatchQueue.main)
@@ -48,21 +48,22 @@ struct Provider: TimelineProvider {
     // API를 통해서 데이터를 fetch하여 보여줄때 딜레이가 있는 경우 여기서 샘플 데이터를 하드코딩해서 보여주는 작업도 가능
     // context.isPreview가 true인 경우 위젯 갤러리에 위젯이 표출되는 상태
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-//        getData { weatherModel, dustModel in
-            let entry = SimpleEntry(date: Date())
+        getData { weatherModel in
+            let entry = SimpleEntry(date: Date(), todayWeather: weatherModel)
             completion(entry)
-//        }
+        }
     }
     
     //WidgetKit은 Provider에게 TimeLine을 요청
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-//        getData { WeatherModel, dustModel in
+        
+        getData { WeatherModel in
             let currentDate = Date()
             let entry = SimpleEntry(date: currentDate)
             let nextRefresh = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
             let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
             completion(timeline)
-//        }
+        }
         
         //context: TimelineProviderContext
         //TimelineProviderContext는 Widget이 렌더링되는 방법에 대한 세부 정보가 포함된 객체에요.
@@ -106,6 +107,10 @@ struct Provider: TimelineProvider {
 struct SimpleEntry: TimelineEntry {
     let date: Date
     var todayWeather: WeatherModel?
+    var x = UserDefaults.shared.integer(forKey: "convertedX")
+    var y = UserDefaults.shared.integer(forKey: "convertedY")
+    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? ""
+    
 //    var todayDust: DustModel?
 }
 
@@ -128,9 +133,9 @@ struct WidgetExtensionEntryView : View {
 //            Text("unknown")
 //        }
         VStack {
-            
-//            Text(entry.todayWeather?.pty ?? "")
-//            Text(entry.todayDust?.pm10Data ?? "")
+            Text(String(entry.x))
+            Text(String(entry.y))
+            Text(entry.administrativeArea)
             
             //위젯 업데이트
             Button {
