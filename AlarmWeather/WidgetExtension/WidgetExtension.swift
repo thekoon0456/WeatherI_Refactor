@@ -26,15 +26,22 @@ class Provider: TimelineProvider {
     
     private var cancellables = Set<AnyCancellable>()
     
-    func getData(completion: @escaping (WeatherModel?) -> Void) {
+    func getData(completion: @escaping ([Item]?) -> Void) {
         weatherNetwork
             .fetchWeatherData()
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { error in
-                print("DEBUG: \(error)")
-                completion(nil)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("DEBUG: sink 성공")
+                    break // 성공적으로 완료된 경우 아무 작업도 필요 없음
+                case .failure(let error):
+                    print("DEBUG: \(error)")
+                }
             }, receiveValue: { model in
-                completion(model)
+                let items = model.response.body.items.item
+                print("DEBUG item: \(items)")
+                completion(items)
             })
             .store(in: &cancellables)
     }
@@ -48,8 +55,8 @@ class Provider: TimelineProvider {
     // API를 통해서 데이터를 fetch하여 보여줄때 딜레이가 있는 경우 여기서 샘플 데이터를 하드코딩해서 보여주는 작업도 가능
     // context.isPreview가 true인 경우 위젯 갤러리에 위젯이 표출되는 상태
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        getData { weatherModel in
-            let entry = SimpleEntry(date: Date(), todayWeather: weatherModel)
+        getData { items in
+            let entry = SimpleEntry(date: Date(), todayWeather: items)
             completion(entry)
         }
     }
@@ -106,7 +113,7 @@ class Provider: TimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
-    var todayWeather: WeatherModel?
+    var todayWeather: [Item]?
     var x = UserDefaults.shared.integer(forKey: "convertedX")
     var y = UserDefaults.shared.integer(forKey: "convertedY")
     var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? ""
@@ -121,30 +128,63 @@ struct WidgetExtensionEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
     var entry: Provider.Entry
     
+    var imageURLString = UserDefaults.shared.string(forKey: "imageURLString")
+    
     var body: some View {
-//        switch widgetFamily {
-//        case .systemSmall:
-//            Text("systemSmall")
-//        case .systemMedium:
-//            Text("systemMedium")
-//        case .systemLarge:
-//            Text("systemLarge")
-//        @unknown default:
-//            Text("unknown")
-//        }
+        //        switch widgetFamily {
+        //        case .systemSmall:
+        //            Text("systemSmall")
+        //        case .systemMedium:
+        //            Text("systemMedium")
+        //        case .systemLarge:
+        //            Text("systemLarge")
+        //        @unknown default:
+        //            Text("unknown")
+        //        }
         VStack {
+            // 로컬 이미지 파일의 경로를 지정
+            if let imageURLString = imageURLString,
+               let imageUrl = URL(string: imageURLString) {
+                // Image 뷰를 사용하여 로컬 이미지 표시
+                Image(uiImage: loadImage(from: imageUrl))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 200, height: 200) // 이미지 크기 조절
+            } else {
+                Text("이미지를 찾을 수 없습니다.")
+            }
+            
             Text(String(entry.x))
             Text(String(entry.y))
             Text(entry.administrativeArea)
+            Text(entry.todayWeather?.first?.fcstTime ?? "데이터 로딩 실패")
+            Text(entry.todayWeather?.first?.fcstValue ?? "데이터 로딩 실패")
             
-            //위젯 업데이트
-            Button {
-                WidgetCenter.shared.reloadAllTimelines()
-            } label: {
-                Text("새로고침")
-            }
+            //            //위젯 업데이트
+            //            Button {
+//                WidgetCenter.shared.reloadAllTimelines()
+//            } label: {
+//                Text("새로고침")
+//            }
         }
 
+    }
+    
+//DEBUG: imageURLs: [file:///var/mobile/Containers/Data/Application/A1E90269-774E-4B69-8EE8-84E2A63921CE/Documents/images/ED34969C-5A36-4A9E-91CF-A7A0EF7768C9.png]
+    
+    // 로컬 이미지 파일을 로드하는 함수
+    func loadImage(from url: URL) -> UIImage {
+        do {
+            let data = try Data(contentsOf: url)
+            if let image = UIImage(data: data) {
+                print("DEBUG: UIImage 변환 성공")
+                return image
+            }
+        } catch {
+            print("로컬 이미지 로드 중 오류 발생: \(error.localizedDescription)")
+        }
+        
+        return UIImage(systemName: "photo") ?? UIImage()
     }
 }
 
