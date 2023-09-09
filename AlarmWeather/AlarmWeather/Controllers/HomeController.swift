@@ -242,7 +242,11 @@ final class HomeController: UIViewController {
         
         //rootVc의 updateData 실행
         dataUpdateDelegate?.updateData()
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("데이터업데이트완료"), object: nil, queue: nil) { _ in
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("데이터업데이트완료"),
+            object: nil,
+            queue: nil
+        ) { _ in
             print("DEBUG: 화면 업데이트 완료")
         }
         

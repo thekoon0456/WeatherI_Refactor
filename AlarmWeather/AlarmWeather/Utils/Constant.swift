@@ -17,7 +17,7 @@ enum CellId: String {
 
 enum WeatherModelCount: Int {
     case todayDetailWeatherCount = 30
-    case todayOneHourWeatherCount = 15
+    case todayOneHourWeatherCount = 12 //오늘 날씨예보 12시간 기준
 }
 
 enum DoubleConstant: Double {
@@ -55,19 +55,21 @@ enum Ments: String {
 }
 
 struct NetworkQuery {
-    static var serviceKey: String {
-        guard let filePath = Bundle.main.path(forResource: "API_KEY", ofType: "plist") else {
-            fatalError("Couldn't find file 'API_KEY.plist'.")
-        }
-        
-        let plist = NSDictionary(contentsOfFile: filePath)
-        
-        guard let value = plist?.object(forKey: "API_KEY") as? String else {
-            fatalError("Couldn't find key 'API_KEY' in 'API_KEY.plist'.")
-        }
-        
-        return value
-    }
+//    static var serviceKey: String {
+//        guard let filePath = Bundle.main.path(forResource: "API_KEY", ofType: "plist") else {
+//            fatalError("Couldn't find file 'API_KEY.plist'.")
+//        }
+//        
+//        let plist = NSDictionary(contentsOfFile: filePath)
+//        
+//        guard let value = plist?.object(forKey: "API_KEY") as? String else {
+//            fatalError("Couldn't find key 'API_KEY' in 'API_KEY.plist'.")
+//        }
+//        
+//        return value
+//    }
+    
+    static var serviceKey = "TbPpUt4IgaF2hibAjqZwt8UIypQm23eXnUeWwU2eK%2F2aDuSttv5ToGxzKUThuLE7XkWWbkw9MqLG0fBC3Q7gPw%3D%3D"
 }
 
 struct CategoryIdentifier {
@@ -418,4 +420,12 @@ struct WeeklyWeatherConst {
         "경상남도 하동": "11H20704"
     ]
 
+}
+
+//MARK: - AppGroup
+extension UserDefaults {
+    static var shared: UserDefaults {
+        let addGroupId = "group.weatherI.widget"
+        return UserDefaults(suiteName: addGroupId)!
+    }
 }

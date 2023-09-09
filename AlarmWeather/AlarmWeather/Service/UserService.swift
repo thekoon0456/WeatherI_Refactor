@@ -31,7 +31,12 @@ final class RealmService {
     }
 
     //MARK: - create
-    func createUser(userName: String?, alertName: String?, alertImage: Data?, alertTimes: List<AlertTimeEntity>?) {
+    func createUser(
+        userName: String?,
+        alertName: String?,
+        alertImage: Data?,
+        alertTimes: List<AlertTimeEntity>?
+    ) {
         let newUser = UserEntity()
         newUser.userName = userName
         newUser.alertName = alertName
@@ -51,7 +56,12 @@ final class RealmService {
     }
     
     //MARK: - update
-    func updateUser(userName: String?, alertName: String?, alertImage: Data?, alertTimes: List<AlertTimeEntity>?) {
+    func updateUser(
+        userName: String?,
+        alertName: String?,
+        alertImage: Data?,
+        alertTimes: List<AlertTimeEntity>?
+    ) {
         let users = readUsers()
         
         if let user = users.first {
