@@ -11,8 +11,6 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
-			<key>AppGroup</key>
-			<string>group.notiWeather</string>
 			<key>UNNotificationExtensionCategory</key>
 			<string>CATEGORY_CUSTOM_UI</string>
 			<key>UNNotificationExtensionDefaultContentHidden</key>

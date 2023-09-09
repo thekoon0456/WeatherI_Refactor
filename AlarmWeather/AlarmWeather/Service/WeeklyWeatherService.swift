@@ -19,8 +19,10 @@ final class WeeklyWeatherService {
                 for i in 3...9 {
                     let rnStItem = i <= 7 ? "rnSt\(i)Pm" : "rnSt\(i)"
                     let wfItem = i <= 7 ? "wf\(i)Pm" : "wf\(i)"
-                    let rnstValue = String(data[0].toDictionary?.filter { $0.key == rnStItem }.first?.value as? Int ?? 0)
-                    let wfValue = data[0].toDictionary?.filter { $0.key == wfItem }.first?.value as? String ?? ""
+                    let rnstValue = String(data[0].toDictionary?
+                        .filter { $0.key == rnStItem }.first?.value as? Int ?? 0)
+                    let wfValue = data[0].toDictionary?
+                        .filter { $0.key == wfItem }.first?.value as? String ?? ""
 
                     let model = WeeklyWeatherModel(date: DateAndTime.getLaterDate(afterDate: i),
                                                    rnSt: rnstValue,

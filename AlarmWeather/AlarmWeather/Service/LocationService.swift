@@ -69,37 +69,13 @@ final class LocationService {
             convertedX = convertedXy.x
             convertedY = convertedXy.y
             print("converted: \(convertedX), \(convertedY)")
+            
+            //MARK: - Widget에 보내주는 데이터들
+            UserDefaults.shared.set(convertedX, forKey: "convertedX")
+            UserDefaults.shared.set(convertedY, forKey: "convertedY")
+            UserDefaults.shared.set(administrativeArea, forKey: "administrativeArea")
             completion()
         }
-        
-        //MARK: - 커스텀 주소 확인 가능
-//        let geocoder = CLGeocoder()
-//        let locale = Locale(identifier: "Ko-kr")
-//        let address = "대한민국 강원도 춘천시 효자동 17-1"
-//
-//        geocoder.geocodeAddressString(address, in: nil, preferredLocale: locale) { placemarks, error in
-//            if let error = error {
-//                print("Geocoding failed with error: \(error.localizedDescription)")
-//                return
-//            }
-//
-//            if let placemark = placemarks?.first {
-//
-//                let locality = placemark.locality ?? ""
-//                let sublocality = placemark.subLocality ?? ""
-//                let administrativeArea = placemark.administrativeArea ?? ""
-//
-//                            self.userRegion = locality + " " + sublocality
-//                            self.localityRegion = locality
-//                            self.subLocalityRegion = sublocality
-//                self.administrativeArea = administrativeArea
-//
-//                print("Locality: \(locality)")
-//                print("Sublocality: \(sublocality)")
-//                print("Administrative Area: \(administrativeArea)")
-//            }
-//        }
-
     }
 }
 
@@ -198,4 +174,36 @@ extension LocationService {
         public var x: Int
         public var y: Int
     }
+    
 }
+
+//MARK: - 커스텀 주소 확인 가능
+//func customLocation() {
+//        let geocoder = CLGeocoder()
+//        let locale = Locale(identifier: "Ko-kr")
+//        let address = "대한민국 강원도 춘천시 효자동 17-1"
+//
+//        geocoder.geocodeAddressString(address, in: nil, preferredLocale: locale) { placemarks, error in
+//            if let error = error {
+//                print("Geocoding failed with error: \(error.localizedDescription)")
+//                return
+//            }
+//
+//            if let placemark = placemarks?.first {
+//
+//                let locality = placemark.locality ?? ""
+//                let sublocality = placemark.subLocality ?? ""
+//                let administrativeArea = placemark.administrativeArea ?? ""
+//
+//                            self.userRegion = locality + " " + sublocality
+//                            self.localityRegion = locality
+//                            self.subLocalityRegion = sublocality
+//                self.administrativeArea = administrativeArea
+//
+//                print("Locality: \(locality)")
+//                print("Sublocality: \(sublocality)")
+//                print("Administrative Area: \(administrativeArea)")
+//            }
+//        }
+//}
+
