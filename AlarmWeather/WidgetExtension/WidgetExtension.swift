@@ -39,7 +39,7 @@ final class Provider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> ()) {
         getData { [weak self] items in
             guard let self else { return }
-            todayWeatherMent(model: items)
+            todayWeatherState(model: items)
             getTempAndPop(model: items)
             let entry = WeatherEntry(date: Date(),
                                     todayWeather: items,
@@ -57,7 +57,7 @@ final class Provider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         getData { [weak self] items in
             guard let self else { return }
-            todayWeatherMent(model: items)
+            todayWeatherState(model: items)
             getTempAndPop(model: items)
             let currentDate = Date()
             let entry = WeatherEntry(date: currentDate,
@@ -100,7 +100,7 @@ extension Provider {
             .store(in: &cancellables)
     }
     
-    private func todayWeatherMent(model: [Item]?) {
+    private func todayWeatherState(model: [Item]?) {
         if model?.filter({ $0.category == "PTY" }).first?.fcstValue == "0" {
             switch model?.filter({ $0.category == "SKY" }).first?.fcstValue {
             case "1":
@@ -145,17 +145,17 @@ extension Provider {
 /*
  TimelineEntry는 date 라는 필수 프로퍼티를 가지는 프로토콜.
  이 date는 위젯을 업데이트하는 시간.
- 위젯을 표시할 날짜를 지정, 위젯 콘텐츠 설정
+ 위젯을 업데이트하는데 기준이 되는 시간과, 위젯에 표시할 컨텐츠를 설정합니다.
  */
 
 struct WeatherEntry: TimelineEntry {
-    let date: Date
-    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패"
-    var todayWeather: [Item]?
-    var todayWeatherLabel: String?
-    var todayWeatherIconName: String?
-    var todayTemp: String?
-    var todayPop: String?
+    let date: Date //시간
+    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패" //위치
+    var todayWeather: [Item]? //기상청 서버에서 가져온 [Item]
+    var todayWeatherLabel: String? //날씨 상태
+    var todayWeatherIconName: String? //날씨 아이콘
+    var todayTemp: String? //온도
+    var todayPop: String? //강수확률
 }
 
 
