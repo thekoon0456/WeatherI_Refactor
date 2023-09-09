@@ -33,7 +33,7 @@ struct Items: Codable {
 }
 
 // MARK: - Item
-struct Item: Codable {
+struct Item: Codable, Equatable {
     let baseDate, baseTime, category, fcstDate: String
     let fcstTime, fcstValue: String
     let nx, ny: Int
@@ -54,18 +54,6 @@ class WeatherNetwork {
     
     lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x)&ny=\(y)"
     
-//    func fetchWeatherData() -> AnyPublisher<WeatherEntity, Error> {
-//        guard let url = URL(string: weatherURL) else {
-//            return Fail(error: URLError(.badURL))
-//                .eraseToAnyPublisher()
-//        }
-//
-//        return URLSession.shared.dataTaskPublisher(for: url)
-//            .map(\.data)
-//            .print()
-//            .decode(type: WeatherEntity.self, decoder: JSONDecoder())
-//            .eraseToAnyPublisher()
-//    }
     
     // Fetch data from the network
     func fetchWeatherData() -> AnyPublisher<WeatherEntity, Error> {
@@ -76,7 +64,9 @@ class WeatherNetwork {
 
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
+            .print()
             .decode(type: WeatherEntity.self, decoder: JSONDecoder())
+            .retry(5) //통신 실패시 5번 재시도
             .eraseToAnyPublisher()
     }
 }
