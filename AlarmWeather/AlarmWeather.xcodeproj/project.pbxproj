@@ -13,6 +13,8 @@
 		7C05CCA52AAA3588000063C7 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23646D2A3318F60026C49A /* Constant.swift */; };
 		7C05CCA82AAAE5D2000063C7 /* WidgetLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C05CCA72AAAE5D2000063C7 /* WidgetLocationManager.swift */; };
 		7C05CCA92AAAEE0B000063C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C2364172A3314D70026C49A /* Assets.xcassets */; };
+		7C17E56E2AAEB9A5004813CE /* API_KEY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */; };
+		7C17E56F2AAEB9E5004813CE /* API_KEY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */; };
 		7C1A1E552A3DD07400B97209 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E542A3DD07400B97209 /* SettingCell.swift */; };
 		7C1A1E5B2A4161E900B97209 /* WeatherEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E5A2A4161E900B97209 /* WeatherEntity.swift */; };
 		7C1A1E5D2A4161F600B97209 /* DustEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E5C2A4161F600B97209 /* DustEntity.swift */; };
@@ -749,6 +751,7 @@
 				7CA246122A7D1383009F6F98 /* loading2.json in Resources */,
 				7C4529A52A76D852008DF938 /* NotiAssets.xcassets in Resources */,
 				7C4529A02A76D0F7008DF938 /* loading.json in Resources */,
+				7C17E56F2AAEB9E5004813CE /* API_KEY.plist in Resources */,
 				7C45299F2A76CFF9008DF938 /* Assets.xcassets in Resources */,
 				7C6585562A74472300CA9620 /* MainInterface.storyboard in Resources */,
 			);
@@ -758,6 +761,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C17E56E2AAEB9A5004813CE /* API_KEY.plist in Resources */,
 				7C05CCA92AAAEE0B000063C7 /* Assets.xcassets in Resources */,
 				7C7E8BEA2AA5CAFD00B5822E /* Assets.xcassets in Resources */,
 			);

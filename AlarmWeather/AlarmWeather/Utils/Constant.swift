@@ -21,9 +21,9 @@ enum WeatherModelCount: Int {
 }
 
 enum DoubleConstant: Double {
-    case networkRequest = 7.0
-    case loadingDelayMent = 5.0
-    case showingLoadingAlert = 15.0
+    case networkRequest = 8.0
+    case loadingDelayMent = 6.0
+    case showingLoadingAlert = 16.0
     case updateData = 600 //10분
 }
 
@@ -55,21 +55,20 @@ enum Ments: String {
 }
 
 struct NetworkQuery {
-//    static var serviceKey: String {
-//        guard let filePath = Bundle.main.path(forResource: "API_KEY", ofType: "plist") else {
-//            fatalError("Couldn't find file 'API_KEY.plist'.")
-//        }
-//        
-//        let plist = NSDictionary(contentsOfFile: filePath)
-//        
-//        guard let value = plist?.object(forKey: "API_KEY") as? String else {
-//            fatalError("Couldn't find key 'API_KEY' in 'API_KEY.plist'.")
-//        }
-//        
-//        return value
-//    }
-    
-    static var serviceKey = "TbPpUt4IgaF2hibAjqZwt8UIypQm23eXnUeWwU2eK%2F2aDuSttv5ToGxzKUThuLE7XkWWbkw9MqLG0fBC3Q7gPw%3D%3D"
+    //API_KEY.plist에 키 저장
+    static var serviceKey: String {
+        guard let filePath = Bundle.main.path(forResource: "API_KEY", ofType: "plist") else {
+            fatalError("Couldn't find file 'API_KEY.plist'.")
+        }
+        
+        let plist = NSDictionary(contentsOfFile: filePath)
+        
+        guard let value = plist?.object(forKey: "API_KEY") as? String else {
+            fatalError("Couldn't find key 'API_KEY' in 'API_KEY.plist'.")
+        }
+        
+        return value
+    }
 }
 
 struct CategoryIdentifier {
