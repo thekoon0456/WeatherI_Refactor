@@ -42,11 +42,12 @@ final class Provider: TimelineProvider {
             todayWeatherState(model: items)
             getTempAndPop(model: items)
             let entry = WeatherEntry(date: Date(),
-                                    todayWeather: items,
-                                    todayWeatherLabel: todayWeatherLabel,
-                                    todayWeatherIconName: todayWeatherIconName,
-                                    todayTemp: temp,
-                                    todayPop: pop)
+                                     imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
+                                     todayWeather: items,
+                                     todayWeatherLabel: todayWeatherLabel,
+                                     todayWeatherIconName: todayWeatherIconName,
+                                     todayTemp: temp,
+                                     todayPop: pop)
             completion(entry)
         }
     }
@@ -61,16 +62,16 @@ final class Provider: TimelineProvider {
             getTempAndPop(model: items)
             let currentDate = Date()
             let entry = WeatherEntry(date: currentDate,
-                                    todayWeather: items,
-                                    todayWeatherLabel: todayWeatherLabel,
-                                    todayWeatherIconName: todayWeatherIconName,
-                                    todayTemp: temp,
-                                    todayPop: pop)
-            let nextRefresh = Calendar.current.date(byAdding: .hour,
-                                                    value: 2,
-                                                    to: currentDate)!
-            let timeline = Timeline(entries: [entry],
-                                    policy: .after(nextRefresh))
+                                     imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
+                                     todayWeather: items,
+                                     todayWeatherLabel: todayWeatherLabel,
+                                     todayWeatherIconName: todayWeatherIconName,
+                                     todayTemp: temp,
+                                     todayPop: pop)
+            // 업데이트 주기 설정
+            let updateFrequency = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
+            let timeline = Timeline(entries: [entry], policy: .after(updateFrequency))
+
             completion(timeline)
         }
     }
@@ -150,6 +151,7 @@ extension Provider {
 
 struct WeatherEntry: TimelineEntry {
     let date: Date //시간
+    var imageURL: String?
     var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패" //위치
     var todayWeather: [Item]? //기상청 서버에서 가져온 [Item]
     var todayWeatherLabel: String? //날씨 상태
@@ -169,14 +171,20 @@ struct WidgetExtensionEntryView : View {
     var body: some View {
         ZStack {
             //TODO: - 배경이미지 설정 (현재 로컬 URL 못 받아오는 중)
-            if let imageURLString = imageURLString,
+            if let imageURLString = entry.imageURL,
                let imageUrl = URL(string: imageURLString) {
                 // Image 뷰를 사용하여 로컬 이미지 표시
                 Image(uiImage: loadImage(from: imageUrl))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             } else {
-                Text("이미지를 찾을 수 없습니다.")
+                let randomInt = (1...5).randomElement()!
+                let originalImage = UIImage(named: "sunnyNight" + "\(randomInt)")
+                let image = resizeImage(image: originalImage!,
+                                        targetSize: CGSize(width: 500, height: 500))
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
             }
             
             HStack {

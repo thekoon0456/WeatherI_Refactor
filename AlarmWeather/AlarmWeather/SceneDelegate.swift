@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WidgetKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
@@ -37,10 +38,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This may occur due to temporary interruptions (ex. an incoming phone call).
         
     }
-
+    
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
+        
+        // 위젯 업데이트 요청 보내기
+        WidgetCenter.shared.reloadTimelines(ofKind: "com.thekoon.NotiWeather.WidgetExtension")
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
