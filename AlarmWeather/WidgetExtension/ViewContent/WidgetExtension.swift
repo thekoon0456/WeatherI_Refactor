@@ -18,22 +18,20 @@ struct WidgetExtensionEntryView : View {
     
     var body: some View {
         ZStack {
-            //TODO: - 배경이미지 설정 (현재 로컬 URL 못 받아오는 중)
-            if let imageURLString = entry.imageURL,
-               let imageUrl = URL(string: imageURLString) {
-                // Image 뷰를 사용하여 로컬 이미지 표시
-                Image(uiImage: loadImage(from: imageUrl))
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else {
-                let randomInt = (1...5).randomElement()!
-                let originalImage = UIImage(named: "sunnyNight" + "\(randomInt)")
-                let image = resizeImage(image: originalImage!,
-                                        targetSize: CGSize(width: 500, height: 500))
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            }
+            //            //TODO: - 배경이미지 설정 (현재 로컬 URL 못 받아오는 중)
+            //            if let imageURLString = entry.imageURL,
+            //               let imageUrl = URL(string: imageURLString) {
+            //                // Image 뷰를 사용하여 로컬 이미지 표시
+            //                Image(uiImage: loadImage(from: imageUrl))
+            //                    .resizable()
+            //                    .aspectRatio(contentMode: .fill)
+            //            } else {
+            let image = resizeImage(image: UIImage(named: entry.todayBackgroundImage ?? ""),
+                                    targetSize: CGSize(width: 500, height: 500))
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+            //            }
             
             HStack {
                 VStack {
@@ -109,14 +107,14 @@ extension View {
         } catch {
             print("이미지 로드 중 오류 발생: \(error.localizedDescription)")
         }
-        let randomInt = (1...5).randomElement()!
+        let randomInt = (1...5).randomElement() ?? 1
         let originalImage = UIImage(named: "sunnyNight" + "\(randomInt)")
         return resizeImage(image: originalImage!, targetSize: CGSize(width: 600, height: 600))
     }
     
     //파일 사이즈 변경 함수
-    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
-        let size = image.size
+    func resizeImage(image: UIImage?, targetSize: CGSize) -> UIImage {
+        guard let size = image?.size else { return UIImage(named: "sunnyNight1") ?? UIImage()}
         let widthRatio = targetSize.width / size.width
         let heightRatio = targetSize.height / size.height
 
@@ -130,11 +128,13 @@ extension View {
 
         // 그래픽 컨텍스트를 만들어 이미지 크기를 조정
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
-        image.draw(in: CGRect(origin: .zero, size: newSize))
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        image?.draw(in: CGRect(origin: .zero, size: newSize))
+        guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else {
+            return UIImage(named: "sunnyNight1") ?? UIImage()
+        }
         UIGraphicsEndImageContext()
 
-        return newImage ?? UIImage()
+        return newImage
     }
 }
 

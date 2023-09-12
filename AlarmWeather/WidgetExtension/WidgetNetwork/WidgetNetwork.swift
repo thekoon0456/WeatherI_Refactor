@@ -8,8 +8,6 @@
 import Combine
 import SwiftUI
 
-
-
 class WeatherNetwork {
     //todayWeather
     let serviceKey = NetworkQuery.serviceKey

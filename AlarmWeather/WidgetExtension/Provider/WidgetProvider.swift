@@ -19,6 +19,7 @@ import WidgetKit
 struct WeatherEntry: TimelineEntry {
     let date: Date //시간
     var imageURL: String?
+    var todayBackgroundImage: String?
     var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패" //위치
     var todayWeather: [Item]? //기상청 서버에서 가져온 [Item]
     var todayWeatherLabel: String? //날씨 상태
@@ -41,6 +42,7 @@ final class Provider: TimelineProvider {
     private var temp: String?
     private var pop: String?
     private var cancellables: [AnyCancellable] = []
+    private var todayBackgroundImage: String?
     
     // 데이터를 불러오기 전(getSnapshot)에 보여줄 placeholder
     func placeholder(in context: Context) -> WeatherEntry {
@@ -64,9 +66,11 @@ final class Provider: TimelineProvider {
                 guard let self else { return }
                 todayWeatherState(model: items)
                 getTempAndPop(model: items)
+                getHomeViewBackgroundImage(model: items)
                 
                 let entry = WeatherEntry(date: Date(),
                                          imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
+                                         todayBackgroundImage: todayBackgroundImage,
                                          todayWeather: items,
                                          todayWeatherLabel: todayWeatherLabel,
                                          todayWeatherIconName: todayWeatherIconName,
@@ -82,9 +86,6 @@ final class Provider: TimelineProvider {
     // 이 함수는 위젯의 타임라인을 정의하고 업데이트 주기를 관리합니다.
     // 위젯의 데이터를 업데이트하고 새로운 엔트리를 생성하는 데 사용됩니다.
     func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
-        let currentDate = Date()
-        let updateFrequency = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
-        
         getData()
             .sink(receiveCompletion: { result in
                 switch result {
@@ -97,16 +98,21 @@ final class Provider: TimelineProvider {
                 guard let self else { return }
                 todayWeatherState(model: items)
                 getTempAndPop(model: items)
+                getHomeViewBackgroundImage(model: items)
+                
+                let currentDate = Date()
+                let entryDate = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
                 
                 let entry = WeatherEntry(date: currentDate,
                                          imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
+                                         todayBackgroundImage: todayBackgroundImage,
                                          todayWeather: items,
                                          todayWeatherLabel: todayWeatherLabel,
                                          todayWeatherIconName: todayWeatherIconName,
                                          todayTemp: temp,
                                          todayPop: pop)
                 
-                let timeline = Timeline(entries: [entry], policy: .after(updateFrequency))
+                let timeline = Timeline(entries: [entry], policy: .after(entryDate))
                 completion(timeline)
             })
             .store(in: &cancellables)
@@ -165,4 +171,58 @@ extension Provider {
         temp = model?.filter { $0.category == "TMP" }.first?.fcstValue
         pop = model?.filter { $0.category == "POP" }.first?.fcstValue
     }
+}
+
+//MARK: - 위젯 백그라운드 설정
+
+extension Provider {
+    func getHomeViewBackgroundImage(model: [Item]?) {
+        if model?.first?.fcstTime ?? "" < "0600"  && model?.first?.fcstTime ?? "" > "2000" {
+            if model?.filter({ $0.category == "PTY" }).first?.fcstValue == "0" {
+                switch model?.filter({ $0.category == "SKY" }).first?.fcstValue {
+                case "1":
+                    todayBackgroundImage = BackGroundImage.sunny.randomElement() ?? ""
+                case "3":
+                    todayBackgroundImage = BackGroundImage.cloudy.randomElement() ?? ""
+                case "4":
+                    todayBackgroundImage = BackGroundImage.cloudy.randomElement() ?? ""
+                default:
+                    break
+                }
+            } else {
+                switch model?.filter({ $0.category == "PTY" }).first?.fcstValue {
+                case "1", "2", "4":
+                    todayBackgroundImage = BackGroundImage.rainy.randomElement() ?? ""
+                case "3":
+                    todayBackgroundImage = BackGroundImage.snowing.randomElement() ?? ""
+                default:
+                    break
+                }
+            }
+        } else {
+            if model?.filter({ $0.category == "PTY" }).first?.fcstValue == "0" {
+                switch model?.filter({ $0.category == "SKY" }).first?.fcstValue {
+                case "1":
+                    todayBackgroundImage = BackGroundImage.sunnyNight.randomElement() ?? ""
+                case "3":
+                    todayBackgroundImage = BackGroundImage.cloudyNight.randomElement() ?? ""
+                case "4":
+                    todayBackgroundImage = BackGroundImage.cloudyNight.randomElement() ?? ""
+                default:
+                    break
+                }
+            } else {
+                switch model?.filter({ $0.category == "PTY" }).first?.fcstValue {
+                case "1", "2", "4":
+                    todayBackgroundImage = BackGroundImage.rainyNight.randomElement() ?? ""
+                case "3":
+                    todayBackgroundImage = BackGroundImage.snowingNight.randomElement() ?? ""
+                default:
+                    break
+                }
+            }
+        }
+
+    }
+    
 }
