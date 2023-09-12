@@ -18,6 +18,10 @@ import WidgetKit
 
 struct WeatherEntry: TimelineEntry {
     let date: Date //시간
+    let view: WidgetExtensionEntryView
+}
+
+struct WidgetData {
     var imageURL: String?
     var todayBackgroundImage: String?
     var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패" //위치
@@ -37,16 +41,14 @@ struct WeatherEntry: TimelineEntry {
 
 final class Provider: TimelineProvider {
     private var weatherNetwork = WeatherNetwork()
-    private var todayWeatherLabel: String?
-    private var todayWeatherIconName: String?
-    private var temp: String?
-    private var pop: String?
+    private var widgetData = WidgetData()
+//    private lazy var widgetView = WidgetExtensionEntryView(data: widgetData)
     private var cancellables: [AnyCancellable] = []
-    private var todayBackgroundImage: String?
-    
+
     // 데이터를 불러오기 전(getSnapshot)에 보여줄 placeholder
     func placeholder(in context: Context) -> WeatherEntry {
-        WeatherEntry(date: Date()) //현재 시간
+        let widgetView = WidgetExtensionEntryView(data: widgetData)
+        return WeatherEntry(date: Date(), view: widgetView) //현재 시간
     }
     
     // 이 함수는 위젯의 초기 스냅샷을 제공합니다.
@@ -68,14 +70,9 @@ final class Provider: TimelineProvider {
                 getTempAndPop(model: items)
                 getHomeViewBackgroundImage(model: items)
                 
+                let widgetView = WidgetExtensionEntryView(data: widgetData)
                 let entry = WeatherEntry(date: Date(),
-                                         imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
-                                         todayBackgroundImage: todayBackgroundImage,
-                                         todayWeather: items,
-                                         todayWeatherLabel: todayWeatherLabel,
-                                         todayWeatherIconName: todayWeatherIconName,
-                                         todayTemp: temp,
-                                         todayPop: pop)
+                                         view: widgetView)
                 
                 completion(entry)
             })
@@ -102,16 +99,11 @@ final class Provider: TimelineProvider {
                 
                 let currentDate = Date()
                 let entryDate = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
+                let widgetView = WidgetExtensionEntryView(data: widgetData)
                 
                 let entry = WeatherEntry(date: currentDate,
-                                         imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
-                                         todayBackgroundImage: todayBackgroundImage,
-                                         todayWeather: items,
-                                         todayWeatherLabel: todayWeatherLabel,
-                                         todayWeatherIconName: todayWeatherIconName,
-                                         todayTemp: temp,
-                                         todayPop: pop)
-                
+                                         view: widgetView)
+
                 let timeline = Timeline(entries: [entry], policy: .after(entryDate))
                 completion(timeline)
             })
@@ -136,31 +128,31 @@ extension Provider {
         if model?.filter({ $0.category == "PTY" }).first?.fcstValue == "0" {
             switch model?.filter({ $0.category == "SKY" }).first?.fcstValue {
             case "1":
-                todayWeatherLabel = "맑음"
-                todayWeatherIconName = "sun.max"
+                widgetData.todayWeatherLabel = "맑음"
+                widgetData.todayWeatherIconName = "sun.max"
             case "3":
-                todayWeatherLabel = "구름 많음"
-                todayWeatherIconName = "cloud"
+                widgetData.todayWeatherLabel = "구름 많음"
+                widgetData.todayWeatherIconName = "cloud"
             case "4":
-                todayWeatherLabel = "흐림"
-                todayWeatherIconName = "cloud.sun"
+                widgetData.todayWeatherLabel = "흐림"
+                widgetData.todayWeatherIconName = "cloud.sun"
             default:
                 break
             }
         } else {
             switch model?.filter({ $0.category == "PTY" }).first?.fcstValue {
             case "1":
-                todayWeatherLabel = "비"
-                todayWeatherIconName = "cloud.rain"
+                widgetData.todayWeatherLabel = "비"
+                widgetData.todayWeatherIconName = "cloud.rain"
             case "2":
-                todayWeatherLabel = "비/눈"
-                todayWeatherIconName = "cloud.sleet"
+                widgetData.todayWeatherLabel = "비/눈"
+                widgetData.todayWeatherIconName = "cloud.sleet"
             case "3":
-                todayWeatherLabel = "눈"
-                todayWeatherIconName = "cloud.snow"
+                widgetData.todayWeatherLabel = "눈"
+                widgetData.todayWeatherIconName = "cloud.snow"
             case "4":
-                todayWeatherLabel = "소나기"
-                todayWeatherIconName = "cloud.sun.rain"
+                widgetData.todayWeatherLabel = "소나기"
+                widgetData.todayWeatherIconName = "cloud.sun.rain"
             default:
                 break
             }
@@ -168,8 +160,8 @@ extension Provider {
     }
     
     private func getTempAndPop(model: [Item]?) {
-        temp = model?.filter { $0.category == "TMP" }.first?.fcstValue
-        pop = model?.filter { $0.category == "POP" }.first?.fcstValue
+        widgetData.todayTemp = model?.filter { $0.category == "TMP" }.first?.fcstValue
+        widgetData.todayPop = model?.filter { $0.category == "POP" }.first?.fcstValue
     }
 }
 
@@ -181,20 +173,20 @@ extension Provider {
             if model?.filter({ $0.category == "PTY" }).first?.fcstValue == "0" {
                 switch model?.filter({ $0.category == "SKY" }).first?.fcstValue {
                 case "1":
-                    todayBackgroundImage = BackGroundImage.sunny.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.sunny.randomElement() ?? ""
                 case "3":
-                    todayBackgroundImage = BackGroundImage.cloudy.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.cloudy.randomElement() ?? ""
                 case "4":
-                    todayBackgroundImage = BackGroundImage.cloudy.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.cloudy.randomElement() ?? ""
                 default:
                     break
                 }
             } else {
                 switch model?.filter({ $0.category == "PTY" }).first?.fcstValue {
                 case "1", "2", "4":
-                    todayBackgroundImage = BackGroundImage.rainy.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.rainy.randomElement() ?? ""
                 case "3":
-                    todayBackgroundImage = BackGroundImage.snowing.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.snowing.randomElement() ?? ""
                 default:
                     break
                 }
@@ -203,26 +195,24 @@ extension Provider {
             if model?.filter({ $0.category == "PTY" }).first?.fcstValue == "0" {
                 switch model?.filter({ $0.category == "SKY" }).first?.fcstValue {
                 case "1":
-                    todayBackgroundImage = BackGroundImage.sunnyNight.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.sunnyNight.randomElement() ?? ""
                 case "3":
-                    todayBackgroundImage = BackGroundImage.cloudyNight.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.cloudyNight.randomElement() ?? ""
                 case "4":
-                    todayBackgroundImage = BackGroundImage.cloudyNight.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.cloudyNight.randomElement() ?? ""
                 default:
                     break
                 }
             } else {
                 switch model?.filter({ $0.category == "PTY" }).first?.fcstValue {
                 case "1", "2", "4":
-                    todayBackgroundImage = BackGroundImage.rainyNight.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.rainyNight.randomElement() ?? ""
                 case "3":
-                    todayBackgroundImage = BackGroundImage.snowingNight.randomElement() ?? ""
+                    widgetData.todayBackgroundImage = BackGroundImage.snowingNight.randomElement() ?? ""
                 default:
                     break
                 }
             }
         }
-
     }
-    
 }

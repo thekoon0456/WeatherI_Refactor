@@ -13,7 +13,7 @@ import WidgetKit
 
 struct WidgetExtensionEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
-    var entry: Provider.Entry
+    let data: WidgetData
     var imageURLString = UserDefaults.shared.string(forKey: "imageURLString")
     
     var body: some View {
@@ -26,8 +26,8 @@ struct WidgetExtensionEntryView : View {
             //                    .resizable()
             //                    .aspectRatio(contentMode: .fill)
             //            } else {
-            let image = resizeImage(image: UIImage(named: entry.todayBackgroundImage ?? ""),
-                                    targetSize: CGSize(width: 500, height: 500))
+            let image = resizeImage(image: UIImage(named: data.todayBackgroundImage ?? ""),
+                                    targetSize: CGSize(width: 550, height: 550))
             Image(uiImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -35,23 +35,26 @@ struct WidgetExtensionEntryView : View {
             
             HStack {
                 VStack {
-                    Image(systemName: entry.todayWeatherIconName ?? "")
+                    Image(systemName: data.todayWeatherIconName ?? "")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 60, height: 60)
                     
                     VStack(alignment: .leading) {
-                        Text(entry.administrativeArea)
-                        Text(entry.todayWeatherLabel ?? "날씨 로딩 실패")
-                        Text("온도: " + (entry.todayTemp ?? "날씨 로딩 실패") + "º")
-                        if entry.todayPop != "0" {
-                            Text("강수 확률: " + (entry.todayPop ?? "날씨 로딩 실패") + "%")
+                        Text(data.administrativeArea)
+                        Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
+                        Text("온도: " + (data.todayTemp ?? "날씨 로딩 실패") + "º")
+                        if data.todayPop != "0" {
+                            Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
                         }
                     }
                     .font(.system(.footnote))
                 }
+                .padding(3)
+                .background(Color.black.opacity(0.3))
+                .cornerRadius(10)
                 .padding(7)
-
+                
                 Spacer()
             }
             .foregroundColor(.white)
@@ -63,12 +66,11 @@ struct WidgetExtensionEntryView : View {
 
 struct WidgetExtension: Widget {
     let kind: String = "com.thekoon.NotiWeather.WidgetExtension" //위젯 고유 키
-    let provider = Provider()
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind,
-                            provider: provider) { entry in
-            WidgetExtensionEntryView(entry: entry)
+                            provider: Provider()) { entry in
+            WidgetExtensionEntryView(data: entry.view.data)
         }
         .configurationDisplayName("날씨의 i") //위젯 추가시 디스플레이에 표시되는 앱 이름
         .description("현재 위치의 오늘의 날씨를 확인하세요") //앱 설명
@@ -90,7 +92,6 @@ extension WidgetExtension {
         }
     }
 }
-
 
 //MARK: - Image 관련 extension
 
@@ -138,9 +139,9 @@ extension View {
     }
 }
 
-struct WidgetExtension_Previews: PreviewProvider {
-    static var previews: some View {
-        WidgetExtensionEntryView(entry: WeatherEntry(date: Date()))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
-    }
-}
+//struct WidgetExtension_Previews: PreviewProvider {
+//    static var previews: some View {
+//        WidgetExtensionEntryView(data: WidgetData())
+//            .previewContext(WidgetPreviewContext(family: .systemSmall))
+//    }
+//}
