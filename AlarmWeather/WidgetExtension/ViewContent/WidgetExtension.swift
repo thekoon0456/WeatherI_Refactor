@@ -27,37 +27,42 @@ struct WidgetExtensionEntryView : View {
             //                    .aspectRatio(contentMode: .fill)
             //            } else {
             let image = resizeImage(image: UIImage(named: data.todayBackgroundImage ?? ""),
-                                    targetSize: CGSize(width: 550, height: 550))
+                                    targetSize: CGSize(width: 400, height: 400))
             Image(uiImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+                .padding(-1) //오른쪽 모서리 흰줄
             //            }
             
             HStack {
-                VStack {
+                VStack(alignment: .leading) {
+                    Text(data.administrativeArea)
+                        .font(.system(.footnote))
+                    
                     Image(systemName: data.todayWeatherIconName ?? "")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 60, height: 60)
+                        .frame(width: 35, height: 35)
+                        .padding(.leading, 5)
                     
-                    VStack(alignment: .leading) {
-                        Text(data.administrativeArea)
-                        Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
-                        Text("온도: " + (data.todayTemp ?? "날씨 로딩 실패") + "º")
-                        if data.todayPop != "0" {
-                            Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
-                        }
+                    Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
+                        .font(.system(.callout, weight: .bold))
+                    Text((data.todayTemp ?? "날씨 로딩 실패") + "º")
+                        .font(.system(.callout, weight: .bold))
+                    if data.todayPop != "0" {
+                        Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
+                            .font(.system(.footnote))
                     }
-                    .font(.system(.footnote))
+                    
                 }
-                .padding(3)
-                .background(Color.black.opacity(0.3))
+                .foregroundColor(.white)
+                .padding(5)
+                .background(Color.black.opacity(0.2))
                 .cornerRadius(10)
                 .padding(7)
                 
                 Spacer()
             }
-            .foregroundColor(.white)
         }
     }
 }
