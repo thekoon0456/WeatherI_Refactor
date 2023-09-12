@@ -9,13 +9,38 @@ import Combine
 import SwiftUI
 import WidgetKit
 
+//MARK: - TimelineEntry
+/*
+ TimelineEntry는 date 라는 필수 프로퍼티를 가지는 프로토콜.
+ 이 date는 위젯을 업데이트하는 시간.
+ 위젯을 업데이트하는데 기준이 되는 시간과, 위젯에 표시할 컨텐츠를 설정합니다.
+ */
+
+struct WeatherEntry: TimelineEntry {
+    let date: Date //시간
+    var imageURL: String?
+    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패" //위치
+    var todayWeather: [Item]? //기상청 서버에서 가져온 [Item]
+    var todayWeatherLabel: String? //날씨 상태
+    var todayWeatherIconName: String? //날씨 아이콘
+    var todayTemp: String? //온도
+    var todayPop: String? //강수확률
+}
+
+//MARK: - TimelineProvider
+/*
+ 위젯의 업데이트할 시기를 WidgetKit에 알려줌.
+ WidgetKit이 Provider에 업데이트 할 시간, TimeLine을 요청
+ 요청을 받은 Provider는 TimeLine을 WidgetKit에 제공
+ */
+
 final class Provider: TimelineProvider {
     private var weatherNetwork = WeatherNetwork()
     private var todayWeatherLabel: String?
     private var todayWeatherIconName: String?
     private var temp: String?
     private var pop: String?
-    private var cancellables = Set<AnyCancellable>()
+    private var cancellables: [AnyCancellable] = []
     
     // 데이터를 불러오기 전(getSnapshot)에 보여줄 placeholder
     func placeholder(in context: Context) -> WeatherEntry {
@@ -23,74 +48,82 @@ final class Provider: TimelineProvider {
     }
     
     // 이 함수는 위젯의 초기 스냅샷을 제공합니다.
-    // 스냅샷은 위젯이 업데이트되기 전에 보여지는 초기 데이터
-    // 주로 고정된 데이터를 표시하거나, 이전 업데이트에서 캐싱된 데이터를 빠르게 표시하는 데 사용됩니다.
-    // 위젯 갤러리에서 위젯을 고를 때 보이는 샘플 데이터를 보여줄때 해당 메소드 호출
+    // 초기 로딩에서 한번 호출됨
     // API를 통해서 데이터를 fetch하여 보여줄때 딜레이가 있는 경우 여기서 샘플 데이터를 하드코딩해서 보여주는 작업도 가능
     // context.isPreview가 true인 경우 위젯 갤러리에 위젯이 표출되는 상태
     func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> ()) {
-        getData { [weak self] items in
-            guard let self else { return }
-            todayWeatherState(model: items)
-            getTempAndPop(model: items)
-            let entry = WeatherEntry(date: Date(),
-                                     imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
-                                     todayWeather: items,
-                                     todayWeatherLabel: todayWeatherLabel,
-                                     todayWeatherIconName: todayWeatherIconName,
-                                     todayTemp: temp,
-                                     todayPop: pop)
-            completion(entry)
-        }
+        getData()
+            .sink(receiveCompletion: { result in
+                switch result {
+                case .finished:
+                    print("DEBUG: sink 성공")
+                case .failure(let error):
+                    print("DEBUG: \(error)")
+                }
+            }, receiveValue: { [weak self] items in
+                guard let self else { return }
+                todayWeatherState(model: items)
+                getTempAndPop(model: items)
+                
+                let entry = WeatherEntry(date: Date(),
+                                         imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
+                                         todayWeather: items,
+                                         todayWeatherLabel: todayWeatherLabel,
+                                         todayWeatherIconName: todayWeatherIconName,
+                                         todayTemp: temp,
+                                         todayPop: pop)
+                
+                completion(entry)
+            })
+            .store(in: &cancellables)
     }
     
     //WidgetKit은 Provider에게 TimeLine을 요청
     // 이 함수는 위젯의 타임라인을 정의하고 업데이트 주기를 관리합니다.
     // 위젯의 데이터를 업데이트하고 새로운 엔트리를 생성하는 데 사용됩니다.
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        getData { [weak self] items in
-            guard let self else { return }
-            todayWeatherState(model: items)
-            getTempAndPop(model: items)
-            let currentDate = Date()
-            let entry = WeatherEntry(date: currentDate,
-                                     imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
-                                     todayWeather: items,
-                                     todayWeatherLabel: todayWeatherLabel,
-                                     todayWeatherIconName: todayWeatherIconName,
-                                     todayTemp: temp,
-                                     todayPop: pop)
-            // 업데이트 주기 설정
-            let updateFrequency = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
-            let timeline = Timeline(entries: [entry], policy: .after(updateFrequency))
-
-            completion(timeline)
-        }
+    func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
+        let currentDate = Date()
+        let updateFrequency = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
+        
+        getData()
+            .sink(receiveCompletion: { result in
+                switch result {
+                case .finished:
+                    print("DEBUG: sink 성공")
+                case .failure(let error):
+                    print("DEBUG: \(error)")
+                }
+            }, receiveValue: { [weak self] items in
+                guard let self else { return }
+                todayWeatherState(model: items)
+                getTempAndPop(model: items)
+                
+                let entry = WeatherEntry(date: currentDate,
+                                         imageURL: UserDefaults.shared.string(forKey: "imageURLString"),
+                                         todayWeather: items,
+                                         todayWeatherLabel: todayWeatherLabel,
+                                         todayWeatherIconName: todayWeatherIconName,
+                                         todayTemp: temp,
+                                         todayPop: pop)
+                
+                let timeline = Timeline(entries: [entry], policy: .after(updateFrequency))
+                completion(timeline)
+            })
+            .store(in: &cancellables)
     }
 }
-
 
 //MARK: - 데이터 관련 함수
 
 extension Provider {
-    private func getData(completion: @escaping ([Item]?) -> Void) {
-        weatherNetwork
+    private func getData() -> AnyPublisher<[Item]?, Error> {
+        return weatherNetwork
             .fetchWeatherData()
+            .map { model in
+                return model.response.body.items.item
+            }
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    print("DEBUG: sink 성공")
-                    break
-                case .failure(let error):
-                    print("DEBUG: \(error)")
-                }
-            }, receiveValue: { model in
-                let items = model.response.body.items.item
-                print("DEBUG item: \(items)")
-                completion(items)
-            })
-            .store(in: &cancellables)
+            .eraseToAnyPublisher()
     }
     
     private func todayWeatherState(model: [Item]?) {
