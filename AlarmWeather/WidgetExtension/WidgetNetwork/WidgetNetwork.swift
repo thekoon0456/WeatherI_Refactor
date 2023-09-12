@@ -7,7 +7,6 @@
 
 import Combine
 import SwiftUI
-import Foundation
 
 // MARK: - Welcome
 struct WeatherEntity: Codable {
