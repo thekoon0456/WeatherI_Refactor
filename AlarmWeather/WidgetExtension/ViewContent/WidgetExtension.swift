@@ -16,6 +16,14 @@ struct WidgetExtensionEntryView : View {
     let data: WidgetData
     var imageURLString = UserDefaults.shared.string(forKey: "imageURLString")
     
+    func getTime() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        dateFormatter.dateFormat = "mm/dd hh:mm:ss"
+        return dateFormatter.string(from: data.updateTime ?? Date())
+    }
+    
+    
     var body: some View {
         ZStack {
             //            //TODO: - 배경이미지 설정 (현재 로컬 URL 못 받아오는 중)
@@ -54,7 +62,7 @@ struct WidgetExtensionEntryView : View {
                             .font(.system(.footnote))
                     }
                     
-                    Text(String(describing: data.updateTime)).font(.system(.footnote))
+                    Text(getTime()).font(.system(.footnote))
                     
                 }
                 .foregroundColor(.white)
@@ -62,9 +70,6 @@ struct WidgetExtensionEntryView : View {
                 .background(Color.black.opacity(0.2))
                 .cornerRadius(10)
                 .padding(7)
-                .onChange(of: data) { data in
-                    print("onChange 데이터: \(data)")
-                }
                 
                 Spacer()
             }
@@ -113,14 +118,14 @@ extension View {
             let data = try Data(contentsOf: url)
             if let image = UIImage(data: data) {
                 print("DEBUG: UIImage 변환 성공")
-                return resizeImage(image: image, targetSize: CGSize(width: 500, height: 500))
+                return resizeImage(image: image, targetSize: CGSize(width: 400, height: 400))
             }
         } catch {
             print("이미지 로드 중 오류 발생: \(error.localizedDescription)")
         }
         let randomInt = (1...5).randomElement() ?? 1
         let originalImage = UIImage(named: "sunnyNight" + "\(randomInt)")
-        return resizeImage(image: originalImage!, targetSize: CGSize(width: 600, height: 600))
+        return resizeImage(image: originalImage!, targetSize: CGSize(width: 400, height: 400))
     }
     
     //파일 사이즈 변경 함수
