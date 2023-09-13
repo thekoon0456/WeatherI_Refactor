@@ -14,7 +14,7 @@ import WidgetKit
 struct WidgetExtensionEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
     let data: WidgetData
-    var imageURLString = UserDefaults.shared.string(forKey: "imageURLString")
+    var realmData = RealmManager.shared.readUsers()
     
     func getTime() -> String {
         let dateFormatter = DateFormatter()
@@ -26,21 +26,17 @@ struct WidgetExtensionEntryView : View {
     
     var body: some View {
         ZStack {
-            //            //TODO: - 배경이미지 설정 (현재 로컬 URL 못 받아오는 중)
-            //            if let imageURLString = entry.imageURL,
-            //               let imageUrl = URL(string: imageURLString) {
-            //                // Image 뷰를 사용하여 로컬 이미지 표시
-            //                Image(uiImage: loadImage(from: imageUrl))
-            //                    .resizable()
-            //                    .aspectRatio(contentMode: .fill)
-            //            } else {
-            let image = resizeImage(image: UIImage(named: data.todayBackgroundImage ?? ""),
+            let image = resizeImage(image: UIImage(data: realmData.first?.alertImage ?? Data()),
                                     targetSize: CGSize(width: 400, height: 400))
+            
             Image(uiImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .padding(-1) //오른쪽 모서리 흰줄
-            //            }
+                .overlay {
+                    Rectangle().foregroundColor(Color.black.opacity(0.2))
+                }
+
             
             HStack {
                 VStack(alignment: .leading) {
@@ -66,14 +62,16 @@ struct WidgetExtensionEntryView : View {
                     
                 }
                 .foregroundColor(.white)
-                .padding(5)
-                .background(Color.black.opacity(0.2))
+//                .padding(5)
+//                .background(Color.black.opacity(0.2))
                 .cornerRadius(10)
                 .padding(7)
                 
                 Spacer()
             }
+            
         }
+
     }
 }
 

@@ -163,6 +163,7 @@ final class AlertService {
             try imageData?.write(to: fileURL)
             printContentsOfDirectory(at: imagesDirectoryURL) //디렉토리 확인
             
+            //MARK: - UserDefaults
             let imageURLString = fileURL.absoluteString
             UserDefaults.shared.setValue(imageURLString, forKey: "imageURLString")
             
