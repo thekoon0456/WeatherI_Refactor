@@ -43,7 +43,6 @@ struct WidgetData: Equatable {
 final class Provider: TimelineProvider {
     private var weatherNetwork = WeatherNetwork()
     private var widgetData = WidgetData()
-//    private lazy var widgetView = WidgetExtensionEntryView(data: widgetData)
     private var cancellables: [AnyCancellable] = []
 
     // 데이터를 불러오기 전(getSnapshot)에 보여줄 placeholder
@@ -74,9 +73,6 @@ final class Provider: TimelineProvider {
                 let widgetView = WidgetExtensionEntryView(data: widgetData)
                 
                 print("스냅샷 함수 실행데이터: \(widgetData)")
-//                print(widgetData.todayWeatherLabel)
-//                print(widgetData.todayTemp)
-//                print(widgetData.todayPop)
                 let entry = WeatherEntry(date: Date(),
                                          view: widgetView)
                 
@@ -109,19 +105,18 @@ final class Provider: TimelineProvider {
                 for hourOffset in 0 ..< 2 {
                     let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
                     
-//                    print(items?.filter { $0.category == "TMP" }.first )
-//                    print(items?.filter { $0.category == "SKY" }.first )
-//                    print(items?.filter { $0.category == "POP" }.first )
+                    print(items?.filter { $0.category == "TMP" }.first )
+                    print(items?.filter { $0.category == "SKY" }.first )
+                    print(items?.filter { $0.category == "POP" }.first )
                     widgetData.updateTime = entryDate
-                    
-                    let widgetView = WidgetExtensionEntryView(data: widgetData)
                     
                     print(widgetData.todayWeatherIconName)
                     print(widgetData.todayWeatherLabel)
                     print(widgetData.todayTemp)
                     print(widgetData.todayPop)
-                    print(entryDate)
+                    print(widgetData.updateTime)
                     
+                    let widgetView = WidgetExtensionEntryView(data: widgetData)
                     let entry = WeatherEntry(date: entryDate,
                                              view: widgetView)
                     entries.append(entry)
