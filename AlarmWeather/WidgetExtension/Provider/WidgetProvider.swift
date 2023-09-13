@@ -18,7 +18,8 @@ import WidgetKit
 
 struct WeatherEntry: TimelineEntry {
     let date: Date //시간
-    let view: WidgetExtensionEntryView
+//    let view: WidgetExtensionEntryView
+    let data: WidgetData
 }
 
 struct WidgetData: Equatable {
@@ -28,8 +29,11 @@ struct WidgetData: Equatable {
     var todayWeather: [Item]? //기상청 서버에서 가져온 [Item]
     var todayWeatherLabel: String? //날씨 상태
     var todayWeatherIconName: String? //날씨 아이콘
+    var todaySky: String?
+    var todayPty: String?
     var todayTemp: String? //온도
     var todayPop: String? //강수확률
+    var fcstTime: String?
     var updateTime: Date?
 }
 
@@ -42,195 +46,247 @@ struct WidgetData: Equatable {
 
 final class Provider: TimelineProvider {
     private var weatherNetwork = WeatherNetwork()
-    private var widgetData = WidgetData()
-    private var cancellables: [AnyCancellable] = []
 
     // 데이터를 불러오기 전(getSnapshot)에 보여줄 placeholder
     func placeholder(in context: Context) -> WeatherEntry {
-        let widgetView = WidgetExtensionEntryView(data: widgetData)
-        return WeatherEntry(date: Date(), view: widgetView) //현재 시간
+//        let widgetView = WidgetExtensionEntryView(data: widgetData)
+        return WeatherEntry(date: Date(), data: WidgetData()) //현재 시간
     }
     
-    // 이 함수는 위젯의 초기 스냅샷을 제공합니다.
-    // 초기 로딩에서 한번 호출됨
-    // API를 통해서 데이터를 fetch하여 보여줄때 딜레이가 있는 경우 여기서 샘플 데이터를 하드코딩해서 보여주는 작업도 가능
-    // context.isPreview가 true인 경우 위젯 갤러리에 위젯이 표출되는 상태
-    func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> ()) {
-        getData()
-            .sink(receiveCompletion: { result in
-                switch result {
-                case .finished:
-                    print("DEBUG: sink 성공")
-                case .failure(let error):
-                    print("DEBUG: \(error)")
-                }
-            }, receiveValue: { [weak self] items in
-                guard let self else { return }
-                todayWeatherState(model: items)
-                getTempAndPop(model: items)
-                getHomeViewBackgroundImage(model: items)
-                widgetData.updateTime = Date()
-                let widgetView = WidgetExtensionEntryView(data: widgetData)
-                
-                print("스냅샷 함수 실행데이터: \(widgetData)")
-                let entry = WeatherEntry(date: Date(),
-                                         view: widgetView)
-                
-                completion(entry)
-            })
-            .store(in: &cancellables)
+    func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> Void) {
+        
     }
+    
+//    // 위젯 미리보기 스냅샷
+//    func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> ()) {
+//        getData()
+//            .sink(receiveCompletion: { result in
+//                switch result {
+//                case .finished:
+//                    print("DEBUG: sink 성공")
+//                case .failure(let error):
+//                    print("DEBUG: \(error)")
+//                }
+//            }, receiveValue: { [weak self] items in
+//                guard let self else { return }
+//                todayWeatherState(model: items)
+//                getTempAndPop(model: items)
+//                getHomeViewBackgroundImage(model: items)
+//                widgetData.updateTime = Date()
+//                let widgetView = WidgetExtensionEntryView(data: widgetData)
+//
+//                print("스냅샷 함수 실행데이터: \(widgetData)")
+//                let entry = WeatherEntry(date: Date(),
+//                                         view: widgetView)
+//
+//                completion(entry)
+//            })
+//            .store(in: &cancellables)
+//    }
     
     //WidgetKit은 Provider에게 TimeLine을 요청
     // 이 함수는 위젯의 타임라인을 정의하고 업데이트 주기를 관리합니다.
     // 위젯의 데이터를 업데이트하고 새로운 엔트리를 생성하는 데 사용됩니다.
+//    func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
+//        getData()
+//            .sink(receiveCompletion: { result in
+//                switch result {
+//                case .finished:
+//                    print("DEBUG: sink 성공")
+//                case .failure(let error):
+//                    print("DEBUG: \(error)")
+//                }
+//            }, receiveValue: { [weak self] items in
+//                guard let self else { return }
+//                todayWeatherState(model: items)
+//                getTempAndPop(model: items)
+//                getHomeViewBackgroundImage(model: items)
+//
+//                var entries: [WeatherEntry] = []
+//                let currentDate = Date()
+//
+//                for hourOffset in 0 ..< 2 {
+//                    let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
+//
+//                    print(items?.filter { $0.category == "TMP" }.first )
+//                    print(items?.filter { $0.category == "SKY" }.first )
+//                    print(items?.filter { $0.category == "POP" }.first )
+//                    widgetData.updateTime = entryDate
+//
+//                    print(widgetData.todayWeatherIconName)
+//                    print(widgetData.todayWeatherLabel)
+//                    print(widgetData.todayTemp)
+//                    print(widgetData.todayPop)
+//                    print(widgetData.updateTime)
+//
+//                    let widgetView = WidgetExtensionEntryView(data: widgetData)
+//                    let entry = WeatherEntry(date: entryDate,
+//                                             view: widgetView)
+//                    entries.append(entry)
+//                }
+//
+//                let timeline = Timeline(entries: entries, policy: .atEnd)
+//                completion(timeline)
+//            })
+//            .store(in: &cancellables)
+//    }
+    
     func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
-        getData()
-            .sink(receiveCompletion: { result in
-                switch result {
-                case .finished:
-                    print("DEBUG: sink 성공")
-                case .failure(let error):
-                    print("DEBUG: \(error)")
-                }
-            }, receiveValue: { [weak self] items in
-                guard let self else { return }
-                todayWeatherState(model: items)
-                getTempAndPop(model: items)
-                getHomeViewBackgroundImage(model: items)
+        getData(completion: { [weak self] widgetData in
+            guard let self else { return }
+            var widgetData = widgetData
+            widgetData.todayWeatherLabel = todayWeatherState(model: widgetData).weatherState
+            widgetData.todayWeatherIconName = todayWeatherState(model: widgetData).iconName
+            widgetData.todayTemp = getTempAndPop(model: widgetData).temp
+            widgetData.todayPop = getTempAndPop(model: widgetData).pop
+            widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
 
-                var entries: [WeatherEntry] = []
-                let currentDate = Date()
+            print(widgetData)
+            
+            var entries: [WeatherEntry] = []
+            let currentDate = Date()
+            
+            for hourOffset in 0 ..< 5 {
+                let entryDate = Calendar.current.date(byAdding: .second, value: hourOffset, to: currentDate)!
+                widgetData.updateTime = entryDate
                 
-                for hourOffset in 0 ..< 2 {
-                    let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-                    
-                    print(items?.filter { $0.category == "TMP" }.first )
-                    print(items?.filter { $0.category == "SKY" }.first )
-                    print(items?.filter { $0.category == "POP" }.first )
-                    widgetData.updateTime = entryDate
-                    
-                    print(widgetData.todayWeatherIconName)
-                    print(widgetData.todayWeatherLabel)
-                    print(widgetData.todayTemp)
-                    print(widgetData.todayPop)
-                    print(widgetData.updateTime)
-                    
-                    let widgetView = WidgetExtensionEntryView(data: widgetData)
-                    let entry = WeatherEntry(date: entryDate,
-                                             view: widgetView)
-                    entries.append(entry)
-                }
+                let entry = WeatherEntry(date: entryDate,
+                                         data: widgetData)
                 
-                let timeline = Timeline(entries: entries, policy: .atEnd)
-                completion(timeline)
-            })
-            .store(in: &cancellables)
+                entries.append(entry)
+                print(entry)
+            }
+            
+            let timeline = Timeline(entries: entries, policy: .atEnd)
+            completion(timeline)
+        })
+        
     }
 }
 
 //MARK: - 데이터 관련 함수
 
 extension Provider {
-    private func getData() -> AnyPublisher<[Item]?, Error> {
-        return weatherNetwork
-            .fetchWeatherData()
-            .map { model in
-                return model.response.body.items.item
-            }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-    }
+//    private func getData() -> AnyPublisher<[Item]?, Error> {
+//        return weatherNetwork
+//            .fetchWeatherData()
+//            .map { model in
+//                return model.response.body.items.item
+//            }
+//            .receive(on: DispatchQueue.main)
+    //            .eraseToAnyPublisher()
+    //    }
     
-    private func todayWeatherState(model: [Item]?) {
-        if model?.filter({ $0.category == "PTY" }).first?.fcstValue == "0" {
-            switch model?.filter({ $0.category == "SKY" }).first?.fcstValue {
-            case "1":
-                widgetData.todayWeatherLabel = "맑음"
-                widgetData.todayWeatherIconName = "sun.max"
-            case "3":
-                widgetData.todayWeatherLabel = "구름 많음"
-                widgetData.todayWeatherIconName = "cloud"
-            case "4":
-                widgetData.todayWeatherLabel = "흐림"
-                widgetData.todayWeatherIconName = "cloud.sun"
-            default:
-                break
-            }
-        } else {
-            switch model?.filter({ $0.category == "PTY" }).first?.fcstValue {
-            case "1":
-                widgetData.todayWeatherLabel = "비"
-                widgetData.todayWeatherIconName = "cloud.rain"
-            case "2":
-                widgetData.todayWeatherLabel = "비/눈"
-                widgetData.todayWeatherIconName = "cloud.sleet"
-            case "3":
-                widgetData.todayWeatherLabel = "눈"
-                widgetData.todayWeatherIconName = "cloud.snow"
-            case "4":
-                widgetData.todayWeatherLabel = "소나기"
-                widgetData.todayWeatherIconName = "cloud.sun.rain"
-            default:
-                break
+    private func getData(completion: @escaping (WidgetData) -> Void) {
+        let weatherNetwork = WeatherNetwork()
+        weatherNetwork.performRequest { (result: Result<[Item], NetworkError>) in
+            switch result {
+            case .success(let data):
+                let todaySky = data.filter({ $0.category == "SKY" }).first?.fcstValue
+                let todayPty = data.filter({ $0.category == "PTY" }).first?.fcstValue
+                let todayTemp = data.filter { $0.category == "TMP" }.first?.fcstValue
+                let todayPop = data.filter { $0.category == "POP" }.first?.fcstValue
+                let fcstTime = data.filter { $0.fcstTime == DateAndTime.currentTime }.first?.fcstTime
+                
+                let model = WidgetData(todaySky: todaySky,
+                                       todayPty: todayPty,
+                                       todayTemp: todayTemp,
+                                       todayPop: todayPop,
+                                       fcstTime: fcstTime)
+                
+                completion(model)
+                
+            case .failure(let error):
+                print("DEBUG: getData Error: \(error.localizedDescription)")
             }
         }
     }
     
-    private func getTempAndPop(model: [Item]?) {
-        widgetData.todayTemp = model?.filter { $0.category == "TMP" }.first?.fcstValue
-        widgetData.todayPop = model?.filter { $0.category == "POP" }.first?.fcstValue
+    
+    private func todayWeatherState(model: WidgetData) -> (weatherState: String, iconName: String) {
+        if model.todayPty == "0" {
+            switch model.todaySky {
+            case "1":
+                return ("맑음", "sun.max")
+            case "3":
+                return ("구름 많음", "cloud")
+            case "4":
+                return ("흐림", "cloud.sun")
+            default:
+                break
+            }
+        } else {
+            switch model.todayPty {
+            case "1":
+                return ("비", "cloud.rain")
+            case "2":
+                return ("비/눈", "cloud.sleet")
+            case "3":
+                return ("눈", "cloud.snow")
+            case "4":
+                return ("소나기", "cloud.sun.rain")
+            default:
+                break
+            }
+        }
+        
+        return ("", "")
+    }
+    
+    private func getTempAndPop(model: WidgetData) -> (temp: String?, pop: String?) {
+        return (model.todayTemp, model.todayPop)
     }
 }
 
 //MARK: - 위젯 백그라운드 설정
 
 extension Provider {
-    func getHomeViewBackgroundImage(model: [Item]?) {
-        if model?.first?.fcstTime ?? "" < "0600"  && model?.first?.fcstTime ?? "" > "2000" {
-            if model?.filter({ $0.category == "PTY" }).first?.fcstValue == "0" {
-                switch model?.filter({ $0.category == "SKY" }).first?.fcstValue {
+    func getHomeViewBackgroundImage(model: WidgetData) -> String {
+        if model.fcstTime ?? "" < "0600"  && model.fcstTime ?? "" > "2000" {
+            if model.todayPty == "0" {
+                switch model.todaySky {
                 case "1":
-                    widgetData.todayBackgroundImage = BackGroundImage.sunny.randomElement() ?? ""
+                    return BackGroundImage.sunny.randomElement() ?? ""
                 case "3":
-                    widgetData.todayBackgroundImage = BackGroundImage.cloudy.randomElement() ?? ""
+                    return BackGroundImage.cloudy.randomElement() ?? ""
                 case "4":
-                    widgetData.todayBackgroundImage = BackGroundImage.cloudy.randomElement() ?? ""
+                    return BackGroundImage.cloudy.randomElement() ?? ""
                 default:
                     break
                 }
             } else {
-                switch model?.filter({ $0.category == "PTY" }).first?.fcstValue {
+                switch model.todayPty {
                 case "1", "2", "4":
-                    widgetData.todayBackgroundImage = BackGroundImage.rainy.randomElement() ?? ""
+                    return BackGroundImage.rainy.randomElement() ?? ""
                 case "3":
-                    widgetData.todayBackgroundImage = BackGroundImage.snowing.randomElement() ?? ""
+                    return BackGroundImage.snowing.randomElement() ?? ""
                 default:
                     break
                 }
             }
         } else {
-            if model?.filter({ $0.category == "PTY" }).first?.fcstValue == "0" {
-                switch model?.filter({ $0.category == "SKY" }).first?.fcstValue {
+            if model.todayPty == "0" {
+                switch model.todaySky {
                 case "1":
-                    widgetData.todayBackgroundImage = BackGroundImage.sunnyNight.randomElement() ?? ""
+                    return BackGroundImage.sunnyNight.randomElement() ?? ""
                 case "3":
-                    widgetData.todayBackgroundImage = BackGroundImage.cloudyNight.randomElement() ?? ""
+                    return BackGroundImage.cloudyNight.randomElement() ?? ""
                 case "4":
-                    widgetData.todayBackgroundImage = BackGroundImage.cloudyNight.randomElement() ?? ""
+                    return BackGroundImage.cloudyNight.randomElement() ?? ""
                 default:
                     break
                 }
             } else {
-                switch model?.filter({ $0.category == "PTY" }).first?.fcstValue {
+                switch model.todayPty {
                 case "1", "2", "4":
-                    widgetData.todayBackgroundImage = BackGroundImage.rainyNight.randomElement() ?? ""
+                    return BackGroundImage.rainyNight.randomElement() ?? ""
                 case "3":
-                    widgetData.todayBackgroundImage = BackGroundImage.snowingNight.randomElement() ?? ""
+                    return BackGroundImage.snowingNight.randomElement() ?? ""
                 default:
                     break
                 }
             }
         }
+        return ""
     }
 }

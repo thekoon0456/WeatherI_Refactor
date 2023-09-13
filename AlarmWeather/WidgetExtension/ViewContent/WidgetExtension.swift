@@ -63,7 +63,7 @@ struct WidgetExtensionEntryView : View {
                 .cornerRadius(10)
                 .padding(7)
                 .onChange(of: data) { data in
-                    print("뷰에서 받아온 데이터 \(data)")
+                    print("onChange 데이터: \(data)")
                 }
                 
                 Spacer()
@@ -80,7 +80,7 @@ struct WidgetExtension: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind,
                             provider: Provider()) { entry in
-            WidgetExtensionEntryView(data: entry.view.data)
+            WidgetExtensionEntryView(data: entry.data)
         }
         .configurationDisplayName("날씨의 i") //위젯 추가시 디스플레이에 표시되는 앱 이름
         .description("현재 위치의 오늘의 날씨를 확인하세요") //앱 설명
