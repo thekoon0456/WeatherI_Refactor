@@ -18,7 +18,6 @@ class WeatherNetwork {
     
     lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x)&ny=\(y)"
     
-    
     // Fetch data from the network
     func fetchWeatherData() -> AnyPublisher<WeatherEntity, Error> {
         guard let url = URL(string: weatherURL) else {

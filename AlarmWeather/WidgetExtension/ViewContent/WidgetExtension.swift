@@ -54,12 +54,17 @@ struct WidgetExtensionEntryView : View {
                             .font(.system(.footnote))
                     }
                     
+                    Text(String(describing: data.updateTime)).font(.system(.footnote))
+                    
                 }
                 .foregroundColor(.white)
                 .padding(5)
                 .background(Color.black.opacity(0.2))
                 .cornerRadius(10)
                 .padding(7)
+                .onChange(of: data) { data in
+                    print("뷰에서 받아온 데이터 \(data)")
+                }
                 
                 Spacer()
             }

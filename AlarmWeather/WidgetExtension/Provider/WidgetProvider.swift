@@ -21,7 +21,7 @@ struct WeatherEntry: TimelineEntry {
     let view: WidgetExtensionEntryView
 }
 
-struct WidgetData {
+struct WidgetData: Equatable {
     var imageURL: String?
     var todayBackgroundImage: String?
     var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패" //위치
@@ -30,6 +30,7 @@ struct WidgetData {
     var todayWeatherIconName: String? //날씨 아이콘
     var todayTemp: String? //온도
     var todayPop: String? //강수확률
+    var updateTime: Date?
 }
 
 //MARK: - TimelineProvider
@@ -69,8 +70,13 @@ final class Provider: TimelineProvider {
                 todayWeatherState(model: items)
                 getTempAndPop(model: items)
                 getHomeViewBackgroundImage(model: items)
-                
+                widgetData.updateTime = Date()
                 let widgetView = WidgetExtensionEntryView(data: widgetData)
+                
+                print("스냅샷 함수 실행데이터: \(widgetData)")
+//                print(widgetData.todayWeatherLabel)
+//                print(widgetData.todayTemp)
+//                print(widgetData.todayPop)
                 let entry = WeatherEntry(date: Date(),
                                          view: widgetView)
                 
@@ -96,15 +102,32 @@ final class Provider: TimelineProvider {
                 todayWeatherState(model: items)
                 getTempAndPop(model: items)
                 getHomeViewBackgroundImage(model: items)
-                
-                let currentDate = Date()
-                let entryDate = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
-                let widgetView = WidgetExtensionEntryView(data: widgetData)
-                
-                let entry = WeatherEntry(date: currentDate,
-                                         view: widgetView)
 
-                let timeline = Timeline(entries: [entry], policy: .after(entryDate))
+                var entries: [WeatherEntry] = []
+                let currentDate = Date()
+                
+                for hourOffset in 0 ..< 2 {
+                    let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
+                    
+//                    print(items?.filter { $0.category == "TMP" }.first )
+//                    print(items?.filter { $0.category == "SKY" }.first )
+//                    print(items?.filter { $0.category == "POP" }.first )
+                    widgetData.updateTime = entryDate
+                    
+                    let widgetView = WidgetExtensionEntryView(data: widgetData)
+                    
+                    print(widgetData.todayWeatherIconName)
+                    print(widgetData.todayWeatherLabel)
+                    print(widgetData.todayTemp)
+                    print(widgetData.todayPop)
+                    print(entryDate)
+                    
+                    let entry = WeatherEntry(date: entryDate,
+                                             view: widgetView)
+                    entries.append(entry)
+                }
+                
+                let timeline = Timeline(entries: entries, policy: .atEnd)
                 completion(timeline)
             })
             .store(in: &cancellables)
