@@ -26,17 +26,24 @@ struct WidgetExtensionEntryView : View {
     
     var body: some View {
         ZStack {
-            let image = resizeImage(image: UIImage(data: realmData.first?.alertImage ?? Data()),
-                                    targetSize: CGSize(width: 400, height: 400))
-            
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .padding(-1) //오른쪽 모서리 흰줄
-                .overlay {
-                    Rectangle().foregroundColor(Color.black.opacity(0.2))
-                }
-
+            if let image = resizeImage(image: UIImage(data: realmData.first?.alertImage ?? Data()),
+                                       targetSize: CGSize(width: 400, height: 400)) {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .padding(-1) //오른쪽 모서리 흰줄
+                    .overlay {
+                        Rectangle().foregroundColor(Color.black.opacity(0.2))
+                    }
+            } else {
+                Image(systemName: data.todayBackgroundImage ?? "")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .padding(-1) //오른쪽 모서리 흰줄
+                    .overlay {
+                        Rectangle().foregroundColor(Color.black.opacity(0.2))
+                    }
+            }
             
             HStack {
                 VStack(alignment: .leading) {
@@ -109,26 +116,9 @@ extension WidgetExtension {
 //MARK: - Image 관련 extension
 
 extension View {
-    // 로컬 이미지 파일을 로드하는 함수
-    func loadImage(from url: URL) -> UIImage {
-        //TODO: - 이미지 URL 인식 불가.
-        do {
-            let data = try Data(contentsOf: url)
-            if let image = UIImage(data: data) {
-                print("DEBUG: UIImage 변환 성공")
-                return resizeImage(image: image, targetSize: CGSize(width: 400, height: 400))
-            }
-        } catch {
-            print("이미지 로드 중 오류 발생: \(error.localizedDescription)")
-        }
-        let randomInt = (1...5).randomElement() ?? 1
-        let originalImage = UIImage(named: "sunnyNight" + "\(randomInt)")
-        return resizeImage(image: originalImage!, targetSize: CGSize(width: 400, height: 400))
-    }
-    
     //파일 사이즈 변경 함수
-    func resizeImage(image: UIImage?, targetSize: CGSize) -> UIImage {
-        guard let size = image?.size else { return UIImage(named: "sunnyNight1") ?? UIImage()}
+    func resizeImage(image: UIImage?, targetSize: CGSize) -> UIImage? {
+        guard let size = image?.size else { return UIImage()}
         let widthRatio = targetSize.width / size.width
         let heightRatio = targetSize.height / size.height
 
