@@ -51,6 +51,7 @@
 		7C4E41BD2AB2191800E1933E /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 7C4E41BC2AB2191800E1933E /* Realm */; };
 		7C4E41BF2AB2191A00E1933E /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7C4E41BE2AB2191A00E1933E /* RealmSwift */; };
 		7C4E41C12AB2193700E1933E /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4E41C02AB2193700E1933E /* RealmManager.swift */; };
+		7C4E41C32AB2B66900E1933E /* WidgetExtensionEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4E41C22AB2B66900E1933E /* WidgetExtensionEntryView.swift */; };
 		7C623FFD2A4CB98D00367B54 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C623FFC2A4CB98D00367B54 /* LocationService.swift */; };
 		7C6240042A4D69C200367B54 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C6240032A4D69C200367B54 /* loading.json */; };
 		7C65854F2A74472300CA9620 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C659A122A7293E700123B1B /* UserNotifications.framework */; };
@@ -204,6 +205,7 @@
 		7C4529A42A76D852008DF938 /* NotiAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = NotiAssets.xcassets; sourceTree = "<group>"; };
 		7C499BE72A710062000DCF5D /* TextFieldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldViewModel.swift; sourceTree = "<group>"; };
 		7C4E41C02AB2193700E1933E /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		7C4E41C22AB2B66900E1933E /* WidgetExtensionEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetExtensionEntryView.swift; sourceTree = "<group>"; };
 		7C623FFC2A4CB98D00367B54 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		7C6240032A4D69C200367B54 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		7C65854E2A74472300CA9620 /* NotificationContentsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationContentsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -534,6 +536,7 @@
 		7C7E8BFA2AA5CC8300B5822E /* ViewContent */ = {
 			isa = PBXGroup;
 			children = (
+				7C4E41C22AB2B66900E1933E /* WidgetExtensionEntryView.swift */,
 				7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */,
 			);
 			path = ViewContent;
@@ -889,6 +892,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CD10C662AA9FA5600D5DFB4 /* WidgetExtension.swift in Sources */,
+				7C4E41C32AB2B66900E1933E /* WidgetExtensionEntryView.swift in Sources */,
 				7CD10C682AA9FA5B00D5DFB4 /* WidgetExtensionLiveActivity.swift in Sources */,
 				7C05CCA12AAA2F2F000063C7 /* WidgetNetwork.swift in Sources */,
 				7CD10C672AA9FA5900D5DFB4 /* WidgetExtensionBundle.swift in Sources */,
@@ -1088,7 +1092,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1131,7 +1135,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1237,7 +1241,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1264,7 +1268,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1293,7 +1297,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.WidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1322,7 +1326,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.WidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
