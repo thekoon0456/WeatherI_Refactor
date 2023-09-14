@@ -25,8 +25,8 @@ struct WidgetExtensionEntryView : View {
             //내부 날씨 화면
             HStack {
                 VStack(alignment: .leading) {
-                    Text(data.administrativeArea)
-                        .font(.system(.footnote))
+                    Text(data.administrativeArea ?? "앱을 실행해주세요")
+                        .font(.footnote)
                     
                     Image(systemName: data.todayWeatherIconName ?? "gobackward")
                         .resizable()
@@ -42,12 +42,11 @@ struct WidgetExtensionEntryView : View {
                         .bold()
                     if data.todayPop != "0" {
                         Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
-                            .font(.system(.footnote))
+                            .font(.footnote)
                     }
                     
                     //테스트 (업데이트 시간 확인)
 //                    Text(getTime()).font(.system(.footnote))
-                    
                 }
                 .foregroundColor(.white)
                 .padding(5)

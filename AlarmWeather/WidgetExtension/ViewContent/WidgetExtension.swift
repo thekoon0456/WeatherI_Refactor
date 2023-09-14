@@ -39,10 +39,3 @@ extension WidgetExtension {
         }
     }
 }
-
-//struct WidgetExtension_Previews: PreviewProvider {
-//    static var previews: some View {
-//        WidgetExtensionEntryView(data: WidgetData())
-//            .previewContext(WidgetPreviewContext(family: .systemSmall))
-//    }
-//}

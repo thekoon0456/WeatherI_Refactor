@@ -23,7 +23,7 @@ struct WeatherEntry: TimelineEntry {
 
 struct WidgetData: Equatable {
     var todayBackgroundImage: String?
-    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패" //위치
+    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea")
     var todayWeatherLabel: String? //날씨 상태
     var todayWeatherIconName: String? //날씨 아이콘
     var todaySky: String?

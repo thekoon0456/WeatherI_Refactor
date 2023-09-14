@@ -13,10 +13,10 @@ class WeatherNetwork {
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "20"
     //사용자 좌표구해서 쿼리 날림
-    var x = UserDefaults.shared.integer(forKey: "convertedX")
-    var y = UserDefaults.shared.integer(forKey: "convertedY")
+    var x: Int? = UserDefaults.shared.object(forKey: "convertedX") as? Int
+    var y: Int? = UserDefaults.shared.object(forKey: "convertedY") as? Int
     
-    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x)&ny=\(y)"
+    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 60)&ny=\(y ?? 127)"
     
      //Fetch data from the network
     func fetchWeatherData() -> AnyPublisher<WeatherEntity, Error> {
