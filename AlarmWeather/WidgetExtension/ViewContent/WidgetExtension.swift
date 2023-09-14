@@ -60,13 +60,15 @@ struct WidgetExtensionEntryView : View {
                     Image(systemName: data.todayWeatherIconName ?? "gobackward")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 35, height: 35)
+                        .frame(width: 45, height: 45)
                         .padding(.leading, 5)
                     
                     Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
-                        .font(.system(.callout, weight: .bold))
+                        .font(.callout)
+                        .bold()
                     Text((data.todayTemp ?? "날씨 로딩 실패") + "º")
-                        .font(.system(.callout, weight: .bold))
+                        .font(.callout)
+                        .bold()
                     if data.todayPop != "0" {
                         Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
                             .font(.system(.footnote))
