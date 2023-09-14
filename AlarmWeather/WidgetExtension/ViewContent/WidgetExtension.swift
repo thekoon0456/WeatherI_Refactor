@@ -16,6 +16,7 @@ struct WidgetExtensionEntryView : View {
     let data: WidgetData
     var realmData = RealmManager.shared.readUsers()
     
+    //MARK: - TestCode
     func getTime() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
@@ -26,7 +27,9 @@ struct WidgetExtensionEntryView : View {
     
     var body: some View {
         ZStack {
-            if let image = resizeImage(image: UIImage(data: realmData.first?.alertImage ?? Data()),
+            //배경 이미지
+            if let realmImage = realmData.first?.alertImage,
+               let image = resizeImage(image: UIImage(data: realmImage),
                                        targetSize: CGSize(width: 400, height: 400)) {
                 Image(uiImage: image)
                     .resizable()
@@ -36,21 +39,25 @@ struct WidgetExtensionEntryView : View {
                         Rectangle().foregroundColor(Color.black.opacity(0.2))
                     }
             } else {
-                Image(systemName: data.todayBackgroundImage ?? "")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .padding(-1) //오른쪽 모서리 흰줄
-                    .overlay {
-                        Rectangle().foregroundColor(Color.black.opacity(0.2))
-                    }
+                if let image = resizeImage(image: UIImage(named: data.todayBackgroundImage ?? "cloudy1"),
+                                           targetSize: CGSize(width: 400, height: 400)) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .padding(-1) //오른쪽 모서리 흰줄
+                        .overlay {
+                            Rectangle().foregroundColor(Color.black.opacity(0.2))
+                        }
+                }
             }
-            
+            //TODO: - 위젯 크기에 따라 다른 화면 구현
+            //내부 날씨 화면
             HStack {
                 VStack(alignment: .leading) {
                     Text(data.administrativeArea)
                         .font(.system(.footnote))
                     
-                    Image(systemName: data.todayWeatherIconName ?? "")
+                    Image(systemName: data.todayWeatherIconName ?? "gobackward")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 35, height: 35)
@@ -65,11 +72,12 @@ struct WidgetExtensionEntryView : View {
                             .font(.system(.footnote))
                     }
                     
-                    Text(getTime()).font(.system(.footnote))
+                    //테스트 (업데이트 시간 확인)
+//                    Text(getTime()).font(.system(.footnote))
                     
                 }
                 .foregroundColor(.white)
-//                .padding(5)
+                .padding(5)
 //                .background(Color.black.opacity(0.2))
                 .cornerRadius(10)
                 .padding(7)

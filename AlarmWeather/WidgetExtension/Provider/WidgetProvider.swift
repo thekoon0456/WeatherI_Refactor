@@ -130,11 +130,12 @@ extension Provider {
                 return model.response.body.items.item
             }
             .map { data in
+                print(data)
                 let todaySky = data.filter({ $0.category == "SKY" }).first?.fcstValue
                 let todayPty = data.filter({ $0.category == "PTY" }).first?.fcstValue
                 let todayTemp = data.filter { $0.category == "TMP" }.first?.fcstValue
                 let todayPop = data.filter { $0.category == "POP" }.first?.fcstValue
-                let fcstTime = data.filter { $0.fcstTime == DateAndTime.currentTime }.first?.fcstTime
+                let fcstTime = data.first?.fcstTime
                 
                 return WidgetData(todaySky: todaySky,
                                   todayPty: todayPty,
@@ -184,7 +185,7 @@ extension Provider {
 
 extension Provider {
     func getHomeViewBackgroundImage(model: WidgetData) -> String {
-        if model.fcstTime ?? "" < "0600"  && model.fcstTime ?? "" > "2000" {
+        if model.fcstTime ?? "" >= "0600"  && model.fcstTime ?? "" <= "2000" {
             if model.todayPty == "0" {
                 switch model.todaySky {
                 case "1":
