@@ -13,7 +13,7 @@ import WidgetKit
 
 struct WidgetExtensionEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
-    let data: WidgetData
+    @State var data: WidgetData
     var realmData = RealmManager.shared.readUsers()
     
     var body: some View {
@@ -22,15 +22,14 @@ struct WidgetExtensionEntryView : View {
                 //배경 이미지
                 widgetBackgroundImage
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .overlay {
                         Rectangle()
                             .foregroundColor(Color.black.opacity(0.3))
                     }
-                    .aspectRatio(contentMode: .fill)
                     .frame(width: proxy.size.width,
                            height: proxy.size.height)
-
-                
+  
                 //TODO: - 위젯 크기에 따라 다른 화면 구현
                 //내부 날씨 화면
                 VStack {
@@ -59,7 +58,7 @@ struct WidgetExtensionEntryView : View {
                             
 //                            테스트 (업데이트 시간 확인)
                             Text(getTime())
-                                .font(.footnote)
+                                .font(.system(size: 10))
                         }
                         .foregroundColor(.white)
                         .padding(10)

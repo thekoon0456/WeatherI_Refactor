@@ -132,7 +132,7 @@ extension Provider {
                 return model.response.body.items.item
             }
             .map { data in
-                print(data)
+//                print(data)
                 let todaySky = data.filter({ $0.category == "SKY" }).first?.fcstValue
                 let todayPty = data.filter({ $0.category == "PTY" }).first?.fcstValue
                 let todayTemp = data.filter { $0.category == "TMP" }.first?.fcstValue

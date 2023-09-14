@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 import CoreLocation
+import WidgetKit
 import RealmSwift
 
 @main
@@ -16,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        // 위젯 업데이트 요청 보내기
+        WidgetCenter.shared.reloadTimelines(ofKind: "com.thekoon.NotiWeather.WidgetExtension")
         
         //MARK: - Realm 마이그레이션
         
@@ -50,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        
+
     }
         
 
