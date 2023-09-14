@@ -17,47 +17,60 @@ struct WidgetExtensionEntryView : View {
     var realmData = RealmManager.shared.readUsers()
     
     var body: some View {
-        ZStack {
-            //배경 이미지
-            widgetBackgroundImage
-            
-            //TODO: - 위젯 크기에 따라 다른 화면 구현
-            //내부 날씨 화면
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(data.administrativeArea ?? "앱을 실행해주세요")
-                        .font(.footnote)
-                    
-                    Image(systemName: data.todayWeatherIconName ?? "gobackward")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 45, height: 45)
-                        .padding(.leading, 5)
-                    
-                    Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
-                        .font(.callout)
-                        .bold()
-                    Text((data.todayTemp ?? "날씨 로딩 실패") + "º")
-                        .font(.callout)
-                        .bold()
-                    if data.todayPop != "0" {
-                        Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
-                            .font(.footnote)
+        GeometryReader { proxy in
+            ZStack {
+                //배경 이미지
+                widgetBackgroundImage
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: proxy.size.width,
+                           height: proxy.size.height)
+                    .overlay {
+                        Rectangle()
+                            .foregroundColor(Color.black.opacity(0.2))
                     }
-                    
-                    //테스트 (업데이트 시간 확인)
-//                    Text(getTime()).font(.system(.footnote))
-                }
-                .foregroundColor(.white)
-                .padding(5)
-//                .background(Color.black.opacity(0.2))
-                .cornerRadius(10)
-                .padding(7)
                 
-                Spacer()
+                //TODO: - 위젯 크기에 따라 다른 화면 구현
+                //내부 날씨 화면
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(data.administrativeArea ?? "앱을 실행해주세요")
+                            .font(.footnote)
+                        
+                        Image(systemName: data.todayWeatherIconName ?? "gobackward")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 45, height: 45)
+                            .padding(.leading, 5)
+                        
+                        Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
+                            .font(.callout)
+                            .bold()
+                        Text((data.todayTemp ?? "날씨 로딩 실패") + "º")
+                            .font(.callout)
+                            .bold()
+                        if data.todayPop != "0" {
+                            Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
+                                .font(.footnote)
+                        }
+                        
+                        //테스트 (업데이트 시간 확인)
+    //                    Text(getTime()).font(.system(.footnote))
+                    }
+                    .foregroundColor(.white)
+                    .padding(10)
+    //                .background(Color.black.opacity(0.2))
+    //                .cornerRadius(10)
+                    Spacer()
+                }
+//                .frame(maxWidth: 338, maxHeight: 354)
+                
             }
-            
         }
+
+
+//        .frame(width: UIScreen.widgetFamily.bounds.width,
+//               height: UIScreen.widgetFamily.bounds.height)
         
     }
 }
@@ -65,26 +78,20 @@ struct WidgetExtensionEntryView : View {
 //MARK: -  Widget View
 
 extension WidgetExtensionEntryView {
-    var widgetBackgroundImage: some View {
+    var widgetBackgroundImage: Image {
         var backgroundImage: Image
         
         if let realmImage = realmData.first?.alertImage,
            let image = resizeImage(image: UIImage(data: realmImage),
-                                   targetSize: CGSize(width: 400, height: 400)) {
+                                   targetSize: CGSize(width: 300, height: 300)) {
             backgroundImage = Image(uiImage: image)
         } else {
             let image = resizeImage(image: UIImage(named: data.todayBackgroundImage ?? "cloudy1"),
-                                    targetSize: CGSize(width: 400, height: 400))
+                                    targetSize: CGSize(width: 300, height: 300))
             backgroundImage = Image(uiImage: image ?? UIImage())
         }
         
         return backgroundImage
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .padding(-1) //오른쪽 모서리 흰줄
-            .overlay {
-                Rectangle().foregroundColor(Color.black.opacity(0.2))
-            }
     }
 }
 
