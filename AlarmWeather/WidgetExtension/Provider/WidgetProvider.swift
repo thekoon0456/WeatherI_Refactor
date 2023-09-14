@@ -22,7 +22,6 @@ struct WeatherEntry: TimelineEntry {
 }
 
 struct WidgetData: Equatable {
-    var imageURL: String?
     var todayBackgroundImage: String?
     var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패" //위치
     var todayWeatherLabel: String? //날씨 상태
@@ -97,7 +96,7 @@ final class Provider: TimelineProvider {
                 widgetData.todayTemp = getTempAndPop(model: widgetData).temp
                 widgetData.todayPop = getTempAndPop(model: widgetData).pop
                 widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
-                
+
                 var entries: [WeatherEntry] = []
                 let currentDate = Date()
                 
@@ -105,6 +104,8 @@ final class Provider: TimelineProvider {
                 for hourOffset in 0 ..< 8 {
                     let entryDate = Calendar.current.date(bySettingHour: (2 + hourOffset * 3) % 24, minute: 11, second: 0, of: currentDate)!
                     widgetData.updateTime = entryDate
+                    
+                    print("DEBUG widgetData: \(widgetData)")
                     
                     let entry = WeatherEntry(date: entryDate,
                                              data: widgetData)
@@ -141,7 +142,7 @@ extension Provider {
                                   todayPop: todayPop,
                                   fcstTime: fcstTime)
             }
-            .print()
+//            .print()
 //            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

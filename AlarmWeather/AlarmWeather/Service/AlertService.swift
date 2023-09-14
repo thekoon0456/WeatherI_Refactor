@@ -162,10 +162,10 @@ final class AlertService {
             let fileURL = imagesDirectoryURL.appendingPathComponent("\(uniqueFilename).png")
             try imageData?.write(to: fileURL)
             printContentsOfDirectory(at: imagesDirectoryURL) //디렉토리 확인
-            
-            //MARK: - UserDefaults
-            let imageURLString = fileURL.absoluteString
-            UserDefaults.shared.setValue(imageURLString, forKey: "imageURLString")
+//
+//            //MARK: - UserDefaults
+//            let imageURLString = fileURL.absoluteString
+//            UserDefaults.shared.setValue(imageURLString, forKey: "imageURLString")
             
             return fileURL
         } catch {

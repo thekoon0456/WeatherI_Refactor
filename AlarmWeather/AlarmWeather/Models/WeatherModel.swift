@@ -45,7 +45,7 @@ struct WeatherModel: Codable {
     let sno: String //1시간 신적설 //1cm
 }
 
-struct TodayDetailWeatherModel {
+struct TodayDetailWeatherModel: Equatable {
     var fcstDate: String
     var fcstTime: String //예보시각 //0500
     var sky: String //하늘 상태 //코드값
