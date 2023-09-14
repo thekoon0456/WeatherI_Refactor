@@ -22,56 +22,59 @@ struct WidgetExtensionEntryView : View {
                 //배경 이미지
                 widgetBackgroundImage
                     .resizable()
+                    .overlay {
+                        Rectangle()
+                            .foregroundColor(Color.black.opacity(0.3))
+                    }
                     .aspectRatio(contentMode: .fill)
                     .frame(width: proxy.size.width,
                            height: proxy.size.height)
-                    .overlay {
-                        Rectangle()
-                            .foregroundColor(Color.black.opacity(0.2))
-                    }
+
                 
                 //TODO: - 위젯 크기에 따라 다른 화면 구현
                 //내부 날씨 화면
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(data.administrativeArea ?? "앱을 실행해주세요")
-                            .font(.footnote)
-                        
-                        Image(systemName: data.todayWeatherIconName ?? "gobackward")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 45, height: 45)
-                            .padding(.leading, 5)
-                        
-                        Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
-                            .font(.callout)
-                            .bold()
-                        Text((data.todayTemp ?? "날씨 로딩 실패") + "º")
-                            .font(.callout)
-                            .bold()
-                        if data.todayPop != "0" {
-                            Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
+                VStack {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(data.administrativeArea ?? "앱을 실행해주세요")
+                                .font(.caption2)
+                            
+                            Image(systemName: data.todayWeatherIconName ?? "gobackward")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50)
+                                .padding(.leading, 5)
+                            
+                            Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
+                                .font(.body)
+                                .bold()
+                            Text((data.todayTemp ?? "온도 로딩 실패") + "º")
+                                .font(.callout)
+                                .bold()
+                            
+                            if data.todayPop != "0" {
+                                Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
+                                    .font(.caption)
+                            }
+                            
+//                            테스트 (업데이트 시간 확인)
+                            Text(getTime())
                                 .font(.footnote)
                         }
+                        .foregroundColor(.white)
+                        .padding(10)
                         
-                        //테스트 (업데이트 시간 확인)
-    //                    Text(getTime()).font(.system(.footnote))
+                        Spacer()
                     }
-                    .foregroundColor(.white)
-                    .padding(10)
-    //                .background(Color.black.opacity(0.2))
-    //                .cornerRadius(10)
-                    Spacer()
+                    
+                    //위젯 사이즈가 클때 컨텐츠 위로 올림
+                    if widgetFamily == .systemLarge {
+                        Spacer()
+                    }
                 }
-//                .frame(maxWidth: 338, maxHeight: 354)
                 
             }
         }
-
-
-//        .frame(width: UIScreen.widgetFamily.bounds.width,
-//               height: UIScreen.widgetFamily.bounds.height)
-        
     }
 }
 
@@ -81,15 +84,20 @@ extension WidgetExtensionEntryView {
     var widgetBackgroundImage: Image {
         var backgroundImage: Image
         
-        if let realmImage = realmData.first?.alertImage,
-           let image = resizeImage(image: UIImage(data: realmImage),
-                                   targetSize: CGSize(width: 300, height: 300)) {
-            backgroundImage = Image(uiImage: image)
-        } else {
-            let image = resizeImage(image: UIImage(named: data.todayBackgroundImage ?? "cloudy1"),
-                                    targetSize: CGSize(width: 300, height: 300))
+        guard
+            let realmImage = realmData.first?.alertImage,
+            let image = resizeImage(
+                image: UIImage(data: realmImage),
+                targetSize: CGSize(width: 300, height: 300))
+        else {
+            let image = resizeImage(
+                image: UIImage(named: data.todayBackgroundImage ?? "sunnyNight1"),
+                targetSize: CGSize(width: 300, height: 300))
             backgroundImage = Image(uiImage: image ?? UIImage())
+            return backgroundImage
         }
+        
+        backgroundImage = Image(uiImage: image)
         
         return backgroundImage
     }
@@ -101,7 +109,7 @@ extension WidgetExtensionEntryView {
     func getTime() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
-        dateFormatter.dateFormat = "mm/dd hh:mm:ss"
+        dateFormatter.dateFormat = "MM/dd HH:mm:ss"
         return dateFormatter.string(from: data.updateTime ?? Date())
     }
 }
@@ -111,7 +119,7 @@ extension WidgetExtensionEntryView {
 extension View {
     //파일 사이즈 변경 함수
     func resizeImage(image: UIImage?, targetSize: CGSize) -> UIImage? {
-        guard let size = image?.size else { return UIImage()}
+        guard let size = image?.size else { return UIImage() }
         let widthRatio = targetSize.width / size.width
         let heightRatio = targetSize.height / size.height
 
@@ -126,9 +134,11 @@ extension View {
         // 그래픽 컨텍스트를 만들어 이미지 크기를 조정
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
         image?.draw(in: CGRect(origin: .zero, size: newSize))
+        
         guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else {
             return UIImage(named: "sunnyNight1") ?? UIImage()
         }
+        
         UIGraphicsEndImageContext()
 
         return newImage

@@ -98,21 +98,31 @@ final class Provider: TimelineProvider {
                 widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
 
                 var entries: [WeatherEntry] = []
+                let calendar = Calendar.current
+                
+                let hourOffsets: [Int] = [2, 5, 8, 11, 14, 17, 20, 23]
+
                 let currentDate = Date()
+                let currentHour = calendar.component(.hour, from: currentDate)
                 
-                // 여덟 번의 업데이트를 생성
-                for hourOffset in 0 ..< 8 {
-                    let entryDate = Calendar.current.date(bySettingHour: (2 + hourOffset * 3) % 24, minute: 11, second: 0, of: currentDate)!
-                    widgetData.updateTime = entryDate
-                    
-                    print("DEBUG widgetData: \(widgetData)")
-                    
-                    let entry = WeatherEntry(date: entryDate,
-                                             data: widgetData)
-                    
-                    entries.append(entry)
+                for hourOffset in hourOffsets {
+                    // 현재 시간 이후인 경우에만 업데이트 생성
+                    if currentHour < hourOffset {
+                        var dateComponents = calendar.dateComponents([.year, .month, .day], from: Date())
+                        dateComponents.hour = hourOffset
+                        dateComponents.minute = 15
+                        dateComponents.second = 0
+
+                        if let entryDate = calendar.date(from: dateComponents) {
+                            widgetData.updateTime = entryDate
+                            print("DEBUG widgetData: \(widgetData)")
+                            let entry = WeatherEntry(date: entryDate,
+                                                     data: widgetData)
+                            entries.append(entry)
+                        }
+                    }
                 }
-                
+
                 let timeline = Timeline(entries: entries, policy: .atEnd)
                 completion(timeline)
             })

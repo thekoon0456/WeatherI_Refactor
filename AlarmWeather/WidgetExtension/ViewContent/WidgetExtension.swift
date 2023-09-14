@@ -27,15 +27,15 @@ struct WidgetExtension: Widget {
 
 
 //MARK: - 잠금화면 위젯 설정
-
+ 
 extension WidgetExtension {
     private var supportedFamilies:[WidgetFamily] {
-        if #available(iOSApplicationExtension 16.0, *) { //잠금화면 위젯은 iOS16부터
-            // iOS 16, 높은 버전 이용자
-            return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryRectangular]
-        } else {
+//        if #available(iOSApplicationExtension 16.0, *) { //잠금화면 위젯은 iOS16부터
+//            // iOS 16, 높은 버전 이용자 (잠금화면 위젯)
+//            return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryRectangular]
+//        } else {
             // iOS 16, 낮은 버전 이용자
             return [.systemSmall, .systemMedium, .systemLarge]
-        }
+//        }
     }
 }
