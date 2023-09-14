@@ -27,7 +27,7 @@ class WeatherNetwork {
         
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
-            .print()
+//            .print()
             .decode(type: WeatherEntity.self, decoder: JSONDecoder())
             .mapError { error in
                 // decode 연산자 이후에 발생한 오류 처리

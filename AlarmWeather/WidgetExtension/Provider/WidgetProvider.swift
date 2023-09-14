@@ -69,8 +69,9 @@ final class Provider: TimelineProvider {
                 widgetData.todayPop = getTempAndPop(model: widgetData).pop
                 widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
                 
+                let completeData = widgetData
                 let entry = WeatherEntry(date: Date(),
-                                         data: widgetData)
+                                         data: completeData)
                 completion(entry)
             })
             .store(in: &cancellables)
@@ -96,33 +97,24 @@ final class Provider: TimelineProvider {
                 widgetData.todayTemp = getTempAndPop(model: widgetData).temp
                 widgetData.todayPop = getTempAndPop(model: widgetData).pop
                 widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
-
-                var entries: [WeatherEntry] = []
-                let calendar = Calendar.current
                 
-                let hourOffsets: [Int] = [2, 5, 8, 11, 14, 17, 20, 23]
-
+                var completeData = widgetData
+                var entries: [WeatherEntry] = []
+                let hourOffsets = [2, 4, 6, 8]
                 let currentDate = Date()
-                let currentHour = calendar.component(.hour, from: currentDate)
                 
                 for hourOffset in hourOffsets {
-                    // 현재 시간 이후인 경우에만 업데이트 생성
-                    if currentHour < hourOffset {
-                        var dateComponents = calendar.dateComponents([.year, .month, .day], from: Date())
-                        dateComponents.hour = hourOffset
-                        dateComponents.minute = 15
-                        dateComponents.second = 0
-
-                        if let entryDate = calendar.date(from: dateComponents) {
-                            widgetData.updateTime = entryDate
-                            print("DEBUG widgetData: \(widgetData)")
-                            let entry = WeatherEntry(date: entryDate,
-                                                     data: widgetData)
-                            entries.append(entry)
-                        }
-                    }
+                    // 엔트리 생성
+                    let entryDate = Calendar.current.date(byAdding: .hour,
+                                                          value: hourOffset,
+                                                          to: currentDate) ?? Date()
+                    completeData.updateTime = entryDate
+                    let entry = WeatherEntry(date: entryDate,
+                                             data: completeData)
+                    entries.append(entry)
                 }
-
+                
+                dump("DEBUG: entries: \(entries)")
                 let timeline = Timeline(entries: entries, policy: .atEnd)
                 completion(timeline)
             })
@@ -154,7 +146,7 @@ extension Provider {
                                   fcstTime: fcstTime)
             }
 //            .print()
-//            .receive(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.global(qos: .background))
             .eraseToAnyPublisher()
     }
     
