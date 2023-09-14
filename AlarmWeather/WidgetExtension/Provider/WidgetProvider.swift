@@ -85,7 +85,7 @@ final class Provider: TimelineProvider {
             .sink(receiveCompletion: { result in
                 switch result {
                 case .finished:
-                    print("DEBUG: sink 성공")
+                    print("DEBUG: getData sink 성공")
                 case .failure(let error):
                     print("DEBUG: \(error)")
                 }
@@ -108,6 +108,7 @@ final class Provider: TimelineProvider {
                     let entryDate = Calendar.current.date(byAdding: .hour,
                                                           value: hourOffset,
                                                           to: currentDate) ?? Date()
+                    //업데이트 시간 테스트
                     completeData.updateTime = entryDate
                     let entry = WeatherEntry(date: entryDate,
                                              data: completeData)
@@ -129,10 +130,8 @@ extension Provider {
         return weatherNetwork
             .fetchWeatherData()
             .map { model in
-                return model.response.body.items.item
-            }
-            .map { data in
-//                print(data)
+                let data = model.response.body.items.item
+                
                 let todaySky = data.filter({ $0.category == "SKY" }).first?.fcstValue
                 let todayPty = data.filter({ $0.category == "PTY" }).first?.fcstValue
                 let todayTemp = data.filter { $0.category == "TMP" }.first?.fcstValue
