@@ -50,6 +50,11 @@ final class RootViewController: UIViewController {
         $0.alpha = 0.1
     }
     
+    private let WeatherILabel = UILabel().then {
+        $0.text = "☀️ " + Ments.weatherI.rawValue + " 🌤️"
+        $0.font = UIFont.systemFont(ofSize: 30, weight: .medium)
+    }
+    
     private let loadingMent = UILabel().then {
         $0.text = Ments.loadingMent.rawValue
         $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -241,7 +246,8 @@ extension RootViewController {
             //HomeController refresh시
             homeController.setValue()
             homeController.configureUI()
-            NotificationCenter.default.post(name: NSNotification.Name("데이터업데이트완료"), object: nil) //NotificationCenter로 HomeController에 완료 알려줌
+            NotificationCenter.default.post(name: NSNotification.Name("데이터업데이트완료"),
+                                            object: nil) //NotificationCenter로 HomeController에 완료 알려줌
         }
     }
 }
@@ -268,6 +274,13 @@ extension RootViewController {
         animationView.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
+        
+        view.addSubview(WeatherILabel)
+        WeatherILabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(120)
+        }
+        
         
         view.addSubview(loadingMent)
         loadingMent.snp.makeConstraints { make in
