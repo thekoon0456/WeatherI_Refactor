@@ -95,25 +95,6 @@ final class Provider: TimelineProvider {
                 widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
                 return widgetData
             }
-            .flatMap { widgetData -> AnyPublisher<[WeatherEntry], Error> in
-                var completeData = widgetData
-                var entries: [WeatherEntry] = []
-                let hourOffsets = [2, 4, 6, 8]
-                let currentDate = Date()
-                
-                for hourOffset in hourOffsets {
-                    let entryDate = Calendar.current.date(byAdding: .second, value: hourOffset, to: currentDate) ?? Date()
-                    completeData.updateTime = entryDate
-                    let entry = WeatherEntry(date: entryDate,
-                                             data: completeData)
-                    entries.append(entry)
-                }
-                
-                // 배열을 AnyPublisher로 변환하여 반환
-                return Just(entries)
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-            }
             .print()
             .sink(receiveCompletion: { result in
                 switch result {
@@ -122,9 +103,12 @@ final class Provider: TimelineProvider {
                 case .failure(let error):
                     print("DEBUG: \(error)")
                 }
-            }, receiveValue: { entries in
-                // 처리된 엔트리를 사용하여 타임라인을 생성합니다.
-                let timeline = Timeline(entries: entries, policy: .atEnd)
+            }, receiveValue: { widgetData in
+                let currentDate = Date()
+                let entry = WeatherEntry(date: currentDate,
+                                         data: widgetData)
+                let nextRefresh = Calendar.current.date(byAdding: .second, value: 5, to: currentDate) ?? Date()
+                let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
                 completion(timeline)
             })
             .store(in: &cancellables)

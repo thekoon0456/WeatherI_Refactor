@@ -13,7 +13,7 @@ import WidgetKit
 
 struct WidgetExtensionEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
-    @State var data: WidgetData
+    var data: WidgetData
     var realmData = RealmManager.shared.readUsers()
     
     var body: some View {
