@@ -45,22 +45,19 @@ final class Provider: TimelineProvider {
     private var weatherNetwork = WeatherNetwork()
     private var cancellables: Set<AnyCancellable> = []
     
-    // 데이터를 불러오기 전(getSnapshot)에 보여줄 위젯데이터
     func placeholder(in context: Context) -> WeatherEntry {
-        return WeatherEntry(date: Date(), data: WidgetData(todayBackgroundImage: "sunny1",
+        return WeatherEntry(
+            date: Date(), data: WidgetData(todayBackgroundImage: "sunny1",
                                                            todayWeatherLabel: "맑음",
                                                            todayWeatherIconName: "sun.max",
                                                            todaySky: "1",
                                                            todayPty: "0",
                                                            todayTemp: "23",
                                                            todayPop: "0",
-                                                           fcstTime: "2300")
-                                                           
-        
-        )
+                                                           fcstTime: "2300"))
     }
     
-    // 위젯 미리보기 스냅샷 (데이터 로드한 뒤)
+    // 위젯 미리보기 스냅샷
     func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> Void) {
         getData()
             .sink(receiveCompletion: { result in
@@ -88,8 +85,6 @@ final class Provider: TimelineProvider {
     }
     
     //WidgetKit은 Provider에게 TimeLine을 요청
-    // 이 함수는 위젯의 타임라인을 정의하고 업데이트 주기를 관리합니다.
-    // 위젯의 데이터를 업데이트하고 새로운 엔트리를 생성하는 데 사용됩니다.
     func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
         
         let dataPublisher = getData()
