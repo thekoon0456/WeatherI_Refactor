@@ -150,24 +150,16 @@ final class Provider: TimelineProvider {
             widgetData.todayTemp = getTempAndPop(model: widgetData).temp
             widgetData.todayPop = getTempAndPop(model: widgetData).pop
             widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
-
-            print(widgetData)
             
-            var entries: [WeatherEntry] = []
             let currentDate = Date()
+            let entryDate = Calendar.current.date(byAdding: .second, value: 5, to: currentDate)!
+            widgetData.updateTime = entryDate
             
-            for hourOffset in 0 ..< 5 {
-                let entryDate = Calendar.current.date(byAdding: .second, value: hourOffset, to: currentDate)!
-                widgetData.updateTime = entryDate
-                
-                let entry = WeatherEntry(date: entryDate,
-                                         data: widgetData)
-                
-                entries.append(entry)
-                print(entry)
-            }
+            let entry = WeatherEntry(date: entryDate,
+                                     data: widgetData)
+            print(entry)
             
-            let timeline = Timeline(entries: entries, policy: .atEnd)
+            let timeline = Timeline(entries: [entry], policy: .after(entryDate))
             completion(timeline)
         })
     }
