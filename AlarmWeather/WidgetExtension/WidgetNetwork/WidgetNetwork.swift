@@ -12,10 +12,13 @@ class WeatherNetwork {
     //todayWeather
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "500"
+
     //사용자 좌표구해서 쿼리 날림
+    //integer는 옵셔널이 아니고, 0을 기본값으로 반환. 옵셔널 쓰려면 .object사용
+    //string은 옵셔널 반환
     var x: Int? = UserDefaults.shared.object(forKey: "convertedX") as? Int
     var y: Int? = UserDefaults.shared.object(forKey: "convertedY") as? Int
-    
+
     lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 60)&ny=\(y ?? 127)"
     
     //Fetch data from the network
@@ -27,7 +30,6 @@ class WeatherNetwork {
         
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
-        //            .print()
             .decode(type: WeatherEntity.self, decoder: JSONDecoder())
             .mapError { error in
                 // decode 연산자 이후에 발생한 오류 처리
@@ -50,7 +52,7 @@ class DustNetwork {
     lazy var dustUrl = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
     
     lazy var userRegion: String = getDustRegion(region: administrativeArea)
-    //
+    
     func getDustRegion(region: String) -> String {
         switch region {
         case "서울특별시":

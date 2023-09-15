@@ -20,13 +20,7 @@ struct WidgetExtensionEntryView : View {
         GeometryReader { proxy in
             ZStack {
                 //배경 이미지
-                widgetBackgroundImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .overlay {
-                        Rectangle()
-                            .foregroundColor(Color.black.opacity(0.3))
-                    }
+                resizedBGImage
                     .frame(width: proxy.size.width,
                            height: proxy.size.height)
                 
@@ -35,43 +29,21 @@ struct WidgetExtensionEntryView : View {
                 VStack {
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(data.administrativeArea ?? "앱을 실행해주세요")
-                                .font(.caption2)
-                            
-                            Image(systemName: data.todayWeatherIconName ?? "gobackward")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 50, height: 50)
-                                .padding(.leading, 5)
-                            
-                            Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
-                                .font(.body)
-                                .bold()
-                            Text((data.todayTemp ?? "온도 로딩 실패") + "º")
-                                .font(.callout)
-                                .bold()
-                            
-                            if data.todayPop != "0" {
-                                Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
-                                    .font(.caption)
-                            }
-                            
-                            //                            테스트 (업데이트 시간 확인)
-                            Text(getTime())
-                                .font(.system(size: 10))
+                            administrativeAreaLabel
+                            todayWeatherIcon
+                            todayWeatherLabel
+                            todayTempLabel
+                            todayPopLabel
+//                            timeTestLabel
                         }
                         .foregroundColor(.white)
                         .padding(10)
                         
                         Spacer()
                     }
-                    
-                    //위젯 사이즈가 클때 컨텐츠 위로 올림
-                    if widgetFamily == .systemLarge {
-                        Spacer()
-                    }
+            
+                    largeSizeSpacer
                 }
-                
             }
         }
     }
@@ -97,20 +69,67 @@ extension WidgetExtensionEntryView {
         }
         
         backgroundImage = Image(uiImage: image)
-        
         return backgroundImage
     }
-}
-
-//MARK: - TestCode
-
-extension WidgetExtensionEntryView {
-    func getTime() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
-        dateFormatter.dateFormat = "MM/dd HH:mm:ss"
-        return dateFormatter.string(from: data.updateTime ?? Date())
+    
+    var resizedBGImage: some View {
+        widgetBackgroundImage
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .overlay {
+                Rectangle()
+                    .foregroundColor(Color.black.opacity(0.3))
+            }
     }
+    
+    var todayWeatherIcon: some View {
+        Image(systemName: data.todayWeatherIconName ?? "gobackward")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: 50, height: 50)
+            .padding(.leading, 5)
+    }
+    
+    var administrativeAreaLabel: some View {
+        Text(data.administrativeArea ?? "앱을 실행해주세요")
+            .font(.caption2)
+    }
+    
+    var todayWeatherLabel: some View {
+        Text(data.todayWeatherLabel ?? "날씨 로딩 실패")
+            .font(.body)
+            .bold()
+    }
+
+    var todayTempLabel: some View {
+        Text((data.todayTemp ?? "온도 로딩 실패") + "º")
+            .font(.callout)
+            .bold()
+    }
+    
+    var todayPopLabel: Text? {
+        if data.todayPop != "0" {
+            return Text("강수 확률: " + (data.todayPop ?? "날씨 로딩 실패") + "%")
+                .font(.caption)
+        }
+        
+        return nil
+    }
+    
+    var timeTestLabel: some View {
+        Text(getTime())
+            .font(.system(size: 10))
+    }
+    
+    var largeSizeSpacer: Spacer? {
+        //위젯 사이즈가 클때 컨텐츠 위로 올림
+        if widgetFamily == .systemLarge {
+            return Spacer()
+        }
+        
+        return nil
+    }
+    
 }
 
 //MARK: - Image 관련 extension
@@ -141,5 +160,17 @@ extension View {
         UIGraphicsEndImageContext()
         
         return newImage
+    }
+}
+
+
+//MARK: - TestCode
+//
+extension WidgetExtensionEntryView {
+    func getTime() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        dateFormatter.dateFormat = "MM/dd HH:mm:ss"
+        return dateFormatter.string(from: data.updateTime ?? Date())
     }
 }

@@ -102,8 +102,7 @@ final class Provider: TimelineProvider {
                 case .failure(let error):
                     print("DEBUG: \(error)")
                 }
-            }, receiveValue: { [weak self] widgetData in
-                guard let self else { return }
+            }, receiveValue: { widgetData in
                 var receiveData = widgetData
                 
                 let currentDate = Date()
