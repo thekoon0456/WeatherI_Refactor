@@ -81,41 +81,49 @@ final class Provider: TimelineProvider {
     // 이 함수는 위젯의 타임라인을 정의하고 업데이트 주기를 관리합니다.
     // 위젯의 데이터를 업데이트하고 새로운 엔트리를 생성하는 데 사용됩니다.
     func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
-        getData()
-            .sink(receiveCompletion: { result in
-                switch result {
-                case .finished:
-                    print("DEBUG: getData sink 성공")
-                case .failure(let error):
-                    print("DEBUG: \(error)")
-                }
-            }, receiveValue: { [weak self] widgetData in
-                guard let self else { return }
+        
+        let dataPublisher = getData()
+        
+        dataPublisher
+            .map { [weak self] widgetData in
+                guard let self else { return widgetData }
                 var widgetData = widgetData
                 widgetData.todayWeatherLabel = todayWeatherState(model: widgetData).weatherState
                 widgetData.todayWeatherIconName = todayWeatherState(model: widgetData).iconName
                 widgetData.todayTemp = getTempAndPop(model: widgetData).temp
                 widgetData.todayPop = getTempAndPop(model: widgetData).pop
                 widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
-                
+                return widgetData
+            }
+            .flatMap { widgetData -> AnyPublisher<[WeatherEntry], Error> in
                 var completeData = widgetData
                 var entries: [WeatherEntry] = []
                 let hourOffsets = [2, 4, 6, 8]
                 let currentDate = Date()
                 
                 for hourOffset in hourOffsets {
-                    // 엔트리 생성
-                    let entryDate = Calendar.current.date(byAdding: .hour,
-                                                          value: hourOffset,
-                                                          to: currentDate) ?? Date()
-                    //업데이트 시간 테스트
+                    let entryDate = Calendar.current.date(byAdding: .second, value: hourOffset, to: currentDate) ?? Date()
                     completeData.updateTime = entryDate
                     let entry = WeatherEntry(date: entryDate,
                                              data: completeData)
                     entries.append(entry)
                 }
                 
-                dump("DEBUG: entries: \(entries)")
+                // 배열을 AnyPublisher로 변환하여 반환
+                return Just(entries)
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
+            .print()
+            .sink(receiveCompletion: { result in
+                switch result {
+                case .finished:
+                    print("DEBUG: 데이터 처리 완료")
+                case .failure(let error):
+                    print("DEBUG: \(error)")
+                }
+            }, receiveValue: { entries in
+                // 처리된 엔트리를 사용하여 타임라인을 생성합니다.
                 let timeline = Timeline(entries: entries, policy: .atEnd)
                 completion(timeline)
             })
