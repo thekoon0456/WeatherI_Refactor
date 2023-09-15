@@ -18,7 +18,7 @@ class WeatherNetwork {
     
     lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 60)&ny=\(y ?? 127)"
     
-     //Fetch data from the network
+    //Fetch data from the network
     func fetchWeatherData() -> AnyPublisher<WeatherEntity, Error> {
         guard let url = URL(string: weatherURL) else {
             return Fail(error: URLError(.badURL))
@@ -27,7 +27,7 @@ class WeatherNetwork {
         
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
-//            .print()
+        //            .print()
             .decode(type: WeatherEntity.self, decoder: JSONDecoder())
             .mapError { error in
                 // decode 연산자 이후에 발생한 오류 처리
@@ -46,11 +46,11 @@ class DustNetwork {
     var itemCode = "PM10" //"PM25"
     var dataGubun = "HOUR"
     var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? ""
-
+    
     lazy var dustUrl = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
     
     lazy var userRegion: String = getDustRegion(region: administrativeArea)
-//
+    //
     func getDustRegion(region: String) -> String {
         switch region {
         case "서울특별시":

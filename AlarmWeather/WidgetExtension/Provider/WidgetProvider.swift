@@ -95,7 +95,6 @@ final class Provider: TimelineProvider {
                 widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
                 return widgetData
             }
-            .print()
             .sink(receiveCompletion: { result in
                 switch result {
                 case .finished:
@@ -103,12 +102,18 @@ final class Provider: TimelineProvider {
                 case .failure(let error):
                     print("DEBUG: \(error)")
                 }
-            }, receiveValue: { widgetData in
+            }, receiveValue: { [weak self] widgetData in
+                guard let self else { return }
+                var receiveData = widgetData
+                
                 let currentDate = Date()
-                let entry = WeatherEntry(date: currentDate,
-                                         data: widgetData)
                 let nextRefresh = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
+                receiveData.updateTime = nextRefresh
+                
+                let entry = WeatherEntry(date: currentDate,
+                                         data: receiveData)
                 let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
+                print("DEBUG: timeline: \(timeline)")
                 completion(timeline)
             })
             .store(in: &cancellables)

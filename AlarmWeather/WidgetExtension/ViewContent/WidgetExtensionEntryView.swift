@@ -29,7 +29,7 @@ struct WidgetExtensionEntryView : View {
                     }
                     .frame(width: proxy.size.width,
                            height: proxy.size.height)
-  
+                
                 //TODO: - 위젯 크기에 따라 다른 화면 구현
                 //내부 날씨 화면
                 VStack {
@@ -56,7 +56,7 @@ struct WidgetExtensionEntryView : View {
                                     .font(.caption)
                             }
                             
-//                            테스트 (업데이트 시간 확인)
+                            //                            테스트 (업데이트 시간 확인)
                             Text(getTime())
                                 .font(.system(size: 10))
                         }
@@ -121,7 +121,7 @@ extension View {
         guard let size = image?.size else { return UIImage() }
         let widthRatio = targetSize.width / size.width
         let heightRatio = targetSize.height / size.height
-
+        
         // 이미지 크기 비율에 따라 새로운 크기 계산
         let newSize: CGSize
         if widthRatio > heightRatio {
@@ -129,7 +129,7 @@ extension View {
         } else {
             newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
         }
-
+        
         // 그래픽 컨텍스트를 만들어 이미지 크기를 조정
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
         image?.draw(in: CGRect(origin: .zero, size: newSize))
@@ -139,7 +139,7 @@ extension View {
         }
         
         UIGraphicsEndImageContext()
-
+        
         return newImage
     }
 }
