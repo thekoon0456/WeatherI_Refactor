@@ -68,7 +68,7 @@ final class RealmService {
             try! realm.write {
                 user.userName = userName ?? user.userName
                 user.alertName = alertName ?? user.alertName
-                user.alertImage = alertImage ?? user.alertImage // 이미지를 Data로 변환
+                user.alertImage = alertImage  // 이미지를 Data로 변환
                 user.lastUpdated = Date()
 
                 if let newAlertTimes = alertTimes {
