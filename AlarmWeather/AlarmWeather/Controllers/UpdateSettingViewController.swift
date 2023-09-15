@@ -122,11 +122,6 @@ class UpdateSettingViewController: UIViewController {
     //MARK: - Action
     
     @objc func saveSetting() {
-        //기존 텍스트필드 안 채워넣었을때 안눌리게
-//        guard let userName = userNameTextField.text else { return }
-//        guard let alertName = alertNameTextField.text else { return }
-
-        //지금은 설정안했을때 nil도 가능하게
         let userName = userNameTextField.text
         let alertName = alertNameTextField.text
         
@@ -194,7 +189,6 @@ class UpdateSettingViewController: UIViewController {
             lastRefreshDate = Date()
         }
     }
-    
     
     //MARK: - Helpers
     
@@ -334,15 +328,35 @@ extension UpdateSettingViewController {
 extension UpdateSettingViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as? UIImage
-        alertProfileImage = image
-        selectPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
-        selectPhotoButton.layer.borderColor = UIColor(white: 1, alpha: 0.7).cgColor
-        selectPhotoButton.layer.borderWidth = 3
-        selectPhotoButton.layer.cornerRadius = 10
-        selectPhotoButton.imageView?.contentMode = .scaleAspectFill
-        
+        clickedPhotoButton(image:image, selected: true)
         dismiss(animated: true)
     }
+    
+    //이미지 선택 취소시 nil로
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        print("이미지피커 취소 눌림")
+        clickedPhotoButton(image: nil, selected: false)
+        dismiss(animated: true)
+    }
+    
+    func clickedPhotoButton(image: UIImage?, selected: Bool) {
+        if selected {
+            print("사진 선택됨")
+            alertProfileImage = image
+            selectPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+            selectPhotoButton.layer.borderColor = UIColor(white: 1, alpha: 0.7).cgColor
+            selectPhotoButton.layer.borderWidth = 3
+            selectPhotoButton.layer.cornerRadius = 10
+            selectPhotoButton.imageView?.contentMode = .scaleAspectFill
+        } else {
+            print("사진 취소됨")
+            alertProfileImage = image
+            selectPhotoButton.setImage(UIImage(named: "plus_photo"), for: .normal)
+            selectPhotoButton.layer.borderWidth = 0
+        }
+
+    }
+    
 }
 
 

@@ -86,7 +86,11 @@ extension HomeViewModel {
         if sortedWeatherPop.filter({ $0.pty == "4" }).count != 0 {
             todayRainyWeatherMent = "소나기가 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
         } else if sortedWeatherPop.filter({ $0.pop != "0" }).count != 0 {
-            todayRainyWeatherMent = "오늘 비 올 확률은 \(sortedWeatherPop[0].pop + "%") ~ \(sortedWeatherPop[sortedWeatherPop.count - 1].pop + "%") 입니다 🌧️"
+            if sortedWeatherPop[0].pop == sortedWeatherPop[sortedWeatherPop.count - 1].pop {
+                todayRainyWeatherMent = "오늘 비 올 확률은 \(sortedWeatherPop[0].pop + "%") 입니다 🌧️"
+            } else {
+                todayRainyWeatherMent = "오늘 비 올 확률은 \(sortedWeatherPop[0].pop + "%") ~ \(sortedWeatherPop[sortedWeatherPop.count - 1].pop + "%") 입니다 🌧️"
+            }
         } else if sortedWeatherPop.filter({ $0.pty == "2" || $0.pty == "2" }).count != 0 {
             todayRainyWeatherMent = "하얀 눈이 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
         } else {

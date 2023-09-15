@@ -13,6 +13,8 @@
 		7C05CCA52AAA3588000063C7 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23646D2A3318F60026C49A /* Constant.swift */; };
 		7C05CCA82AAAE5D2000063C7 /* WidgetLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C05CCA72AAAE5D2000063C7 /* WidgetLocationManager.swift */; };
 		7C05CCA92AAAEE0B000063C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C2364172A3314D70026C49A /* Assets.xcassets */; };
+		7C17E56E2AAEB9A5004813CE /* API_KEY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */; };
+		7C17E56F2AAEB9E5004813CE /* API_KEY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */; };
 		7C1A1E552A3DD07400B97209 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E542A3DD07400B97209 /* SettingCell.swift */; };
 		7C1A1E5B2A4161E900B97209 /* WeatherEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E5A2A4161E900B97209 /* WeatherEntity.swift */; };
 		7C1A1E5D2A4161F600B97209 /* DustEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E5C2A4161F600B97209 /* DustEntity.swift */; };
@@ -46,6 +48,10 @@
 		7C4529AC2A76E991008DF938 /* DustRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E602A41621D00B97209 /* DustRepository.swift */; };
 		7C4529AD2A76E9FD008DF938 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2364B02A334B730026C49A /* Extension.swift */; };
 		7C499BE82A710062000DCF5D /* TextFieldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C499BE72A710062000DCF5D /* TextFieldViewModel.swift */; };
+		7C4E41BD2AB2191800E1933E /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 7C4E41BC2AB2191800E1933E /* Realm */; };
+		7C4E41BF2AB2191A00E1933E /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7C4E41BE2AB2191A00E1933E /* RealmSwift */; };
+		7C4E41C12AB2193700E1933E /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4E41C02AB2193700E1933E /* RealmManager.swift */; };
+		7C4E41C32AB2B66900E1933E /* WidgetExtensionEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4E41C22AB2B66900E1933E /* WidgetExtensionEntryView.swift */; };
 		7C623FFD2A4CB98D00367B54 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C623FFC2A4CB98D00367B54 /* LocationService.swift */; };
 		7C6240042A4D69C200367B54 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C6240032A4D69C200367B54 /* loading.json */; };
 		7C65854F2A74472300CA9620 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C659A122A7293E700123B1B /* UserNotifications.framework */; };
@@ -76,6 +82,8 @@
 		7C8444412A338F22006B76C7 /* DustController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8444402A338F22006B76C7 /* DustController.swift */; };
 		7C8444432A338FA5006B76C7 /* SettingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8444422A338FA5006B76C7 /* SettingController.swift */; };
 		7C84447D2A33A4AF006B76C7 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84447C2A33A4AF006B76C7 /* HomeController.swift */; };
+		7C8F1BD22AB045C1004B66A6 /* WidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8F1BD12AB045C1004B66A6 /* WidgetProvider.swift */; };
+		7C8F1BD72AB048F3004B66A6 /* WidgetEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8F1BD62AB048F3004B66A6 /* WidgetEntity.swift */; };
 		7C9695312A4AE2ED00F21478 /* DustViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9695302A4AE2ED00F21478 /* DustViewModel.swift */; };
 		7CA0906B2A35C292002077D3 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0906A2A35C292002077D3 /* HomeViewModel.swift */; };
 		7CA246112A7D1383009F6F98 /* loading2.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA246102A7D1383009F6F98 /* loading2.json */; };
@@ -196,6 +204,8 @@
 		7C2364B02A334B730026C49A /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		7C4529A42A76D852008DF938 /* NotiAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = NotiAssets.xcassets; sourceTree = "<group>"; };
 		7C499BE72A710062000DCF5D /* TextFieldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldViewModel.swift; sourceTree = "<group>"; };
+		7C4E41C02AB2193700E1933E /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		7C4E41C22AB2B66900E1933E /* WidgetExtensionEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetExtensionEntryView.swift; sourceTree = "<group>"; };
 		7C623FFC2A4CB98D00367B54 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		7C6240032A4D69C200367B54 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		7C65854E2A74472300CA9620 /* NotificationContentsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationContentsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -231,6 +241,8 @@
 		7C8444402A338F22006B76C7 /* DustController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustController.swift; sourceTree = "<group>"; };
 		7C8444422A338FA5006B76C7 /* SettingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingController.swift; sourceTree = "<group>"; };
 		7C84447C2A33A4AF006B76C7 /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		7C8F1BD12AB045C1004B66A6 /* WidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetProvider.swift; sourceTree = "<group>"; };
+		7C8F1BD62AB048F3004B66A6 /* WidgetEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetEntity.swift; sourceTree = "<group>"; };
 		7C9695302A4AE2ED00F21478 /* DustViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustViewModel.swift; sourceTree = "<group>"; };
 		7CA0906A2A35C292002077D3 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		7CA0906C2A36CDBC002077D3 /* AlarmWeather.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AlarmWeather.entitlements; sourceTree = "<group>"; };
@@ -294,6 +306,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C4E41BF2AB2191A00E1933E /* RealmSwift in Frameworks */,
+				7C4E41BD2AB2191800E1933E /* Realm in Frameworks */,
 				7C7E8BE12AA5CAFC00B5822E /* SwiftUI.framework in Frameworks */,
 				7C7E8BE02AA5CAFC00B5822E /* WidgetKit.framework in Frameworks */,
 			);
@@ -500,30 +514,21 @@
 			isa = PBXGroup;
 			children = (
 				7C05CCA62AAAE2E3000063C7 /* WidgetExtension.entitlements */,
-				7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */,
 				7C7E8BE32AA5CAFC00B5822E /* WidgetExtensionBundle.swift */,
-				7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */,
-				7C05CCA72AAAE5D2000063C7 /* WidgetLocationManager.swift */,
-				7C7E8BF82AA5CC6B00B5822E /* WeatherWidget */,
-				7C7E8BE52AA5CAFC00B5822E /* WidgetExtensionLiveActivity.swift */,
+				7C8F1BD52AB04621004B66A6 /* WidgetNetwork */,
+				7C7E8BFA2AA5CC8300B5822E /* ViewContent */,
+				7C7E8BF92AA5CC7C00B5822E /* Provider */,
+				7C8F1BD82AB04A62004B66A6 /* off */,
 				7C7E8BE92AA5CAFD00B5822E /* Assets.xcassets */,
 				7C7E8BEB2AA5CAFD00B5822E /* Info.plist */,
 			);
 			path = WidgetExtension;
 			sourceTree = "<group>";
 		};
-		7C7E8BF82AA5CC6B00B5822E /* WeatherWidget */ = {
-			isa = PBXGroup;
-			children = (
-				7C7E8BFA2AA5CC8300B5822E /* ViewContent */,
-				7C7E8BF92AA5CC7C00B5822E /* Provider */,
-			);
-			path = WeatherWidget;
-			sourceTree = "<group>";
-		};
 		7C7E8BF92AA5CC7C00B5822E /* Provider */ = {
 			isa = PBXGroup;
 			children = (
+				7C8F1BD12AB045C1004B66A6 /* WidgetProvider.swift */,
 			);
 			path = Provider;
 			sourceTree = "<group>";
@@ -531,8 +536,29 @@
 		7C7E8BFA2AA5CC8300B5822E /* ViewContent */ = {
 			isa = PBXGroup;
 			children = (
+				7C4E41C22AB2B66900E1933E /* WidgetExtensionEntryView.swift */,
+				7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */,
 			);
 			path = ViewContent;
+			sourceTree = "<group>";
+		};
+		7C8F1BD52AB04621004B66A6 /* WidgetNetwork */ = {
+			isa = PBXGroup;
+			children = (
+				7C8F1BD62AB048F3004B66A6 /* WidgetEntity.swift */,
+				7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */,
+				7C4E41C02AB2193700E1933E /* RealmManager.swift */,
+			);
+			path = WidgetNetwork;
+			sourceTree = "<group>";
+		};
+		7C8F1BD82AB04A62004B66A6 /* off */ = {
+			isa = PBXGroup;
+			children = (
+				7C7E8BE52AA5CAFC00B5822E /* WidgetExtensionLiveActivity.swift */,
+				7C05CCA72AAAE5D2000063C7 /* WidgetLocationManager.swift */,
+			);
+			path = off;
 			sourceTree = "<group>";
 		};
 		7CA85A952A6424FF002966E0 /* Lottie */ = {
@@ -649,6 +675,8 @@
 			);
 			name = WidgetExtension;
 			packageProductDependencies = (
+				7C4E41BC2AB2191800E1933E /* Realm */,
+				7C4E41BE2AB2191A00E1933E /* RealmSwift */,
 			);
 			productName = WidgetExtensionExtension;
 			productReference = 7C7E8BDE2AA5CAFC00B5822E /* WidgetExtension.appex */;
@@ -749,6 +777,7 @@
 				7CA246122A7D1383009F6F98 /* loading2.json in Resources */,
 				7C4529A52A76D852008DF938 /* NotiAssets.xcassets in Resources */,
 				7C4529A02A76D0F7008DF938 /* loading.json in Resources */,
+				7C17E56F2AAEB9E5004813CE /* API_KEY.plist in Resources */,
 				7C45299F2A76CFF9008DF938 /* Assets.xcassets in Resources */,
 				7C6585562A74472300CA9620 /* MainInterface.storyboard in Resources */,
 			);
@@ -758,6 +787,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C17E56E2AAEB9A5004813CE /* API_KEY.plist in Resources */,
 				7C05CCA92AAAEE0B000063C7 /* Assets.xcassets in Resources */,
 				7C7E8BEA2AA5CAFD00B5822E /* Assets.xcassets in Resources */,
 			);
@@ -862,10 +892,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CD10C662AA9FA5600D5DFB4 /* WidgetExtension.swift in Sources */,
+				7C4E41C32AB2B66900E1933E /* WidgetExtensionEntryView.swift in Sources */,
 				7CD10C682AA9FA5B00D5DFB4 /* WidgetExtensionLiveActivity.swift in Sources */,
 				7C05CCA12AAA2F2F000063C7 /* WidgetNetwork.swift in Sources */,
 				7CD10C672AA9FA5900D5DFB4 /* WidgetExtensionBundle.swift in Sources */,
+				7C8F1BD22AB045C1004B66A6 /* WidgetProvider.swift in Sources */,
+				7C4E41C12AB2193700E1933E /* RealmManager.swift in Sources */,
 				7C05CCA82AAAE5D2000063C7 /* WidgetLocationManager.swift in Sources */,
+				7C8F1BD72AB048F3004B66A6 /* WidgetEntity.swift in Sources */,
 				7C05CCA52AAA3588000063C7 /* Constant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1058,7 +1092,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1101,7 +1135,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1207,7 +1241,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1234,7 +1268,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1263,7 +1297,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.WidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1292,7 +1326,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.WidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1397,6 +1431,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7C4E41BC2AB2191800E1933E /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		7C4E41BE2AB2191A00E1933E /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
 		7CE4B0052A78E02200540FBA /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7CE4B0042A78E02200540FBA /* XCRemoteSwiftPackageReference "lottie-spm" */;
