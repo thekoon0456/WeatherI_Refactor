@@ -45,12 +45,22 @@ final class Provider: TimelineProvider {
     private var weatherNetwork = WeatherNetwork()
     private var cancellables: Set<AnyCancellable> = []
     
-    // 데이터를 불러오기 전(getSnapshot)에 보여줄 placeholder
+    // 데이터를 불러오기 전(getSnapshot)에 보여줄 위젯데이터
     func placeholder(in context: Context) -> WeatherEntry {
-        return WeatherEntry(date: Date(), data: WidgetData()) //현재 시간
+        return WeatherEntry(date: Date(), data: WidgetData(todayBackgroundImage: "sunny1",
+                                                           todayWeatherLabel: "맑음",
+                                                           todayWeatherIconName: "sun.max",
+                                                           todaySky: "1",
+                                                           todayPty: "0",
+                                                           todayTemp: "23",
+                                                           todayPop: "0",
+                                                           fcstTime: "2300")
+                                                           
+        
+        )
     }
     
-    // 위젯 미리보기 스냅샷
+    // 위젯 미리보기 스냅샷 (데이터 로드한 뒤)
     func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> Void) {
         getData()
             .sink(receiveCompletion: { result in
@@ -106,7 +116,7 @@ final class Provider: TimelineProvider {
                 var receiveData = widgetData
                 
                 let currentDate = Date()
-                let nextRefresh = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
+                let nextRefresh = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
                 receiveData.updateTime = nextRefresh
                 
                 let entry = WeatherEntry(date: currentDate,
@@ -140,7 +150,6 @@ extension Provider {
                                   todayPop: todayPop,
                                   fcstTime: fcstTime)
             }
-        //            .print()
             .receive(on: DispatchQueue.global(qos: .background))
             .eraseToAnyPublisher()
     }
