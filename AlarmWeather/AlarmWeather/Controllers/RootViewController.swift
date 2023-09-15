@@ -129,40 +129,41 @@ final class RootViewController: UIViewController {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
-        self.viewModel.loadTodayWeather { [weak self] model in
+        viewModel.loadTodayWeather { [weak self] model in
             guard let self = self else { return }
-            self.todayWeather = model
+            todayWeather = model
             print("DEBUG: loadTodayWeather 완료")
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        self.viewModel.loadTodayDetailWeather { [weak self] model in
+        viewModel.loadTodayDetailWeather { [weak self] model in
             guard let self = self else { return }
-            self.todayDetailWeather = model
+            todayDetailWeather = model
             print("DEBUG: loadTodayDetailWeather 완료")
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        self.dustViewModel.loadTodayDust { [weak self] model in
+        dustViewModel.loadTodayDust { [weak self] model in
             guard let self = self else { return }
-            self.todayDust = model
+            todayDust = model
             print("DEBUG: loadTodayDust 완료")
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        self.viewModel.loadWeeklyWeather { model in
-            self.weeklyWeather = model
+        viewModel.loadWeeklyWeather { [weak self] model in
+            guard let self = self else { return }
+            weeklyWeather = model
             print("DEBUG: loadWeeklyWeather 완료")
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        self.viewModel.loadWeeklyWeatherTemp { [weak self] model in
+        viewModel.loadWeeklyWeatherTemp { [weak self] model in
             guard let self = self else { return }
-            self.weeklyWeatherTemp = model
+            weeklyWeatherTemp = model
             print("DEBUG: loadWeeklyWeatherTemp 완료")
             dispatchGroup.leave()
         }
@@ -278,14 +279,13 @@ extension RootViewController {
         view.addSubview(WeatherILabel)
         WeatherILabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(120)
+            make.top.equalToSuperview().offset(125)
         }
-        
         
         view.addSubview(loadingMent)
         loadingMent.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-120)
+            make.bottom.equalToSuperview().offset(-125)
         }
         
         view.addSubview(blurView)
