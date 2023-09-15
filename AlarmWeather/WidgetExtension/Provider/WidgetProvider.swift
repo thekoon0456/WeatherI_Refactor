@@ -124,11 +124,11 @@ extension Provider {
             .map { model in
                 let data = model.response.body.items.item
                 
-                let todaySky = data.filter({ $0.category == "SKY" }).first?.fcstValue
-                let todayPty = data.filter({ $0.category == "PTY" }).first?.fcstValue
-                let todayTemp = data.filter { $0.category == "TMP" }.first?.fcstValue
-                let todayPop = data.filter { $0.category == "POP" }.first?.fcstValue
-                let fcstTime = data.first?.fcstTime
+                let todaySky = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "SKY" }.first?.fcstValue ?? ""
+                let todayPty = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "PTY" }.first?.fcstValue ?? ""
+                let todayTemp = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "TMP" }.first?.fcstValue ?? ""
+                let todayPop = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "POP" }.first?.fcstValue ?? ""
+                let fcstTime = data.filter { $0.fcstTime == DateAndTime.currentTime }.first?.fcstTime ?? ""
                 
                 return WidgetData(todaySky: todaySky,
                                   todayPty: todayPty,
@@ -136,7 +136,7 @@ extension Provider {
                                   todayPop: todayPop,
                                   fcstTime: fcstTime)
             }
-//            .print()
+        //            .print()
             .receive(on: DispatchQueue.global(qos: .background))
             .eraseToAnyPublisher()
     }

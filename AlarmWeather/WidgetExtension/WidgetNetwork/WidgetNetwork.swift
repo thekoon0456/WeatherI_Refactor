@@ -11,7 +11,7 @@ import SwiftUI
 class WeatherNetwork {
     //todayWeather
     let serviceKey = NetworkQuery.serviceKey
-    var pageCount = "20"
+    var pageCount = "500"
     //사용자 좌표구해서 쿼리 날림
     var x: Int? = UserDefaults.shared.object(forKey: "convertedX") as? Int
     var y: Int? = UserDefaults.shared.object(forKey: "convertedY") as? Int
