@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-class WeatherNetwork {
+class WeatherNetwork: RetryRequest {
     //todayWeather
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "20"
@@ -18,40 +18,22 @@ class WeatherNetwork {
     
     lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x)&ny=\(y)"
     
-    // Fetch data from the network
-//    func fetchWeatherData() -> AnyPublisher<WeatherEntity, Error> {
-//        guard let url = URL(string: weatherURL) else {
-//            return Fail(error: URLError(.badURL))
-//                .eraseToAnyPublisher()
-//        }
-//
-//        return URLSession.shared.dataTaskPublisher(for: url)
-//            .map(\.data)
-//            .print()
-//            .decode(type: WeatherEntity.self, decoder: JSONDecoder())
-//            .retry(5) //통신 실패시 5번 재시도
-//            .eraseToAnyPublisher()
-//    }
-    
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-        
-//        setNxNy(nx: LocationService.shared.latitude ?? 0, ny: LocationService.shared.longitude ?? 0)
-        
+
         guard let url = URL(string: weatherURL) else { return }
 
-//        let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
         URLSession.shared.dataTask(with: url) { data, response, error in
             if error != nil {
                 print("네트워크 에러 \(String(describing: error?.localizedDescription))")
                 completion(.failure(.networkingError))
-//                self.retryRequest(completion: completion)
+                self.retryRequest(completion: completion)
                 return
             }
             
             guard let data = data else {
                 print("데이터 에러")
                 completion(.failure(.dataError))
-//                self.retryRequest(completion: completion)
+                self.retryRequest(completion: completion)
                 return
             }
 
@@ -59,7 +41,7 @@ class WeatherNetwork {
                 print("Weather JSON 파싱 성공")
                 completion(.success(item))
             } else {
-//                self.retryRequest(completion: completion)
+                self.retryRequest(completion: completion)
                 completion(.failure(.parseError))
             }
         }.resume()
@@ -131,5 +113,29 @@ class DustNetwork {
         default:
             return "서울특별시"
         }
+    }
+}
+
+//MARK: - 통신 재시도 Protocol
+
+protocol RetryRequest {
+    func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> Void)
+    func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> Void)
+    func setCustomURLSession(retryRequest: Double) -> URLSession
+}
+
+extension RetryRequest {
+    //통신 실패시 1초 뒤에 통신 재시도 코드
+    func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            performRequest(completion: completion)
+        }
+    }
+    
+    func setCustomURLSession(retryRequest: Double) -> URLSession {
+        let sessionConfiguration = URLSessionConfiguration.default
+        sessionConfiguration.timeoutIntervalForRequest = retryRequest
+        let session = URLSession(configuration: sessionConfiguration)
+        return session
     }
 }

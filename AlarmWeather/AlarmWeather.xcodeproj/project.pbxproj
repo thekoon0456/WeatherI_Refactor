@@ -108,6 +108,10 @@
 		7CE4B0112A78E0B200540FBA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 7CE4B0102A78E0B200540FBA /* Lottie */; };
 		7CE4B0132A78E0BA00540FBA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7CE4B0122A78E0BA00540FBA /* SnapKit */; };
 		7CE4B0152A78E0BE00540FBA /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 7CE4B0142A78E0BE00540FBA /* Then */; };
+		7CFC464E2AB3E28D005C087A /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 7CFC464D2AB3E28D005C087A /* Realm */; };
+		7CFC46502AB3E294005C087A /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7CFC464F2AB3E294005C087A /* RealmSwift */; };
+		7CFC46522AB3E376005C087A /* WidgetExtensionEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC46512AB3E376005C087A /* WidgetExtensionEntryView.swift */; };
+		7CFC46542AB3E39E005C087A /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC46532AB3E39E005C087A /* RealmManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -256,6 +260,8 @@
 		7CCB83812A7ED19C00459E7B /* OnboardingContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContentViewController.swift; sourceTree = "<group>"; };
 		7CDA21592A337A26006FF93F /* WetherAndDustStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WetherAndDustStackView.swift; sourceTree = "<group>"; };
 		7CE4B0032A78D43B00540FBA /* NotificationContentsExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationContentsExtensionDebug.entitlements; sourceTree = "<group>"; };
+		7CFC46512AB3E376005C087A /* WidgetExtensionEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetExtensionEntryView.swift; sourceTree = "<group>"; };
+		7CFC46532AB3E39E005C087A /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -300,6 +306,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CFC46502AB3E294005C087A /* RealmSwift in Frameworks */,
+				7CFC464E2AB3E28D005C087A /* Realm in Frameworks */,
 				7C7E8BE12AA5CAFC00B5822E /* SwiftUI.framework in Frameworks */,
 				7C7E8BE02AA5CAFC00B5822E /* WidgetKit.framework in Frameworks */,
 			);
@@ -528,6 +536,7 @@
 		7C7E8BFA2AA5CC8300B5822E /* ViewContent */ = {
 			isa = PBXGroup;
 			children = (
+				7CFC46512AB3E376005C087A /* WidgetExtensionEntryView.swift */,
 				7C7E8BE72AA5CAFC00B5822E /* WidgetExtension.swift */,
 			);
 			path = ViewContent;
@@ -538,6 +547,7 @@
 			children = (
 				7C8F1BD62AB048F3004B66A6 /* WidgetEntity.swift */,
 				7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */,
+				7CFC46532AB3E39E005C087A /* RealmManager.swift */,
 			);
 			path = WidgetNetwork;
 			sourceTree = "<group>";
@@ -665,6 +675,8 @@
 			);
 			name = WidgetExtension;
 			packageProductDependencies = (
+				7CFC464D2AB3E28D005C087A /* Realm */,
+				7CFC464F2AB3E294005C087A /* RealmSwift */,
 			);
 			productName = WidgetExtensionExtension;
 			productReference = 7C7E8BDE2AA5CAFC00B5822E /* WidgetExtension.appex */;
@@ -880,11 +892,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CD10C662AA9FA5600D5DFB4 /* WidgetExtension.swift in Sources */,
+				7CFC46522AB3E376005C087A /* WidgetExtensionEntryView.swift in Sources */,
 				7CD10C682AA9FA5B00D5DFB4 /* WidgetExtensionLiveActivity.swift in Sources */,
 				7C05CCA12AAA2F2F000063C7 /* WidgetNetwork.swift in Sources */,
 				7CD10C672AA9FA5900D5DFB4 /* WidgetExtensionBundle.swift in Sources */,
 				7C8F1BD22AB045C1004B66A6 /* WidgetProvider.swift in Sources */,
 				7C05CCA82AAAE5D2000063C7 /* WidgetLocationManager.swift in Sources */,
+				7CFC46542AB3E39E005C087A /* RealmManager.swift in Sources */,
 				7C8F1BD72AB048F3004B66A6 /* WidgetEntity.swift in Sources */,
 				7C05CCA52AAA3588000063C7 /* Constant.swift in Sources */,
 			);
@@ -1451,6 +1465,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7CE4B0072A78E02E00540FBA /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
+		};
+		7CFC464D2AB3E28D005C087A /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		7CFC464F2AB3E294005C087A /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

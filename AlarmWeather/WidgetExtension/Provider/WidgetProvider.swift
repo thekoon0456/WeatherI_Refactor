@@ -18,15 +18,12 @@ import WidgetKit
 
 struct WeatherEntry: TimelineEntry {
     let date: Date //시간
-//    let view: WidgetExtensionEntryView
     let data: WidgetData
 }
 
 struct WidgetData: Equatable {
-    var imageURL: String?
     var todayBackgroundImage: String?
-    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패" //위치
-    var todayWeather: [Item]? //기상청 서버에서 가져온 [Item]
+    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea")
     var todayWeatherLabel: String? //날씨 상태
     var todayWeatherIconName: String? //날씨 아이콘
     var todaySky: String?
@@ -54,17 +51,30 @@ final class Provider: TimelineProvider {
     }
     
     func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> Void) {
-        
+        getData(completion: { [weak self] widgetData in
+            guard let self else { return }
+            var widgetData = widgetData
+            widgetData.todayWeatherLabel = todayWeatherState(model: widgetData).weatherState
+            widgetData.todayWeatherIconName = todayWeatherState(model: widgetData).iconName
+            widgetData.todayTemp = getTempAndPop(model: widgetData).temp
+            widgetData.todayPop = getTempAndPop(model: widgetData).pop
+            widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
+
+            let entry = WeatherEntry(date: Date(),
+                                     data: widgetData)
+            
+            completion(entry)
+        })
     }
     
-//    // 위젯 미리보기 스냅샷
-//    func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> ()) {
-//        getData()
-//            .sink(receiveCompletion: { result in
-//                switch result {
-//                case .finished:
-//                    print("DEBUG: sink 성공")
-//                case .failure(let error):
+    //    // 위젯 미리보기 스냅샷
+    //    func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> ()) {
+    //        getData()
+    //            .sink(receiveCompletion: { result in
+    //                switch result {
+    //                case .finished:
+    //                    print("DEBUG: sink 성공")
+    //                case .failure(let error):
 //                    print("DEBUG: \(error)")
 //                }
 //            }, receiveValue: { [weak self] items in
@@ -160,7 +170,6 @@ final class Provider: TimelineProvider {
             let timeline = Timeline(entries: entries, policy: .atEnd)
             completion(timeline)
         })
-        
     }
 }
 
@@ -202,7 +211,6 @@ extension Provider {
         }
     }
     
-    
     private func todayWeatherState(model: WidgetData) -> (weatherState: String, iconName: String) {
         if model.todayPty == "0" {
             switch model.todaySky {
@@ -213,7 +221,7 @@ extension Provider {
             case "4":
                 return ("흐림", "cloud.sun")
             default:
-                break
+                return ("", "")
             }
         } else {
             switch model.todayPty {
@@ -226,11 +234,9 @@ extension Provider {
             case "4":
                 return ("소나기", "cloud.sun.rain")
             default:
-                break
+                return ("", "")
             }
         }
-        
-        return ("", "")
     }
     
     private func getTempAndPop(model: WidgetData) -> (temp: String?, pop: String?) {
@@ -242,7 +248,7 @@ extension Provider {
 
 extension Provider {
     func getHomeViewBackgroundImage(model: WidgetData) -> String {
-        if model.fcstTime ?? "" < "0600"  && model.fcstTime ?? "" > "2000" {
+        if model.fcstTime ?? "" >= "0600"  && model.fcstTime ?? "" <= "2000" {
             if model.todayPty == "0" {
                 switch model.todaySky {
                 case "1":
@@ -252,7 +258,7 @@ extension Provider {
                 case "4":
                     return BackGroundImage.cloudy.randomElement() ?? ""
                 default:
-                    break
+                    return ""
                 }
             } else {
                 switch model.todayPty {
@@ -261,7 +267,7 @@ extension Provider {
                 case "3":
                     return BackGroundImage.snowing.randomElement() ?? ""
                 default:
-                    break
+                    return ""
                 }
             }
         } else {
@@ -274,7 +280,7 @@ extension Provider {
                 case "4":
                     return BackGroundImage.cloudyNight.randomElement() ?? ""
                 default:
-                    break
+                    return ""
                 }
             } else {
                 switch model.todayPty {
@@ -283,10 +289,9 @@ extension Provider {
                 case "3":
                     return BackGroundImage.snowingNight.randomElement() ?? ""
                 default:
-                    break
+                    return ""
                 }
             }
         }
-        return ""
     }
 }
