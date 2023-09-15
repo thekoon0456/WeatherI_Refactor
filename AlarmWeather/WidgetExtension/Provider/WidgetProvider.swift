@@ -107,7 +107,7 @@ final class Provider: TimelineProvider {
                 let currentDate = Date()
                 let entry = WeatherEntry(date: currentDate,
                                          data: widgetData)
-                let nextRefresh = Calendar.current.date(byAdding: .second, value: 5, to: currentDate) ?? Date()
+                let nextRefresh = Calendar.current.date(byAdding: .hour, value: 2, to: currentDate)!
                 let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
                 completion(timeline)
             })

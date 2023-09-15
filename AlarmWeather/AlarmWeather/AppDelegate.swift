@@ -18,8 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // 위젯 업데이트 요청 보내기
-        WidgetCenter.shared.reloadTimelines(ofKind: "com.thekoon.NotiWeather.WidgetExtension")
+//        // 위젯 업데이트 요청 보내기
+//        WidgetCenter.shared.reloadTimelines(ofKind: "com.thekoon.NotiWeather.WidgetExtension")
         
         //MARK: - Realm 마이그레이션
         
