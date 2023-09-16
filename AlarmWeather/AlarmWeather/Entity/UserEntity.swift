@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import RealmSwift
 
+import RealmSwift
 
 class UserEntity: Object {
     @Persisted var userName: String?

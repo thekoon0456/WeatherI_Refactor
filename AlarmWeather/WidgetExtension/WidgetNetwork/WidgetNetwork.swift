@@ -19,7 +19,7 @@ class WeatherNetwork {
     var x: Int? = UserDefaults.shared.object(forKey: "convertedX") as? Int
     var y: Int? = UserDefaults.shared.object(forKey: "convertedY") as? Int
 
-    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 60)&ny=\(y ?? 127)"
+    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 0)&ny=\(y ?? 0)"
     
     //Fetch data from the network
     func fetchWeatherData() -> AnyPublisher<WeatherEntity, Error> {
@@ -27,7 +27,6 @@ class WeatherNetwork {
             return Fail(error: URLError(.badURL))
                 .eraseToAnyPublisher()
         }
-        
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
             .decode(type: WeatherEntity.self, decoder: JSONDecoder())
@@ -49,7 +48,7 @@ class DustNetwork {
     var dataGubun = "HOUR"
     var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? ""
     
-    lazy var dustUrl = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
+    lazy var dustURL = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
     
     lazy var userRegion: String = getDustRegion(region: administrativeArea)
     

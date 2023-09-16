@@ -22,10 +22,13 @@ final class WeeklyWeatherTempService {
                     let taMinValue = data[0].toDictionary?.filter { $0.key == taMinItem }.first?.value as? Int ?? 0
                     let taMaxValue = data[0].toDictionary?.filter { $0.key == taMaxItem }.first?.value as? Int ?? 0
                     
-                    let model = WeeklyWeatherTempModel(date: DateAndTime.getLaterDate(afterDate: i),
-                                                       taMin: String(taMinValue),
-                                                       taMax: String(taMaxValue),
-                                                       diurnalRange: abs(taMinValue - taMaxValue))
+                    let model = WeeklyWeatherTempModel(
+                        date: DateAndTime.getLaterDate(afterDate: i),
+                        taMin: String(taMinValue),
+                        taMax: String(taMaxValue),
+                        diurnalRange: abs(taMinValue - taMaxValue)
+                    )
+                    
                     weeklyWeatherTempArr.append(model)
                 }
                 

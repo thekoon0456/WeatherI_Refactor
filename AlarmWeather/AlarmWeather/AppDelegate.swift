@@ -4,11 +4,11 @@
 //
 //  Created by Deokhun KIM on 2023/06/09.
 //
-
-import UIKit
 import CoreData
 import CoreLocation
+import UIKit
 import WidgetKit
+
 import RealmSwift
 
 @main

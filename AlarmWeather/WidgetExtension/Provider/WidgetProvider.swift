@@ -18,20 +18,25 @@ import WidgetKit
 
 struct WeatherEntry: TimelineEntry {
     let date: Date //시간
-    let data: WidgetData
+    let data: WidgetViewModel
 }
 
 struct WidgetData: Equatable {
-    var todayBackgroundImage: String?
-    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea")
-    var todayWeatherLabel: String? //날씨 상태
-    var todayWeatherIconName: String? //날씨 아이콘
     var todaySky: String?
     var todayPty: String?
     var todayTemp: String? //온도
     var todayPop: String? //강수확률
     var fcstTime: String?
-    var updateTime: Date?
+}
+
+struct WidgetViewModel {
+    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea")
+    var todayWeatherLabel: String? //날씨 상태
+    var todayWeatherIconName: String? //날씨 아이콘
+    var todayTemp: String? //온도
+    var todayPop: String? //강수확률
+    var todayBackgroundImage: String? //위젯 날씨 배경화면
+    var updateTime: Date? //새로고침한 시간
 }
 
 //MARK: - TimelineProvider
@@ -47,17 +52,11 @@ final class Provider: TimelineProvider {
     
     // 데이터를 불러오기 전(getSnapshot)에 보여줄 위젯데이터
     func placeholder(in context: Context) -> WeatherEntry {
-        return WeatherEntry(date: Date(), data: WidgetData(todayBackgroundImage: "sunny1",
-                                                           todayWeatherLabel: "맑음",
-                                                           todayWeatherIconName: "sun.max",
-                                                           todaySky: "1",
-                                                           todayPty: "0",
-                                                           todayTemp: "23",
-                                                           todayPop: "0",
-                                                           fcstTime: "2300")
-                                                           
-        
-        )
+        return WeatherEntry(date: Date(), data: WidgetViewModel(todayWeatherLabel: "맑음",
+                                                                todayWeatherIconName: "sun.max",
+                                                                todayTemp: "23",
+                                                                todayPop: "0",
+                                                                todayBackgroundImage: "sunny1"))
     }
     
     // 위젯 미리보기 스냅샷 (데이터 로드한 뒤)
@@ -66,22 +65,27 @@ final class Provider: TimelineProvider {
             .sink(receiveCompletion: { result in
                 switch result {
                 case .finished:
-                    print("DEBUG: sink 성공")
+                    print("DEBUG: 데이터 처리 완료")
                 case .failure(let error):
                     print("DEBUG: \(error)")
                 }
             }, receiveValue: { [weak self] widgetData in
                 guard let self else { return }
-                var widgetData = widgetData
-                widgetData.todayWeatherLabel = todayWeatherState(model: widgetData).weatherState
-                widgetData.todayWeatherIconName = todayWeatherState(model: widgetData).iconName
-                widgetData.todayTemp = getTempAndPop(model: widgetData).temp
-                widgetData.todayPop = getTempAndPop(model: widgetData).pop
-                widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
+                let todayWeatherLabel = getTodayState(model: widgetData)
+                let todayWeatherIconName = getTodayIconName(model: widgetData)
+                let todayTemp = getTemp(model: widgetData)
+                let todayPop = getPop(model: widgetData)
+                let todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
                 
-                let completeData = widgetData
+                let widgetViewModel = WidgetViewModel(todayWeatherLabel: todayWeatherLabel,
+                                                        todayWeatherIconName: todayWeatherIconName,
+                                                        todayTemp: todayTemp,
+                                                        todayPop: todayPop,
+                                                        todayBackgroundImage: todayBackgroundImage)
+                
                 let entry = WeatherEntry(date: Date(),
-                                         data: completeData)
+                                         data: widgetViewModel)
+                
                 completion(entry)
             })
             .store(in: &cancellables)
@@ -91,20 +95,7 @@ final class Provider: TimelineProvider {
     // 이 함수는 위젯의 타임라인을 정의하고 업데이트 주기를 관리합니다.
     // 위젯의 데이터를 업데이트하고 새로운 엔트리를 생성하는 데 사용됩니다.
     func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
-        
-        let dataPublisher = getData()
-        
-        dataPublisher
-            .map { [weak self] widgetData in
-                guard let self else { return widgetData }
-                var widgetData = widgetData
-                widgetData.todayWeatherLabel = todayWeatherState(model: widgetData).weatherState
-                widgetData.todayWeatherIconName = todayWeatherState(model: widgetData).iconName
-                widgetData.todayTemp = getTempAndPop(model: widgetData).temp
-                widgetData.todayPop = getTempAndPop(model: widgetData).pop
-                widgetData.todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
-                return widgetData
-            }
+        getData()
             .sink(receiveCompletion: { result in
                 switch result {
                 case .finished:
@@ -112,15 +103,26 @@ final class Provider: TimelineProvider {
                 case .failure(let error):
                     print("DEBUG: \(error)")
                 }
-            }, receiveValue: { widgetData in
-                var receiveData = widgetData
+            }, receiveValue: { [weak self] widgetData in
+                guard let self else { return }
+                let todayWeatherLabel = getTodayState(model: widgetData)
+                let todayWeatherIconName = getTodayIconName(model: widgetData)
+                let todayTemp = getTemp(model: widgetData)
+                let todayPop = getPop(model: widgetData)
+                let todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
+                
+                var widgetViewModel = WidgetViewModel(todayWeatherLabel: todayWeatherLabel,
+                                                        todayWeatherIconName: todayWeatherIconName,
+                                                        todayTemp: todayTemp,
+                                                        todayPop: todayPop,
+                                                        todayBackgroundImage: todayBackgroundImage)
                 
                 let currentDate = Date()
-                let nextRefresh = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
-                receiveData.updateTime = nextRefresh
+                let nextRefresh = Calendar.current.date(byAdding: .minute, value: 10, to: currentDate)!
+                widgetViewModel.updateTime = nextRefresh
                 
                 let entry = WeatherEntry(date: currentDate,
-                                         data: receiveData)
+                                         data: widgetViewModel)
                 let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
                 print("DEBUG: timeline: \(timeline)")
                 completion(timeline)
@@ -136,7 +138,7 @@ extension Provider {
         return weatherNetwork
             .fetchWeatherData()
             .map { model in
-                let data = model.response.body.items.item
+                let data = model.response.body.items.item //item
                 
                 let todaySky = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "SKY" }.first?.fcstValue ?? ""
                 let todayPty = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "PTY" }.first?.fcstValue ?? ""
@@ -150,40 +152,76 @@ extension Provider {
                                   todayPop: todayPop,
                                   fcstTime: fcstTime)
             }
-            .receive(on: DispatchQueue.global(qos: .background))
+            .receive(on: DispatchQueue.global(qos: .background)) //데이터 백그라운드큐에서 받아오기
             .eraseToAnyPublisher()
     }
+}
     
-    private func todayWeatherState(model: WidgetData) -> (weatherState: String, iconName: String) {
+//MARK: - 뷰모델 함수
+
+extension Provider {
+    private func getTodayState(model: WidgetData) -> String {
         if model.todayPty == "0" {
             switch model.todaySky {
             case "1":
-                return ("맑음", "sun.max")
+                return "맑음"
             case "3":
-                return ("구름 많음", "cloud")
+                return "구름 많음"
             case "4":
-                return ("흐림", "cloud.sun")
+                return "흐림"
             default:
-                return ("", "")
+                return "맑음"
             }
         } else {
             switch model.todayPty {
             case "1":
-                return ("비", "cloud.rain")
+                return "비"
             case "2":
-                return ("비/눈", "cloud.sleet")
+                return "비/눈"
             case "3":
-                return ("눈", "cloud.snow")
+                return "눈"
             case "4":
-                return ("소나기", "cloud.sun.rain")
+                return "소나기"
             default:
-                return ("", "")
+                return "비"
             }
         }
     }
     
-    private func getTempAndPop(model: WidgetData) -> (temp: String?, pop: String?) {
-        return (model.todayTemp, model.todayPop)
+    private func getTodayIconName(model: WidgetData) -> String {
+        if model.todayPty == "0" {
+            switch model.todaySky {
+            case "1":
+                return "sun.max"
+            case "3":
+                return "cloud"
+            case "4":
+                return "cloud.sun"
+            default:
+                return "sun.max"
+            }
+        } else {
+            switch model.todayPty {
+            case "1":
+                return "cloud.rain"
+            case "2":
+                return "cloud.sleet"
+            case "3":
+                return "cloud.snow"
+            case "4":
+                return "cloud.sun.rain"
+            default:
+                return "cloud.rain"
+            }
+        }
+    }
+    
+    private func getTemp(model: WidgetData) -> String? {
+        return model.todayTemp
+    }
+    
+    private func getPop(model: WidgetData) -> String? {
+        return model.todayPop
     }
 }
 
@@ -191,6 +229,7 @@ extension Provider {
 
 extension Provider {
     func getHomeViewBackgroundImage(model: WidgetData) -> String {
+        //낮시간일때 낮 이미지
         if model.fcstTime ?? "" >= "0600"  && model.fcstTime ?? "" <= "2000" {
             if model.todayPty == "0" {
                 switch model.todaySky {
@@ -201,7 +240,7 @@ extension Provider {
                 case "4":
                     return BackGroundImage.cloudy.randomElement() ?? ""
                 default:
-                    return ""
+                    return BackGroundImage.sunny.randomElement() ?? ""
                 }
             } else {
                 switch model.todayPty {
@@ -210,10 +249,10 @@ extension Provider {
                 case "3":
                     return BackGroundImage.snowing.randomElement() ?? ""
                 default:
-                    return ""
+                    return BackGroundImage.rainy.randomElement() ?? ""
                 }
             }
-        } else {
+        } else { //밤 시간부터 밤 이미지
             if model.todayPty == "0" {
                 switch model.todaySky {
                 case "1":
@@ -223,7 +262,7 @@ extension Provider {
                 case "4":
                     return BackGroundImage.cloudyNight.randomElement() ?? ""
                 default:
-                    return ""
+                    return BackGroundImage.sunnyNight.randomElement() ?? ""
                 }
             } else {
                 switch model.todayPty {
@@ -232,7 +271,7 @@ extension Provider {
                 case "3":
                     return BackGroundImage.snowingNight.randomElement() ?? ""
                 default:
-                    return ""
+                    return BackGroundImage.rainyNight.randomElement() ?? ""
                 }
             }
         }

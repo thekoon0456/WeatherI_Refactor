@@ -14,11 +14,10 @@ final class DustRepository {
     var itemCode = "PM10" //"PM25"
     var dataGubun = "HOUR"
 
-    lazy var dustUrl = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
+    lazy var dustURL = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
     
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-        
-        guard let url = URL(string: dustUrl) else { return }
+        guard let url = URL(string: dustURL) else { return }
         
         let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
         session.dataTask(with: url) { data, response, error in
@@ -45,7 +44,6 @@ final class DustRepository {
             }
         }.resume()
     }
-    
 
     func parseDustJSON(_ api: Data) -> [DustItem]? {
         let decoder = JSONDecoder()
@@ -58,7 +56,6 @@ final class DustRepository {
             return nil
         }
     }
-
 }
 
 extension DustRepository: RetryRequest {}
