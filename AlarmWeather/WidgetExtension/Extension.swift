@@ -20,7 +20,7 @@ extension RetryRequest {
             fatalError("Failed to perform network request after 5 retries.")
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
             performRequest { (result: Result<[T], NetworkError>) in
                 switch result {
                 case .success:
