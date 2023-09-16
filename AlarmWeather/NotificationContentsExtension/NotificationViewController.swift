@@ -28,7 +28,22 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var alertName: UILabel!
     
+    private var viewModel = HomeViewModel()
+    private var dustViewModel = DustViewModel()
+    private var todayWeather: WeatherModel?
+    private var todayDust: DustModel?
+    private var todayDetailWeather = [TodayDetailWeatherModel]()
+    private var todayRecommendItems: [String] = []
+    
+    private var realmData = NotiRealmManager.shared.readUsers()
+    
+    private let loadingMent = UILabel().then {
+        $0.text = Ments.loadingMent.rawValue
+        $0.font = UIFont.systemFont(ofSize: 10, weight: .medium)
+    }
+    
     //MARK: - Lottie
+    
     lazy var animationView = LottieAnimationView(name: LottieFiles.loadingView.rawValue).then {
         $0.frame = notiWeatherView.bounds
         $0.contentMode = .scaleAspectFit
@@ -37,18 +52,6 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     
     lazy var animationBg = UIView().then {
         $0.backgroundColor = .tertiarySystemBackground
-    }
-    
-    private var viewModel = HomeViewModel()
-    private var dustViewModel = DustViewModel()
-    private var todayWeather: WeatherModel?
-    private var todayDust: DustModel?
-    private var todayDetailWeather = [TodayDetailWeatherModel]()
-    private var todayRecommendItems: [String] = []
-    
-    private let loadingMent = UILabel().then {
-        $0.text = Ments.loadingMent.rawValue
-        $0.font = UIFont.systemFont(ofSize: 10, weight: .medium)
     }
     
     //MARK: - LifeCycle
@@ -61,15 +64,21 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     }
     
     func didReceive(_ notification: UNNotification) {
-        //사진 가져옴
-        if let attachment = notification.request.content.attachments.first,
-           attachment.url.startAccessingSecurityScopedResource(),
-           let imageData = try? Data(contentsOf: attachment.url) {
-            profileImageView.image = UIImage(data: imageData)
-        } else {
-            //시간에 따라 배경 추가
-            profileImageView.image = defaultImage()
+//        //사진 가져옴
+//        if let attachment = notification.request.content.attachments.first,
+//           attachment.url.startAccessingSecurityScopedResource(),
+//           let imageData = try? Data(contentsOf: attachment.url) {
+//            profileImageView.image = UIImage(data: imageData)
+//        } else {
+//            //시간에 따라 배경 추가
+//            profileImageView.image = defaultImage()
+//        }
+        
+        guard let image = realmData.first?.alertImage else {
+            return profileImageView.image = defaultImage()
         }
+        
+        profileImageView.image = UIImage(data: image)
         
         if let userInfo = notification.request.content.userInfo as? [String: Any],
            let alertName = userInfo["alertName"] as? String,

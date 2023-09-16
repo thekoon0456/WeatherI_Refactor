@@ -1,19 +1,19 @@
 //
-//  RealmManager.swift
-//  WidgetExtension
+//  NotificationRealmManager.swift
+//  NotificationContentsExtension
 //
-//  Created by Deokhun KIM on 2023/09/14.
+//  Created by Deokhun KIM on 2023/09/16.
 //
 
 import Foundation
 
 import RealmSwift
 
-class RealmManager {
+class NotiRealmManager {
     
     //MARK: - Properties
     
-    static let shared = RealmManager()
+    static let shared = NotiRealmManager()
     
     private var localRealm: Realm {
         let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.weatherI.widget")
