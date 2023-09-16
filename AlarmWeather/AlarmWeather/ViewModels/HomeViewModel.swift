@@ -55,7 +55,7 @@ final class HomeViewModel {
             getRainyMent(model: model.1) //1시간 간격으로 오늘 전체 강수량 멘트
             todayDetailWeatherIcon(model: model.0)
             
-            print("DEBUG: detailWeatherIconArr: \(todayDetailWeatherIconName)")
+//            print("DEBUG: detailWeatherIconArr: \(todayDetailWeatherIconName)")
             completion(todayDetailWeather ?? model.0)
         }
     }

@@ -25,7 +25,9 @@ final class SettingAddAlertViewController: UIViewController {
         let control = UISegmentedControl(items: items)
         control.selectedSegmentIndex = 0
         control.tintColor = .white
-        control.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
+        control.addTarget(self,
+                          action: #selector(segmentedControlValueChanged),
+                          for: .valueChanged)
         return control
     }()
     
@@ -35,21 +37,27 @@ final class SettingAddAlertViewController: UIViewController {
         $0.locale = Locale(identifier: "ko_kr")
         $0.tintColor = .white
 //        $0.minuteInterval = 5 //5분 간격으로 설정
-        $0.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        $0.addTarget(self,
+                     action: #selector(datePickerValueChanged),
+                     for: .valueChanged)
     }
     
     private lazy var addAlertTimeButton = UIButton().then {
         $0.setTitle("저장", for: .normal)
         $0.setTitleColor(.label, for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        $0.addTarget(self, action: #selector(addAlertTimeButtonTapped), for: .touchUpInside)
+        $0.addTarget(self,
+                     action: #selector(addAlertTimeButtonTapped),
+                     for: .touchUpInside)
     }
     
     private lazy var closeAlertTimeButton = UIButton().then {
         $0.setTitle("닫기", for: .normal)
         $0.setTitleColor(.label, for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        $0.addTarget(self, action: #selector(closeAlertTimeButtonTapped), for: .touchUpInside)
+        $0.addTarget(self,
+                     action: #selector(closeAlertTimeButtonTapped),
+                     for: .touchUpInside)
     }
     
     private let blurView = UIView().then {
