@@ -5,10 +5,9 @@
 //  Created by Deokhun KIM on 2023/09/08.
 //
 
-import Combine
 import SwiftUI
 
-class WeatherNetwork {
+class WeatherNetwork: RetryRequest {
     //todayWeather
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "500"
@@ -21,22 +20,44 @@ class WeatherNetwork {
 
     lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 0)&ny=\(y ?? 0)"
     
-    //Fetch data from the network
-    func fetchWeatherData() -> AnyPublisher<WeatherEntity, Error> {
-        guard let url = URL(string: weatherURL) else {
-            return Fail(error: URLError(.badURL))
-                .eraseToAnyPublisher()
-        }
-        return URLSession.shared.dataTaskPublisher(for: url)
-            .map(\.data)
-            .decode(type: WeatherEntity.self, decoder: JSONDecoder())
-            .mapError { error in
-                // decode 연산자 이후에 발생한 오류 처리
-                print("Decode error: \(error)")
-                return error
+    func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
+        guard let url = URL(string: weatherURL) else { return }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if error != nil {
+                print("네트워크 에러 \(String(describing: error?.localizedDescription))")
+                completion(.failure(.networkingError))
+                self.retryRequest(completion: completion)
+                return
             }
-            .retry(5) // 디코딩 이후 발생한 오류에 대한 재시도
-            .eraseToAnyPublisher()
+            
+            guard let data = data else {
+                print("데이터 에러")
+                completion(.failure(.dataError))
+                self.retryRequest(completion: completion)
+                return
+            }
+
+            if let item = self.parseWeatherJSON(data) as? [T] {
+                print("Weather JSON 파싱 성공")
+                completion(.success(item))
+            } else {
+                self.retryRequest(completion: completion)
+                completion(.failure(.parseError))
+            }
+        }.resume()
+    }
+    
+    func parseWeatherJSON(_ api: Data) -> [Item]? {
+        let decoder = JSONDecoder()
+        do {
+            let decodedData = try decoder.decode(WeatherEntity.self, from: api)
+            let item = decodedData.response.body.items.item
+            return item //[Item]
+        } catch {
+            print("DEBUG: Weather JSON 파싱 실패 \(error.localizedDescription)")
+            return nil
+        }
     }
 }
 

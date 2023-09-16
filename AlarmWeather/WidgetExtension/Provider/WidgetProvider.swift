@@ -5,7 +5,6 @@
 //  Created by Deokhun KIM on 2023/09/12.
 //
 
-import Combine
 import SwiftUI
 import WidgetKit
 
@@ -48,7 +47,6 @@ struct WidgetViewModel {
 
 final class Provider: TimelineProvider {
     private var weatherNetwork = WeatherNetwork()
-    private var cancellables: Set<AnyCancellable> = []
     
     // 데이터를 불러오기 전(getSnapshot)에 보여줄 위젯데이터
     func placeholder(in context: Context) -> WeatherEntry {
@@ -61,99 +59,89 @@ final class Provider: TimelineProvider {
     
     // 위젯 미리보기 스냅샷 (데이터 로드한 뒤)
     func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> Void) {
-        getData()
-            .sink(receiveCompletion: { result in
-                switch result {
-                case .finished:
-                    print("DEBUG: 데이터 처리 완료")
-                case .failure(let error):
-                    print("DEBUG: \(error)")
-                }
-            }, receiveValue: { [weak self] widgetData in
-                guard let self else { return }
-                let todayWeatherLabel = getTodayState(model: widgetData)
-                let todayWeatherIconName = getTodayIconName(model: widgetData)
-                let todayTemp = getTemp(model: widgetData)
-                let todayPop = getPop(model: widgetData)
-                let todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
-                
-                let widgetViewModel = WidgetViewModel(todayWeatherLabel: todayWeatherLabel,
-                                                        todayWeatherIconName: todayWeatherIconName,
-                                                        todayTemp: todayTemp,
-                                                        todayPop: todayPop,
-                                                        todayBackgroundImage: todayBackgroundImage)
-                
-                let entry = WeatherEntry(date: Date(),
-                                         data: widgetViewModel)
-                
-                completion(entry)
-            })
-            .store(in: &cancellables)
+        getData { [weak self] widgetData in
+            guard let self else { return }
+            
+            let todayWeatherLabel = getTodayState(model: widgetData)
+            let todayWeatherIconName = getTodayIconName(model: widgetData)
+            let todayTemp = getTemp(model: widgetData)
+            let todayPop = getPop(model: widgetData)
+            let todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
+            
+            let widgetViewModel = WidgetViewModel(todayWeatherLabel: todayWeatherLabel,
+                                                  todayWeatherIconName: todayWeatherIconName,
+                                                  todayTemp: todayTemp,
+                                                  todayPop: todayPop,
+                                                  todayBackgroundImage: todayBackgroundImage)
+            
+            let entry = WeatherEntry(date: Date(),
+                                     data: widgetViewModel)
+            
+            completion(entry)
+        }
     }
     
     //WidgetKit은 Provider에게 TimeLine을 요청
     // 이 함수는 위젯의 타임라인을 정의하고 업데이트 주기를 관리합니다.
     // 위젯의 데이터를 업데이트하고 새로운 엔트리를 생성하는 데 사용됩니다.
     func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
-        getData()
-            .sink(receiveCompletion: { result in
-                switch result {
-                case .finished:
-                    print("DEBUG: 데이터 처리 완료")
-                case .failure(let error):
-                    print("DEBUG: \(error)")
-                }
-            }, receiveValue: { [weak self] widgetData in
-                guard let self else { return }
-                let todayWeatherLabel = getTodayState(model: widgetData)
-                let todayWeatherIconName = getTodayIconName(model: widgetData)
-                let todayTemp = getTemp(model: widgetData)
-                let todayPop = getPop(model: widgetData)
-                let todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
-                
-                var widgetViewModel = WidgetViewModel(todayWeatherLabel: todayWeatherLabel,
-                                                        todayWeatherIconName: todayWeatherIconName,
-                                                        todayTemp: todayTemp,
-                                                        todayPop: todayPop,
-                                                        todayBackgroundImage: todayBackgroundImage)
-                
-                let currentDate = Date()
-                let nextRefresh = Calendar.current.date(byAdding: .minute, value: 10, to: currentDate)!
-                widgetViewModel.updateTime = nextRefresh
-                
-                let entry = WeatherEntry(date: currentDate,
-                                         data: widgetViewModel)
-                let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
-                print("DEBUG: timeline: \(timeline)")
-                completion(timeline)
-            })
-            .store(in: &cancellables)
+        getData { [weak self] widgetData in
+            guard let self else { return }
+            
+            let todayWeatherLabel = getTodayState(model: widgetData)
+            let todayWeatherIconName = getTodayIconName(model: widgetData)
+            let todayTemp = getTemp(model: widgetData)
+            let todayPop = getPop(model: widgetData)
+            let todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
+            
+            var widgetViewModel = WidgetViewModel(todayWeatherLabel: todayWeatherLabel,
+                                                  todayWeatherIconName: todayWeatherIconName,
+                                                  todayTemp: todayTemp,
+                                                  todayPop: todayPop,
+                                                  todayBackgroundImage: todayBackgroundImage)
+            
+            let currentDate = Date()
+            let nextRefresh = Calendar.current.date(byAdding: .minute, value: 10, to: currentDate)!
+            
+            //MARK: - Test(Update 시간 확인)
+            widgetViewModel.updateTime = nextRefresh
+            
+            let entry = WeatherEntry(date: currentDate,
+                                     data: widgetViewModel)
+            
+            let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
+            print("DEBUG: timeline: \(timeline)")
+            completion(timeline)
+        }
     }
 }
 
 //MARK: - 데이터 관련 함수
 
 extension Provider {
-    private func getData() -> AnyPublisher<WidgetData, Error> {
-        return weatherNetwork
-            .fetchWeatherData()
-            .map { model in
-                let data = model.response.body.items.item //item
-                
+    private func getData(completion: @escaping (WidgetData) -> Void) {
+        let weatherNetwork = WeatherNetwork()
+        weatherNetwork.performRequest { (result: Result<[Item], NetworkError>) in
+            switch result {
+            case .success(let data):
                 let todaySky = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "SKY" }.first?.fcstValue ?? ""
                 let todayPty = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "PTY" }.first?.fcstValue ?? ""
                 let todayTemp = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "TMP" }.first?.fcstValue ?? ""
                 let todayPop = data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == "POP" }.first?.fcstValue ?? ""
                 let fcstTime = data.filter { $0.fcstTime == DateAndTime.currentTime }.first?.fcstTime ?? ""
                 
-                return WidgetData(todaySky: todaySky,
-                                  todayPty: todayPty,
-                                  todayTemp: todayTemp,
-                                  todayPop: todayPop,
-                                  fcstTime: fcstTime)
+                let widgetData =  WidgetData(todaySky: todaySky,
+                                             todayPty: todayPty,
+                                             todayTemp: todayTemp,
+                                             todayPop: todayPop,
+                                             fcstTime: fcstTime)
+                
+                completion(widgetData)
+                
+            case .failure(let error):
+                print("DEBUG: getData Error: \(error.localizedDescription)")
             }
-            .receive(on: DispatchQueue.global(qos: .background)) //데이터 백그라운드큐에서 받아오기
-            .eraseToAnyPublisher()
+        }
     }
 }
     
