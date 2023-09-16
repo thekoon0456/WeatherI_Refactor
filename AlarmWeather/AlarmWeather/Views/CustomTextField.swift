@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import SnapKit
 import Then
 
@@ -20,6 +21,7 @@ class CustomTextField: UITextField {
             make.height.equalTo(50)
             make.width.equalTo(12)
         }
+        
         spacer.frame = frame
         leftView = spacer
         leftViewMode = .always
@@ -31,7 +33,8 @@ class CustomTextField: UITextField {
         backgroundColor = UIColor(white: 1, alpha: 0.2)
         heightAnchor.constraint(equalToConstant: 50).isActive = true
         layer.cornerRadius = 5
-        attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [.foregroundColor: UIColor(white: 1, alpha: 0.7)])
+        attributedPlaceholder = NSAttributedString(string: placeHolder,
+                                                   attributes: [.foregroundColor: UIColor(white: 1, alpha: 0.7)])
         self.isSecureTextEntry = isSecureTextEntry ?? false
     }
     

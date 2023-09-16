@@ -10,6 +10,9 @@ import UIKit
 import RealmSwift
 
 final class RealmService {
+    
+    //MARK: - Properties
+    
     static let shared = RealmService()
     let realm = try! Realm()
     

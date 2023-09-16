@@ -6,12 +6,14 @@
 //
 
 import UIKit
+
+import Lottie
 import SnapKit
 import Then
-import Lottie
-
 
 class OnboardingContentViewController: UIViewController {
+    
+    //MARK: - Properties
     
     //MARK: - Lottie
     private lazy var animationView = LottieAnimationView(name: LottieFiles.loadingView.rawValue).then {

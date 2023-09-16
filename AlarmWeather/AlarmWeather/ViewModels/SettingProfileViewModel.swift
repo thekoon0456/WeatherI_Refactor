@@ -6,9 +6,12 @@
 //
 
 import Foundation
+
 import RealmSwift
 
 final class SettingProfileViewModel {
+    
+    //MARK: - Properties
     
     var realmManager = RealmService.shared
     

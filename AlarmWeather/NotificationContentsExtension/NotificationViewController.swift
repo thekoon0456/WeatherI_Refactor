@@ -8,17 +8,14 @@
 import UIKit
 import UserNotifications
 import UserNotificationsUI
+
+import Lottie
 import SnapKit
 import Then
-import Lottie
 
-////        todayWeatherMent.text = "기분 좋은 맑은 하늘입니다 ☀️"
-////        todayDustMent.text = "미세먼지가 좋습니다 😆"
-////        todayTempRangeMent.text = "오늘의 온도는 26º ~ 32º 입니다"
-////        todayPopRangeMent.text = "오늘 비올 확률은 10% ~ 30% 입니다"
-////        todayItemMent.text = "혹시 모르니 우산을 챙겨주세요 ☂️"
-///
 final class NotificationViewController: UIViewController, UNNotificationContentExtension {
+    
+    //MARK: - Properties
     
     @IBOutlet weak var notiWeatherView: UIView!
     @IBOutlet weak var iconImageView: UIImageView!

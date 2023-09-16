@@ -6,10 +6,9 @@
 //
 
 import UIKit
+
 import SnapKit
 import Then
-
-
 
 final class TodayTimeWeatherCell: UICollectionViewCell {
     

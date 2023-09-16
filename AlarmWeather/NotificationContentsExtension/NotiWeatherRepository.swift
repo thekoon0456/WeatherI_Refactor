@@ -9,6 +9,8 @@ import Foundation
 
 final class WeatherRepository {
     
+    //MARK: - Properties
+    
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "300"
     //사용자 좌표구해서 쿼리 날림

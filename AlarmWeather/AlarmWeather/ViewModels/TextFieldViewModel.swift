@@ -8,6 +8,9 @@
 import Foundation
 
 struct TextFieldViewModel {
+    
+    //MARK: - Properties
+    
     var userName: String? = RealmService.shared.readUsers().first?.userName
     var alertName: String? = RealmService.shared.readUsers().first?.alertName
     

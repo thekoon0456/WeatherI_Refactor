@@ -7,12 +7,15 @@
 
 import Foundation
 
-//MARK: - 중기육상예보
+//중기육상예보
 //0600시, pm
 //rnSt3Pm //3일후 강수 확률
 //wf3Pm //3일후 날씨 예보
 
 final class WeeklyWeatherRepository {
+    
+    //MARK: - Properties
+    
     let serviceKey = NetworkQuery.serviceKey
     var regId = "0"
     

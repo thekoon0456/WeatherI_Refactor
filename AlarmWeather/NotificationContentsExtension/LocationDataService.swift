@@ -8,11 +8,14 @@
 import Foundation
 
 class LocationDataService {
-    static let shared = LocationDataService()
     
-    private init() { }
+    //MARK: - Properties
+    
+    static let shared = LocationDataService()
     
     static var x = 0
     static var y = 0
     static var administrativeArea = ""
+    
+    private init() { }
 }

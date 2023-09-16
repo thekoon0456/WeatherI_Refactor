@@ -9,6 +9,8 @@ import Foundation
 
 final class DustViewModel {
     
+    //MARK: - Properties
+    
     let dustService = DustService()
     var todayDust: DustModel? //홈에서 사용하는 오늘날씨 데이터
     var todayDustIconName = "" //홈 메인 아이콘

@@ -5,13 +5,15 @@
 //  Created by Deokhun KIM on 2023/06/11.
 //
 
-import UIKit
-import Then
 import CoreLocation
+import UIKit
+
+import Then
 
 //화면에 보여질 데이터
-
 final class HomeViewModel {
+    
+    //MARK: - Properties
     
     let weatherService = WeatherService()
     let weeklyWeatherService = WeeklyWeatherService()
@@ -81,8 +83,8 @@ final class HomeViewModel {
     }
 }
 
- 
 //MARK: - 뷰모델 함수
+
 extension HomeViewModel {
     func todayWeatherMent(model: WeatherModel) -> String {
         if model.pty == "0" {

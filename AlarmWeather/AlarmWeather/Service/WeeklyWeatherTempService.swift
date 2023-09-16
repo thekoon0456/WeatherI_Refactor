@@ -8,6 +8,9 @@
 import Foundation
 
 final class WeeklyWeatherTempService {
+    
+    //MARK: - Properties
+    
     var repository = WeeklyWeatherTempRepository()
     
     func fetchWeeklyWeatherTemp(completion: @escaping ([WeeklyWeatherTempModel]) -> Void) {

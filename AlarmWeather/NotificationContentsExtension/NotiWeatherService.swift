@@ -10,6 +10,9 @@ import Foundation
 //최대 4일치 데이터 들어옴
 //패치 등 로직
 final class WeatherService {
+    
+    //MARK: - Properties
+    
     var repository = WeatherRepository()
     
     func fetchTodayWeather(completion: @escaping (WeatherModel) -> Void) {

@@ -5,10 +5,13 @@
 //  Created by Deokhun KIM on 2023/06/29.
 //
 
-import Foundation
 import CoreLocation
+import Foundation
 
 final class LocationService {
+    
+    //MARK: - Properties
+    
     static let shared = LocationService()
     var manager = CLLocationManager()
     var location: CLLocation?

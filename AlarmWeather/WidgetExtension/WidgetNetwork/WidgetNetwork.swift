@@ -5,10 +5,12 @@
 //  Created by Deokhun KIM on 2023/09/08.
 //
 
-import SwiftUI
+import Foundation
 
 class WeatherNetwork: RetryRequest {
-    //todayWeather
+    
+    //MARK: - Properties
+    
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "500"
 

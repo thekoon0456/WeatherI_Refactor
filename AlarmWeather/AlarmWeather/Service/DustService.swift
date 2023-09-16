@@ -8,6 +8,9 @@
 import Foundation
 
 final class DustService {
+    
+    //MARK: - Properties
+    
     var repository = DustRepository()
 
     func fetchDustWeather(completion: @escaping (DustModel) -> Void) {

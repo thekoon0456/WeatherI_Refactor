@@ -5,13 +5,14 @@
 //  Created by Deokhun KIM on 2023/06/11.
 //
 
-import UIKit
-import Then
 import CoreLocation
+import UIKit
 
-//화면에 보여질 데이터
+import Then
 
 final class HomeViewModel {
+    
+    //MARK: - Properties
     
     let weatherService = WeatherService()
     
@@ -54,8 +55,8 @@ final class HomeViewModel {
     }
 }
 
- 
 //MARK: - 뷰모델 함수
+
 extension HomeViewModel {
     func getTodayRecommendItems(model: [TodayDetailWeatherModel]) -> [String] {
         var weatherItemArr: Set<String> = [] //중복 없애려고 set으로
@@ -71,7 +72,9 @@ extension HomeViewModel {
             default:
                 continue
             }
+            
             //MARK: - Todo 겨울에 아이템 추가
+            
 //            if model[i].tmp < "5º" {
 //                weatherItemArr.insert(" 🧣 🧤")
 //            }

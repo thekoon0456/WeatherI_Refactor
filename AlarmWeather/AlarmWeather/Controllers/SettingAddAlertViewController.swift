@@ -5,14 +5,15 @@
 //  Created by Deokhun KIM on 2023/07/24.
 //
 
-import UIKit
 import CoreData
-import RealmSwift
+import UIKit
 
+import RealmSwift
 
 final class SettingAddAlertViewController: UIViewController {
     
     //MARK: - Properties
+    
     var viewModel: SettingProfileViewModel?
     
     private var alertTime: AlertTimeEntity? = AlertTimeEntity()

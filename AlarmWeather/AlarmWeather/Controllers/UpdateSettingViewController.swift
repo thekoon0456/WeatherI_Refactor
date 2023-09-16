@@ -6,9 +6,10 @@
 //
 
 import UIKit
+
+import RealmSwift
 import SnapKit
 import Then
-import RealmSwift
 
 class UpdateSettingViewController: UIViewController {
     

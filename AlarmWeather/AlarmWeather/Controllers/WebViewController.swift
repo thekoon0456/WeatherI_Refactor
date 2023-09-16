@@ -12,6 +12,9 @@ import SnapKit
 import Then
 
 final class WebViewController: UIViewController {
+    
+    //MARK: - Properties
+    
     var url: String
     
     init(url: String) {
