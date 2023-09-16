@@ -48,7 +48,6 @@ struct WidgetViewModel {
 final class Provider: TimelineProvider {
     private var weatherNetwork = WeatherNetwork()
     
-    // 데이터를 불러오기 전(getSnapshot)에 보여줄 미리보기
     func placeholder(in context: Context) -> WeatherEntry {
         return WeatherEntry(
             date: Date(),
@@ -83,7 +82,7 @@ final class Provider: TimelineProvider {
             completion(entry)
         }
     }
-    
+
     //widget 새로고침
     func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
         getData { [weak self] widgetData in
