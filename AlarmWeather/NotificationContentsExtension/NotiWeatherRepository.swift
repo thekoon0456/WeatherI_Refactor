@@ -15,7 +15,7 @@ final class WeatherRepository {
     var nx = "0"
     var ny = "0"
     
-    lazy var weatherUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=300&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(nx)&ny=\(ny)"
+    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=300&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(nx)&ny=\(ny)"
     
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
         nx = String(LocationDataService.x)
@@ -23,7 +23,7 @@ final class WeatherRepository {
         
         print("nx: \(nx), ny: \(ny)")
 
-        guard let url = URL(string: weatherUrl) else { return }
+        guard let url = URL(string: weatherURL) else { return }
 
         let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
         session.dataTask(with: url) { data, response, error in

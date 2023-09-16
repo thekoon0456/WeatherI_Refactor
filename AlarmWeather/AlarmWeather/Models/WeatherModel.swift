@@ -50,10 +50,3 @@ struct TodayDetailWeather {
     let todayDetailTemp: String
 }
 
-struct WeeklyWeather {
-    let weeklyDate: String
-    let todayWeather: String
-    let todayLowTemp: String
-    let todayHighTemp: String
-}
-

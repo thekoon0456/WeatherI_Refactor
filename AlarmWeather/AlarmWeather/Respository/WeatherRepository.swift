@@ -8,23 +8,19 @@
 import Foundation
 
 //weather 서버에서 가져옴
-//JSON 받아서 이런 형태의 모델로 만들어서 모델 -> 서비스로
-
+//JSON 받아서 모델 -> 서비스로
 final class WeatherRepository {
-    
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "500"
     //사용자 좌표구해서 쿼리 날림
     var nx = "0"
     var ny = "0"
 
-    lazy var weatherUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(nx)&ny=\(ny)"
+    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(nx)&ny=\(ny)"
     
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-        
         setNxNy(nx: LocationService.shared.latitude ?? 0, ny: LocationService.shared.longitude ?? 0)
-        
-        guard let url = URL(string: weatherUrl) else { return }
+        guard let url = URL(string: weatherURL) else { return }
 
         let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
         session.dataTask(with: url) { data, response, error in
@@ -71,7 +67,6 @@ final class WeatherRepository {
         self.ny = String(convertedXy.y)
         print("DEBUG: nx: \(self.nx) ny: \(self.ny)")
     }
-    
 }
 
 extension WeatherRepository: RetryRequest { }

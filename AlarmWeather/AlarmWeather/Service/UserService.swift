@@ -5,18 +5,15 @@
 //  Created by Deokhun KIM on 2023/07/27.
 //
 
-import Foundation
-import RealmSwift
 import UIKit
 
+import RealmSwift
 
 final class RealmService {
-    
     static let shared = RealmService()
+    let realm = try! Realm()
     
     private init() { }
-    
-    let realm = try! Realm()
     
     // Swift Array를 Realm의 List로 변환하는 함수
     func convertToList<T: Object>(_ array: [T]) -> List<T> {
@@ -31,6 +28,7 @@ final class RealmService {
     }
 
     //MARK: - create
+    
     func createUser(
         userName: String?,
         alertName: String?,
@@ -50,12 +48,14 @@ final class RealmService {
     }
     
     //MARK: - read
+    
     func readUsers() -> Results<UserEntity> {
         let users = realm.objects(UserEntity.self)
         return users
     }
     
     //MARK: - update
+    
     func updateUser(
         userName: String?,
         alertName: String?,
@@ -84,6 +84,7 @@ final class RealmService {
     }
     
     //MARK: - delete
+    
     func deleteUser() {
         let users = readUsers()
 

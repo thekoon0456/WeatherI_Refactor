@@ -5,7 +5,6 @@
 //  Created by Deokhun KIM on 2023/09/14.
 //
 
-import Combine
 import SwiftUI
 import WidgetKit
 
@@ -13,7 +12,7 @@ import WidgetKit
 
 struct WidgetExtensionEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
-    var data: WidgetData
+    var data: WidgetViewModel
     var realmData = RealmManager.shared.readUsers()
     
     var body: some View {
@@ -59,11 +58,14 @@ extension WidgetExtensionEntryView {
             let realmImage = realmData.first?.alertImage,
             let image = resizeImage(
                 image: UIImage(data: realmImage),
-                targetSize: CGSize(width: 300, height: 300))
+                targetSize: CGSize(width: 300, height: 300)
+            )
         else {
             let image = resizeImage(
                 image: UIImage(named: data.todayBackgroundImage ?? "sunnyNight1"),
-                targetSize: CGSize(width: 300, height: 300))
+                targetSize: CGSize(width: 300, height: 300)
+            )
+            
             backgroundImage = Image(uiImage: image ?? UIImage())
             return backgroundImage
         }

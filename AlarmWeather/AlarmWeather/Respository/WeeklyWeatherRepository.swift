@@ -8,23 +8,19 @@
 import Foundation
 
 //MARK: - 중기육상예보
-//기준 0600시
-//pm으로
+//0600시, pm
 //rnSt3Pm //3일후 강수 확률
 //wf3Pm //3일후 날씨 예보
 
 final class WeeklyWeatherRepository {
-
     let serviceKey = NetworkQuery.serviceKey
     var regId = "0"
     
-    lazy var weatherUrl = "https://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?pageNo=1%E2%80%A8&regId=\(regId)&serviceKey=\(serviceKey)&numOfRows=100&tmFc=\(DateAndTime.currentTime >= "0600" ? DateAndTime.weeklyQuaryDate : DateAndTime.yesterdayweeklyQuaryDate)&dataType=JSON"
+    lazy var weatherURL = "https://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?pageNo=1%E2%80%A8&regId=\(regId)&serviceKey=\(serviceKey)&numOfRows=100&tmFc=\(DateAndTime.currentTime >= "0600" ? DateAndTime.weeklyQuaryDate : DateAndTime.yesterdayweeklyQuaryDate)&dataType=JSON"
     
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-        
         getWeeklyWeatherRegId(region: LocationService.shared.administrativeArea ?? "")
-        
-        guard let url = URL(string: weatherUrl) else { return }
+        guard let url = URL(string: weatherURL) else { return }
         
         let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
         session.dataTask(with: url) { data, response, error in
@@ -106,7 +102,6 @@ final class WeeklyWeatherRepository {
             break
         }
     }
-
 }
 
 extension WeeklyWeatherRepository: RetryRequest { }

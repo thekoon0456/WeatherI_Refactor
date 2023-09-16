@@ -11,7 +11,6 @@ final class DustService {
     var repository = DustRepository()
 
     func fetchDustWeather(completion: @escaping (DustModel) -> Void) {
-        
         let userRegion: String = getDustRegion(region: LocationService.shared.administrativeArea ?? "")
         
         print("DEBUG: DustUserRegion: \(userRegion)")
@@ -20,12 +19,16 @@ final class DustService {
             switch result {
             case .success(let data):
                 let dicValue = data[0].toDictionary?.filter { $0.key == userRegion }.first?.value as? String ?? ""
+                
                 print("DEBUG: DustData: \(dicValue)")
-                let model = DustModel(dustState: self.dustPm10DataToString(dustData: dicValue),
-                                      pm10Data: dicValue,
-                                      pm25Data: "PM10 사용중",
-                                      dustCode: data[0].itemCode ?? "서버정보없음",
-                                      dataTime: data[0].dataTime ?? "서버정보없음")
+                
+                let model = DustModel(
+                    dustState: self.dustPm10DataToString(dustData: dicValue),
+                    pm10Data: dicValue,
+                    pm25Data: "PM10 사용중",
+                    dustCode: data[0].itemCode ?? "서버정보없음",
+                    dataTime: data[0].dataTime ?? "서버정보없음"
+                )
                 
                 print("DEBUG: DustModel: \(model)")
                 completion(model)

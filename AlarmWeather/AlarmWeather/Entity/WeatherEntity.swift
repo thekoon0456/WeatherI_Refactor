@@ -8,31 +8,25 @@
 import Foundation
 
 //서버에서 오는 원천 데이터
-
-// MARK: - WeatherEntity
 struct WeatherEntity: Codable {
     let response: Response
 }
 
-// MARK: - Response
 struct Response: Codable {
     let header: Header
     let body: Body
 }
 
-// MARK: - Body
 struct Body: Codable {
     let dataType: String
     let items: Items
     let pageNo, numOfRows, totalCount: Int
 }
 
-// MARK: - Items
 struct Items: Codable {
     let item: [Item]
 }
 
-// MARK: - Item
 struct Item: Codable {
     let baseDate, baseTime: String
     let category: Category
@@ -57,7 +51,6 @@ enum Category: String, Codable {
     case wsd = "WSD"
 }
 
-// MARK: - Header
 struct Header: Codable {
     let resultCode, resultMsg: String
 }
