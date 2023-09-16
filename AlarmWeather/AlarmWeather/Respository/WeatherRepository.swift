@@ -10,6 +10,9 @@ import Foundation
 //weather 서버에서 가져옴
 //JSON 받아서 모델 -> 서비스로
 final class WeatherRepository {
+    
+    //MARK: - Properties
+    
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "500"
     //사용자 좌표구해서 쿼리 날림

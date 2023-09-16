@@ -9,6 +9,8 @@ import Foundation
 
 final class DustRepository {
     
+    //MARK: - Properties
+    
     let serviceKey = NetworkQuery.serviceKey
     var itemCount = "1"
     var itemCode = "PM10" //"PM25"

@@ -70,7 +70,6 @@ extension UIView: CustomAnimation { }
 
 extension UIViewController: CustomAnimation { }
 
-
 //MARK: - Using Then
 
 extension LottieAnimation: Then { }
@@ -89,7 +88,6 @@ class BackBarButtonItem: UIBarButtonItem {
         }
     }
 }
-
 
 //MARK: - UILabelLineSpacing
 

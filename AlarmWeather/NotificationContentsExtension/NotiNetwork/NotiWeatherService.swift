@@ -10,6 +10,9 @@ import Foundation
 //최대 4일치 데이터 들어옴
 //패치 등 로직
 final class WeatherService {
+    
+    //MARK: - Properties
+    
     var repository = WeatherRepository()
     
     func fetchTodayWeather(completion: @escaping (WeatherModel) -> Void) {
@@ -27,7 +30,7 @@ final class WeatherService {
                                          reh: data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == Category.reh }.first?.fcstValue ?? "",
                                          wsd: data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == Category.wsd }.first?.fcstValue ?? "",
                                          sno: data.filter { $0.fcstDate == DateAndTime.todayDate && $0.category == Category.sno }.first?.fcstValue ?? "")
-                print("DEBUG: todayModel: \(model)")
+//                print("DEBUG: todayModel: \(model)")
                 completion(model)
                 
             case .failure(let error):
@@ -57,7 +60,7 @@ final class WeatherService {
                     timeArr.append(time)
                 }
                 
-                print("DEBUG: fcstTime: \(timeArr)")
+//                print("DEBUG: fcstTime: \(timeArr)")
                 
                 for i in 0..<WeatherModelCount.todayOneHourWeatherCount.rawValue {
                     //받오는 시간 중간에 ":" 넣어줌
@@ -75,7 +78,7 @@ final class WeatherService {
                     completedModel.append(model)
                 }
                 
-                print("DEBUG: todayDetailModel: \(completedModel)")
+//                print("DEBUG: todayDetailModel: \(completedModel)")
                 completion(completedModel)
             case .failure(let error):
                 print("DEBUG: fetchtodayDetailModel Error: \(error.localizedDescription)")

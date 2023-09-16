@@ -13,6 +13,9 @@ import Foundation
 //taMax3 최대기온
 
 final class WeeklyWeatherTempRepository {
+    
+    //MARK: - Properties
+    
     let serviceKey = NetworkQuery.serviceKey
     lazy var regId = getWeeklyWeatherTempRegId(currentAdministrativeArea: LocationService.shared.administrativeArea ?? "", currentLocality: LocationService.shared.localityRegion ?? "")
     

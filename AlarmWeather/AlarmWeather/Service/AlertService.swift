@@ -5,10 +5,10 @@
 //  Created by Deokhun KIM on 2023/07/25.
 //
 
-import Foundation
-import UserNotifications
-import RealmSwift
 import UIKit
+import UserNotifications
+
+import RealmSwift
 
 final class AlertService {
     
@@ -16,14 +16,9 @@ final class AlertService {
     
     static let shared = AlertService()
     
-    private init() { }
-    
-    //MARK: - properties
-    
     // UNUserNotificationCenter 객체 생성
     let center = UNUserNotificationCenter.current()
     let realmManager = RealmService.shared
-    var imageURLs: [URL] = [] //생성된 이미지 URL저장하는 배열
     
     //바뀔때마다 트리거 추가
     lazy var userAlertTimes: [AlertTimeEntity]? = realmManager.convertToArray(realmManager.readUsers().first?.alertTimes ?? List<AlertTimeEntity>()) {
@@ -34,15 +29,10 @@ final class AlertService {
             }
         }
     }
-   
+    
+    private init() { }
   
     func settingTriggers(completion: @escaping ([UNCalendarNotificationTrigger]) -> Void) {
-        
-        //기존 이미지 데이터 있으면 삭제
-        if !imageURLs.isEmpty {
-            deleteFileURLs()
-        }
-        
         // 기존 트리거 삭제
         center.removeAllPendingNotificationRequests()
         
@@ -93,7 +83,6 @@ final class AlertService {
         completion(triggers)
     }
     
-    
     func sendNotification(triggers: [UNCalendarNotificationTrigger]) {
 
         for (index, trigger) in triggers.enumerated() {
@@ -107,26 +96,6 @@ final class AlertService {
             center.setNotificationCategories([customUICategory])
             
             var userInfo: [String: Any] = [:]
-            
-            if let imageData = realmManager.readUsers().first?.alertImage,
-               let imageURL = try? saveImageDataToDisk(imageData: imageData) {
-                do {
-                    let attachment = try UNNotificationAttachment(identifier: "imageAttachment",
-                                                                  url: imageURL,
-                                                                  options: nil)
-                    content.attachments = [attachment]
-                    // 생성한 이미지 링크를 배열에 추가
-                    imageURLs.append(imageURL)
-                    print("DEBUG: imageURLs: \(imageURLs)")
-                } catch {
-                    print("imageURLError: \(error.localizedDescription)")
-                }
-            }
-            
-            //위치정보 추가
-            userInfo["x"] = LocationService.shared.convertedX
-            userInfo["y"] = LocationService.shared.convertedY
-            userInfo["administrativeArea"] = LocationService.shared.administrativeArea
             userInfo["alertName"] = realmManager.readUsers().first?.alertName
             
             content.title = "날씨의 i ☀️"
@@ -146,71 +115,6 @@ final class AlertService {
                 }
             }
             
-        }
-    }
-    
-    //이미지 데이터를 가져와 documentsDirectory에 저장하고 url 생성
-    func saveImageDataToDisk(imageData: Data?) throws -> URL {
-        do {
-            let documentsDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            //images 디렉토리 생성해서 이미지 안에 저장
-            let imagesDirectoryURL = documentsDirectory.appendingPathComponent("images")
-            try FileManager.default.createDirectory(at: imagesDirectoryURL, withIntermediateDirectories: true, attributes: nil)
-            
-            //파일 url 생성해서 imagesDirectoryURL 디렉토리에 저장
-            let uniqueFilename = UUID().uuidString
-            let fileURL = imagesDirectoryURL.appendingPathComponent("\(uniqueFilename).png")
-            try imageData?.write(to: fileURL)
-            printContentsOfDirectory(at: imagesDirectoryURL) //디렉토리 확인
-//
-//            //MARK: - UserDefaults
-//            let imageURLString = fileURL.absoluteString
-//            UserDefaults.shared.setValue(imageURLString, forKey: "imageURLString")
-            
-            return fileURL
-        } catch {
-            print("DEBUG: saveImageError: \(error.localizedDescription)")
-            throw error
-        }
-    }
-    
-    //기존 documentsDirectory 데이터 삭제
-    func deleteFileURLs() {
-        let fileManager = FileManager.default
-        let documentsDirectory = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let imagesDirectoryURL = documentsDirectory.appendingPathComponent("images")
-        do {
-            let fileURLs = try fileManager.contentsOfDirectory(at: imagesDirectoryURL, includingPropertiesForKeys: nil, options: [])
-            for fileURL in fileURLs {
-                try fileManager.removeItem(at: fileURL)
-            }
-            imageURLs = [] //기존 이미지 배열 비우기
-        } catch {
-            print("DEBUG: 이미지 삭제 실패: \(error.localizedDescription)")
-        }
-    }
-    
-    //MARK: - 삭제 확인용 프린트 메서드
-    func printContentsOfDirectory(at url: URL) {
-        let fileManager = FileManager.default
-        
-        //디렉토리 내의 모든 파일과 디렉토리를 열거
-        let directoryEnumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: nil)
-        
-        //열거된 모든 파일과 디렉토리를 출력
-        if let enumerator = directoryEnumerator {
-            for case let fileURL as URL in enumerator {
-                var isDirectory: ObjCBool = false
-                if fileManager.fileExists(atPath: fileURL.path, isDirectory: &isDirectory) {
-                    if isDirectory.boolValue {
-                        print("Directory: \(fileURL.lastPathComponent)")
-                    } else {
-                        print("File: \(fileURL.lastPathComponent)")
-                    }
-                }
-            }
-        } else {
-            print("The directory is empty or doesn't exist.")
         }
     }
 

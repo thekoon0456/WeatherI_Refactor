@@ -8,11 +8,15 @@
 import Foundation
 
 final class DustService {
+    
+    //MARK: - Properties
+    
     var repository = DustRepository()
-
+    let administrativeArea: String? = UserDefaults.shared.string(forKey: "administrativeArea")
+    
     func fetchDustWeather(completion: @escaping (DustModel) -> Void) {
         
-        let userRegion: String = getDustRegion(region: LocationDataService.administrativeArea)
+        let userRegion: String = getDustRegion(region: administrativeArea ?? "서울특별시")
         
         print("DEBUG: DustUserRegion: \(userRegion)")
         
@@ -27,7 +31,7 @@ final class DustService {
                                       dustCode: data[0].itemCode ?? "서버정보없음",
                                       dataTime: data[0].dataTime ?? "서버정보없음")
                 
-                print("DEBUG: DustModel: \(model)")
+//                print("DEBUG: DustModel: \(model)")
                 completion(model)
                 
             case .failure:

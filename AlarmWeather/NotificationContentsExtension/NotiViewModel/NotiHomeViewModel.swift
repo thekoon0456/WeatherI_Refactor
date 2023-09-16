@@ -5,13 +5,14 @@
 //  Created by Deokhun KIM on 2023/06/11.
 //
 
-import UIKit
-import Then
 import CoreLocation
+import UIKit
 
-//화면에 보여질 데이터
+import Then
 
 final class HomeViewModel {
+    
+    //MARK: - Properties
     
     let weatherService = WeatherService()
     
@@ -22,10 +23,9 @@ final class HomeViewModel {
     var todayRainyWeatherMent = ""
     var todayBackgroundImage = BackGroundImage.rainyNight[3] //배경화면 사진 //배경화면 사진
     var todayRecommendItems: [String] = [] //추천 아이템
-    
     var todayDetailWeather: [TodayDetailWeatherModel]? //컬렉션뷰에서 사용하는 데이터
     var todayDetailWeatherIconName: [String] = [] //todayDetailIcon
-    
+    var administrativeArea: String? = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패"
     var weeklyWeatherIconName: [String] = []
     
     //서비스의 fetchNow -> 뷰모델 데이터로 변환
@@ -35,8 +35,8 @@ final class HomeViewModel {
             todayWeather = model
             todayWeatherMainMent = todayWeatherMent(model: model)
             getHomeViewBackgroundImage(model: model)
-            print("DEBUG: TodayBGImage: \(todayBackgroundImage)")
-            print("DEBUG: TodayWeatherModel: \(String(describing: self.todayWeather))")
+//            print("DEBUG: TodayBGImage: \(todayBackgroundImage)")
+//            print("DEBUG: TodayWeatherModel: \(String(describing: self.todayWeather))")
             completion(todayWeather ?? model)
         }
     }
@@ -54,8 +54,8 @@ final class HomeViewModel {
     }
 }
 
- 
 //MARK: - 뷰모델 함수
+
 extension HomeViewModel {
     func getTodayRecommendItems(model: [TodayDetailWeatherModel]) -> [String] {
         var weatherItemArr: Set<String> = [] //중복 없애려고 set으로
@@ -71,7 +71,9 @@ extension HomeViewModel {
             default:
                 continue
             }
+            
             //MARK: - Todo 겨울에 아이템 추가
+            
 //            if model[i].tmp < "5º" {
 //                weatherItemArr.insert(" 🧣 🧤")
 //            }

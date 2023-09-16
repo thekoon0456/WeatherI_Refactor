@@ -12,6 +12,9 @@
 		7C05CCA12AAA2F2F000063C7 /* WidgetNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */; };
 		7C05CCA52AAA3588000063C7 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23646D2A3318F60026C49A /* Constant.swift */; };
 		7C05CCA92AAAEE0B000063C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C2364172A3314D70026C49A /* Assets.xcassets */; };
+		7C1162DE2AB5DC4A00030E61 /* NotificationRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1162DD2AB5DC4A00030E61 /* NotificationRealmManager.swift */; };
+		7C1162E22AB5DC9900030E61 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1162E12AB5DC9900030E61 /* Realm */; };
+		7C1162E42AB5DC9E00030E61 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1162E32AB5DC9E00030E61 /* RealmSwift */; };
 		7C17E56E2AAEB9A5004813CE /* API_KEY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */; };
 		7C17E56F2AAEB9E5004813CE /* API_KEY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */; };
 		7C1A1E552A3DD07400B97209 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E542A3DD07400B97209 /* SettingCell.swift */; };
@@ -59,7 +62,6 @@
 		7C6585892A7449EA00CA9620 /* NotiHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65857D2A7449EA00CA9620 /* NotiHomeViewModel.swift */; };
 		7C65858A2A7449EA00CA9620 /* NotiDustViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65857E2A7449EA00CA9620 /* NotiDustViewModel.swift */; };
 		7C65858B2A7449EA00CA9620 /* NotiWeatherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65857F2A7449EA00CA9620 /* NotiWeatherRepository.swift */; };
-		7C65858D2A7449EA00CA9620 /* LocationDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6585812A7449EA00CA9620 /* LocationDataService.swift */; };
 		7C659A0C2A72366D00123B1B /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C659A0B2A72366D00123B1B /* UserService.swift */; };
 		7C6E788B2A7B6C7100341098 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6E788A2A7B6C7100341098 /* OnboardingViewController.swift */; };
 		7C7D47EB2A716EC40079A2CD /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7D47EA2A716EC40079A2CD /* UserEntity.swift */; };
@@ -111,7 +113,7 @@
 		7CFC464E2AB3E28D005C087A /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 7CFC464D2AB3E28D005C087A /* Realm */; };
 		7CFC46502AB3E294005C087A /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7CFC464F2AB3E294005C087A /* RealmSwift */; };
 		7CFC46522AB3E376005C087A /* WidgetExtensionEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC46512AB3E376005C087A /* WidgetExtensionEntryView.swift */; };
-		7CFC46542AB3E39E005C087A /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC46532AB3E39E005C087A /* RealmManager.swift */; };
+		7CFC46542AB3E39E005C087A /* WidgetRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC46532AB3E39E005C087A /* WidgetRealmManager.swift */; };
 		7CFF48F42AB5B07400E967E9 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFF48F32AB5B07400E967E9 /* WebViewController.swift */; };
 		7CFF48F62AB5C38600E967E9 /* MailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFF48F52AB5C38600E967E9 /* MailController.swift */; };
 /* End PBXBuildFile section */
@@ -177,6 +179,7 @@
 		7C0392F42A67C8AC00A533B2 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetNetwork.swift; sourceTree = "<group>"; };
 		7C05CCA62AAAE2E3000063C7 /* WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetExtension.entitlements; sourceTree = "<group>"; };
+		7C1162DD2AB5DC4A00030E61 /* NotificationRealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRealmManager.swift; sourceTree = "<group>"; };
 		7C1A1E542A3DD07400B97209 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		7C1A1E5A2A4161E900B97209 /* WeatherEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherEntity.swift; sourceTree = "<group>"; };
 		7C1A1E5C2A4161F600B97209 /* DustEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustEntity.swift; sourceTree = "<group>"; };
@@ -216,7 +219,6 @@
 		7C65857D2A7449EA00CA9620 /* NotiHomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotiHomeViewModel.swift; sourceTree = "<group>"; };
 		7C65857E2A7449EA00CA9620 /* NotiDustViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotiDustViewModel.swift; sourceTree = "<group>"; };
 		7C65857F2A7449EA00CA9620 /* NotiWeatherRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotiWeatherRepository.swift; sourceTree = "<group>"; };
-		7C6585812A7449EA00CA9620 /* LocationDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationDataService.swift; sourceTree = "<group>"; };
 		7C659A0B2A72366D00123B1B /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		7C659A122A7293E700123B1B /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		7C659A142A7293E700123B1B /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
@@ -263,7 +265,7 @@
 		7CDA21592A337A26006FF93F /* WetherAndDustStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WetherAndDustStackView.swift; sourceTree = "<group>"; };
 		7CE4B0032A78D43B00540FBA /* NotificationContentsExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationContentsExtensionDebug.entitlements; sourceTree = "<group>"; };
 		7CFC46512AB3E376005C087A /* WidgetExtensionEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetExtensionEntryView.swift; sourceTree = "<group>"; };
-		7CFC46532AB3E39E005C087A /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		7CFC46532AB3E39E005C087A /* WidgetRealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetRealmManager.swift; sourceTree = "<group>"; };
 		7CFF48F32AB5B07400E967E9 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		7CFF48F52AB5C38600E967E9 /* MailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -298,7 +300,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C1162E22AB5DC9900030E61 /* Realm in Frameworks */,
 				7CE4B0152A78E0BE00540FBA /* Then in Frameworks */,
+				7C1162E42AB5DC9E00030E61 /* RealmSwift in Frameworks */,
 				7C6585502A74472300CA9620 /* UserNotificationsUI.framework in Frameworks */,
 				7CE4B0132A78E0BA00540FBA /* SnapKit in Frameworks */,
 				7C65854F2A74472300CA9620 /* UserNotifications.framework in Frameworks */,
@@ -320,6 +324,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7C1162DF2AB5DC5100030E61 /* NotiNetwork */ = {
+			isa = PBXGroup;
+			children = (
+				7C65857F2A7449EA00CA9620 /* NotiWeatherRepository.swift */,
+				7C65857B2A7449E900CA9620 /* NotiWeatherService.swift */,
+				7C6585772A7449E900CA9620 /* NotiDustService.swift */,
+			);
+			path = NotiNetwork;
+			sourceTree = "<group>";
+		};
+		7C1162E02AB5DC6500030E61 /* NotiViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				7C65857D2A7449EA00CA9620 /* NotiHomeViewModel.swift */,
+				7C65857E2A7449EA00CA9620 /* NotiDustViewModel.swift */,
+			);
+			path = NotiViewModel;
+			sourceTree = "<group>";
+		};
 		7C1A1E582A41619800B97209 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
@@ -502,13 +525,10 @@
 			isa = PBXGroup;
 			children = (
 				7CE4B0032A78D43B00540FBA /* NotificationContentsExtensionDebug.entitlements */,
-				7C65857F2A7449EA00CA9620 /* NotiWeatherRepository.swift */,
-				7C65857B2A7449E900CA9620 /* NotiWeatherService.swift */,
-				7C6585772A7449E900CA9620 /* NotiDustService.swift */,
-				7C6585812A7449EA00CA9620 /* LocationDataService.swift */,
-				7C65857D2A7449EA00CA9620 /* NotiHomeViewModel.swift */,
-				7C65857E2A7449EA00CA9620 /* NotiDustViewModel.swift */,
+				7C1162DF2AB5DC5100030E61 /* NotiNetwork */,
+				7C1162E02AB5DC6500030E61 /* NotiViewModel */,
 				7C6585522A74472300CA9620 /* NotificationViewController.swift */,
+				7C1162DD2AB5DC4A00030E61 /* NotificationRealmManager.swift */,
 				7C6585542A74472300CA9620 /* MainInterface.storyboard */,
 				7C4529A42A76D852008DF938 /* NotiAssets.xcassets */,
 				7C6585572A74472300CA9620 /* Info.plist */,
@@ -554,7 +574,7 @@
 			children = (
 				7C8F1BD62AB048F3004B66A6 /* WidgetEntity.swift */,
 				7C05CCA02AAA2F2F000063C7 /* WidgetNetwork.swift */,
-				7CFC46532AB3E39E005C087A /* RealmManager.swift */,
+				7CFC46532AB3E39E005C087A /* WidgetRealmManager.swift */,
 			);
 			path = WidgetNetwork;
 			sourceTree = "<group>";
@@ -662,6 +682,8 @@
 				7CE4B0102A78E0B200540FBA /* Lottie */,
 				7CE4B0122A78E0BA00540FBA /* SnapKit */,
 				7CE4B0142A78E0BE00540FBA /* Then */,
+				7C1162E12AB5DC9900030E61 /* Realm */,
+				7C1162E32AB5DC9E00030E61 /* RealmSwift */,
 			);
 			productName = NotificationContentsExtension;
 			productReference = 7C65854E2A74472300CA9620 /* NotificationContentsExtension.appex */;
@@ -879,7 +901,6 @@
 			files = (
 				7C65858A2A7449EA00CA9620 /* NotiDustViewModel.swift in Sources */,
 				7C6585532A74472300CA9620 /* NotificationViewController.swift in Sources */,
-				7C65858D2A7449EA00CA9620 /* LocationDataService.swift in Sources */,
 				7C4529AC2A76E991008DF938 /* DustRepository.swift in Sources */,
 				7C4529AD2A76E9FD008DF938 /* Extension.swift in Sources */,
 				7C65858B2A7449EA00CA9620 /* NotiWeatherRepository.swift in Sources */,
@@ -889,6 +910,7 @@
 				7C6585872A7449EA00CA9620 /* NotiWeatherService.swift in Sources */,
 				7C4529A22A76D153008DF938 /* WeeklyWeatherEntity.swift in Sources */,
 				7C6585892A7449EA00CA9620 /* NotiHomeViewModel.swift in Sources */,
+				7C1162DE2AB5DC4A00030E61 /* NotificationRealmManager.swift in Sources */,
 				7C4529A72A76E7C7008DF938 /* WeatherModel.swift in Sources */,
 				7C4529A12A76D150008DF938 /* WeatherEntity.swift in Sources */,
 				7C6585832A7449EA00CA9620 /* NotiDustService.swift in Sources */,
@@ -906,7 +928,7 @@
 				7C05CCA12AAA2F2F000063C7 /* WidgetNetwork.swift in Sources */,
 				7CD10C672AA9FA5900D5DFB4 /* WidgetExtensionBundle.swift in Sources */,
 				7C8F1BD22AB045C1004B66A6 /* WidgetProvider.swift in Sources */,
-				7CFC46542AB3E39E005C087A /* RealmManager.swift in Sources */,
+				7CFC46542AB3E39E005C087A /* WidgetRealmManager.swift in Sources */,
 				7C8F1BD72AB048F3004B66A6 /* WidgetEntity.swift in Sources */,
 				7C05CCA52AAA3588000063C7 /* Constant.swift in Sources */,
 			);
@@ -1100,7 +1122,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1143,7 +1165,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1249,7 +1271,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1276,7 +1298,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.Extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1305,13 +1327,13 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.WidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1334,13 +1356,13 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thekoon.NotiWeather.WidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1439,6 +1461,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7C1162E12AB5DC9900030E61 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		7C1162E32AB5DC9E00030E61 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
 		7CE4B0052A78E02200540FBA /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7CE4B0042A78E02200540FBA /* XCRemoteSwiftPackageReference "lottie-spm" */;

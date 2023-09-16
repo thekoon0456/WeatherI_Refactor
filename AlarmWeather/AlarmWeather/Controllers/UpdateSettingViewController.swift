@@ -6,9 +6,10 @@
 //
 
 import UIKit
+
+import RealmSwift
 import SnapKit
 import Then
-import RealmSwift
 
 class UpdateSettingViewController: UIViewController {
     
@@ -18,11 +19,6 @@ class UpdateSettingViewController: UIViewController {
     private var settingViewModel = SettingProfileViewModel()
     private var textFieldViewModel = TextFieldViewModel()
     private var lastRefreshDate: Date = Date() //백그라운드에서 오래 있으면 홈뷰로
-    
-    private lazy var backGroundTapGesture = UITapGestureRecognizer(
-        target: self,
-        action: #selector(handleTap)
-    )
     
     private var alertProfileImage: UIImage? //선택한 이미지
     
@@ -95,6 +91,11 @@ class UpdateSettingViewController: UIViewController {
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .heavy)
         $0.addTarget(self, action: #selector(saveSetting), for: .touchUpInside)
     }
+    
+    private lazy var backGroundTapGesture = UITapGestureRecognizer(
+        target: self,
+        action: #selector(handleTap)
+    )
     
     //MARK: - Lifecycle
     
@@ -206,6 +207,10 @@ class UpdateSettingViewController: UIViewController {
         alertNameTextField.text = RealmService.shared.readUsers().first?.alertName
         setPhotoButton()
         getAddedTime()
+        
+        if let imageData = RealmService.shared.readUsers().first?.alertImage {
+            alertProfileImage = UIImage(data: imageData)
+        }
     }
     
     func setPhotoButton() {
