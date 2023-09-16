@@ -10,16 +10,11 @@ import UserNotifications
 
 import RealmSwift
 
-
 final class AlertService {
     
     //MARK: - properties
     
     static let shared = AlertService()
-    
-    private init() { }
-    
-    //MARK: - properties
     
     // UNUserNotificationCenter 객체 생성
     let center = UNUserNotificationCenter.current()
@@ -35,7 +30,8 @@ final class AlertService {
             }
         }
     }
-   
+    
+    private init() { }
   
     func settingTriggers(completion: @escaping ([UNCalendarNotificationTrigger]) -> Void) {
         
@@ -94,7 +90,6 @@ final class AlertService {
         completion(triggers)
     }
     
-    
     func sendNotification(triggers: [UNCalendarNotificationTrigger]) {
 
         for (index, trigger) in triggers.enumerated() {
@@ -124,10 +119,11 @@ final class AlertService {
 //                }
 //            }
             
-            //위치정보 추가
-            userInfo["x"] = LocationService.shared.convertedX
-            userInfo["y"] = LocationService.shared.convertedY
-            userInfo["administrativeArea"] = LocationService.shared.administrativeArea
+//            //위치정보 추가
+//            userInfo["x"] = LocationService.shared.convertedX
+//            userInfo["y"] = LocationService.shared.convertedY
+//            userInfo["administrativeArea"] = LocationService.shared.administrativeArea
+            
             userInfo["alertName"] = realmManager.readUsers().first?.alertName
             
             content.title = "날씨의 i ☀️"

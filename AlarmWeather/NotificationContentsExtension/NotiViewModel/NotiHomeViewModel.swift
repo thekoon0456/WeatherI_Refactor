@@ -23,10 +23,9 @@ final class HomeViewModel {
     var todayRainyWeatherMent = ""
     var todayBackgroundImage = BackGroundImage.rainyNight[3] //배경화면 사진 //배경화면 사진
     var todayRecommendItems: [String] = [] //추천 아이템
-    
     var todayDetailWeather: [TodayDetailWeatherModel]? //컬렉션뷰에서 사용하는 데이터
     var todayDetailWeatherIconName: [String] = [] //todayDetailIcon
-    
+    var administrativeArea: String? = UserDefaults.shared.string(forKey: "administrativeArea") ?? "위치 인식 실패"
     var weeklyWeatherIconName: [String] = []
     
     //서비스의 fetchNow -> 뷰모델 데이터로 변환

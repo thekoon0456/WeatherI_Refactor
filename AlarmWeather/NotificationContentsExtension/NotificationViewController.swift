@@ -80,26 +80,27 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
         
         profileImageView.image = UIImage(data: image)
         
-        if let userInfo = notification.request.content.userInfo as? [String: Any],
-           let alertName = userInfo["alertName"] as? String,
-           let x = userInfo["x"] as? Int,
-           let y = userInfo["y"] as? Int,
-           let administrativeArea = userInfo["administrativeArea"] as? String {
-            print("위치 값 세팅")
-            LocationDataService.x = x
-            LocationDataService.y = y
-            LocationDataService.administrativeArea = administrativeArea
-            
-            locationLabel.text = alertName != "" ? "\(alertName)님이 보내는" + " 오늘의 \(LocationDataService.administrativeArea) 날씨!" : "오늘의 \(LocationDataService.administrativeArea) 날씨입니다"
-            
-            loadData { [weak self] in
+        guard
+            let userInfo = notification.request.content.userInfo as? [String: Any],
+            let alertName = userInfo["alertName"] as? String else { return }
+        //           let x = userInfo["x"] as? Int,
+        //           let y = userInfo["y"] as? Int,
+        //           let administrativeArea = userInfo["administrativeArea"] as? String {
+        //            print("위치 값 세팅")
+        //            LocationDataService.x = x
+        //            LocationDataService.y = y
+        //            LocationDataService.administrativeArea = administrativeArea
+        
+        locationLabel.text = (alertName != "" ? "\(alertName)님이 보내는"
+                              + " 오늘의 \(viewModel.administrativeArea ?? "") 날씨!" : "오늘의 \(viewModel.administrativeArea ?? "") 날씨입니다")
+        
+        loadData { [weak self] in
+            guard let self = self else { return }
+            // UI 업데이트를 메인 스레드에서 수행
+            DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                // UI 업데이트를 메인 스레드에서 수행
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    updateUI()
-                    stopAnimation()
-                }
+                updateUI()
+                stopAnimation()
             }
         }
     }

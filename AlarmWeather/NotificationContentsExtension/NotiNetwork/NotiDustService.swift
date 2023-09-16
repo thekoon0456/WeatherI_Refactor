@@ -12,10 +12,11 @@ final class DustService {
     //MARK: - Properties
     
     var repository = DustRepository()
-
+    let administrativeArea: String? = UserDefaults.shared.string(forKey: "administrativeArea")
+    
     func fetchDustWeather(completion: @escaping (DustModel) -> Void) {
         
-        let userRegion: String = getDustRegion(region: LocationDataService.administrativeArea)
+        let userRegion: String = getDustRegion(region: administrativeArea ?? "서울특별시")
         
         print("DEBUG: DustUserRegion: \(userRegion)")
         

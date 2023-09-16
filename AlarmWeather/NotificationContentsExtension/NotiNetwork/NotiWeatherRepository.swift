@@ -14,17 +14,12 @@ final class WeatherRepository {
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "300"
     //사용자 좌표구해서 쿼리 날림
-    var nx = "0"
-    var ny = "0"
+    var x: Int? = UserDefaults.shared.object(forKey: "convertedX") as? Int
+    var y: Int? = UserDefaults.shared.object(forKey: "convertedY") as? Int
     
-    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=300&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(nx)&ny=\(ny)"
+    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=300&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 60)&ny=\(y ?? 127)"
     
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-        nx = String(LocationDataService.x)
-        ny = String(LocationDataService.y)
-        
-        print("nx: \(nx), ny: \(ny)")
-
         guard let url = URL(string: weatherURL) else { return }
 
         let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)

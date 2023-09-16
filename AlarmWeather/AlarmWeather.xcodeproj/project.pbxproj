@@ -62,7 +62,6 @@
 		7C6585892A7449EA00CA9620 /* NotiHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65857D2A7449EA00CA9620 /* NotiHomeViewModel.swift */; };
 		7C65858A2A7449EA00CA9620 /* NotiDustViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65857E2A7449EA00CA9620 /* NotiDustViewModel.swift */; };
 		7C65858B2A7449EA00CA9620 /* NotiWeatherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65857F2A7449EA00CA9620 /* NotiWeatherRepository.swift */; };
-		7C65858D2A7449EA00CA9620 /* LocationDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6585812A7449EA00CA9620 /* LocationDataService.swift */; };
 		7C659A0C2A72366D00123B1B /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C659A0B2A72366D00123B1B /* UserService.swift */; };
 		7C6E788B2A7B6C7100341098 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6E788A2A7B6C7100341098 /* OnboardingViewController.swift */; };
 		7C7D47EB2A716EC40079A2CD /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7D47EA2A716EC40079A2CD /* UserEntity.swift */; };
@@ -220,7 +219,6 @@
 		7C65857D2A7449EA00CA9620 /* NotiHomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotiHomeViewModel.swift; sourceTree = "<group>"; };
 		7C65857E2A7449EA00CA9620 /* NotiDustViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotiDustViewModel.swift; sourceTree = "<group>"; };
 		7C65857F2A7449EA00CA9620 /* NotiWeatherRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotiWeatherRepository.swift; sourceTree = "<group>"; };
-		7C6585812A7449EA00CA9620 /* LocationDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationDataService.swift; sourceTree = "<group>"; };
 		7C659A0B2A72366D00123B1B /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		7C659A122A7293E700123B1B /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		7C659A142A7293E700123B1B /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
@@ -332,7 +330,6 @@
 				7C65857F2A7449EA00CA9620 /* NotiWeatherRepository.swift */,
 				7C65857B2A7449E900CA9620 /* NotiWeatherService.swift */,
 				7C6585772A7449E900CA9620 /* NotiDustService.swift */,
-				7C6585812A7449EA00CA9620 /* LocationDataService.swift */,
 			);
 			path = NotiNetwork;
 			sourceTree = "<group>";
@@ -904,7 +901,6 @@
 			files = (
 				7C65858A2A7449EA00CA9620 /* NotiDustViewModel.swift in Sources */,
 				7C6585532A74472300CA9620 /* NotificationViewController.swift in Sources */,
-				7C65858D2A7449EA00CA9620 /* LocationDataService.swift in Sources */,
 				7C4529AC2A76E991008DF938 /* DustRepository.swift in Sources */,
 				7C4529AD2A76E9FD008DF938 /* Extension.swift in Sources */,
 				7C65858B2A7449EA00CA9620 /* NotiWeatherRepository.swift in Sources */,
