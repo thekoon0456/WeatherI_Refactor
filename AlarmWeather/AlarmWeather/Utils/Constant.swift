@@ -5,7 +5,6 @@
 //  Created by Deokhun KIM on 2023/06/09.
 //
 
-import Foundation
 import UIKit
 
 enum CellId: String {
@@ -39,6 +38,11 @@ enum LottieFiles: String {
     case locationView = "location"
     case addUserView = "addUser"
     case notificationView = "notification"
+}
+
+enum WeatherIURL: String {
+    case homepage = "https://www.notion.so/thekoon0456/i-ce0ca603f50840f99799338a948acda4"
+    case qAndA = "https://www.notion.so/thekoon0456/Q-A-e366265bcdef413f850e7cbe9fdc51fe"
 }
 
 /*

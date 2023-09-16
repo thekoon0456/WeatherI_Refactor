@@ -6,11 +6,13 @@
 //
 
 import UIKit
+
+import Lottie
 import SnapKit
 import Then
-import Lottie
-
 final class OnboardingViewController: UIViewController {
+    
+    //MARK: - Properties
     
     private lazy var pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal).then {
         $0.delegate = self

@@ -12,7 +12,6 @@ import Lottie
 import SnapKit
 import Then
 
-
 protocol DataUpdateDelegate: AnyObject {
     func updateData()
 }

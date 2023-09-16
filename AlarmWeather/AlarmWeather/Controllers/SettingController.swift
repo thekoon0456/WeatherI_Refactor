@@ -14,10 +14,15 @@ import Then
 final class SettingController: UIViewController {
     
     //MARK: - Properties
+    
     var weatherViewModel: HomeViewModel?
     private var lastRefreshDate: Date = Date() //백그라운드에서 오래 있으면 홈뷰로
     
-    var settingMenus = ["유저 / 알림 설정하기", "날씨의 i 페이지 보기", "자주 묻는 Q&A 보기", "개발자 피드백 보내기"]
+    var settingMenus = ["유저 / 알림 설정하기",
+                        "날씨의 i 페이지 보기",
+                        "자주 묻는 Q&A 보기",
+                        "개발자 피드백 보내기"]
+    
     //TODO: - 여행 알림 설정하기 기능 추가
     
     lazy var backgoundImageView = UIImageView().then {
@@ -93,10 +98,10 @@ final class SettingController: UIViewController {
         case _ where row == 0:
             settingCellTapped(viewController: UpdateSettingViewController())
         case _ where row == 1:
-            let url = "https://www.notion.so/thekoon0456/i-ce0ca603f50840f99799338a948acda4"
+            let url = WeatherIURL.homepage.rawValue
             qAndACellTapped(viewController: WebViewController(url: url))
         case _ where row == 2:
-            let url = "https://www.notion.so/thekoon0456/Q-A-e366265bcdef413f850e7cbe9fdc51fe"
+            let url = WeatherIURL.qAndA.rawValue
             qAndACellTapped(viewController: WebViewController(url: url))
         case _ where row == 3:
             sendEmail()

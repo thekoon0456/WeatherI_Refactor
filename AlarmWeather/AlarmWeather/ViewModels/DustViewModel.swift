@@ -5,10 +5,11 @@
 //  Created by Deokhun KIM on 2023/06/27.
 //
 
-import Foundation
 import UIKit
 
 final class DustViewModel {
+    
+    //MARK: - Properties
     
     let dustService = DustService()
     var todayDust: DustModel? //홈에서 사용하는 오늘날씨 데이터

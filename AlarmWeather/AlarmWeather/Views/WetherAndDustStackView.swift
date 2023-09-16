@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import SnapKit
 import Then
 
@@ -34,10 +35,10 @@ final class WetherAndDustStackView: UIStackView {
             make.height.equalTo(120)
         }
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            weatherAnimation(weatherIcon)
-        }
+//        DispatchQueue.main.async { [weak self] in
+//            guard let self = self else { return }
+//            weatherAnimation(weatherIcon)
+//        }
         
         todayWeatherLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -82,10 +83,10 @@ final class WetherAndDustStackView: UIStackView {
             make.height.equalTo(120)
         }
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            weatherAnimation(dustIcon)
-        }
+//        DispatchQueue.main.async { [weak self] in
+//            guard let self = self else { return }
+//            weatherAnimation(dustIcon)
+//        }
         
         dustDetailLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

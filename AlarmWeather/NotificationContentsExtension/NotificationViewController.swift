@@ -8,17 +8,14 @@
 import UIKit
 import UserNotifications
 import UserNotificationsUI
+
+import Lottie
 import SnapKit
 import Then
-import Lottie
 
-////        todayWeatherMent.text = "기분 좋은 맑은 하늘입니다 ☀️"
-////        todayDustMent.text = "미세먼지가 좋습니다 😆"
-////        todayTempRangeMent.text = "오늘의 온도는 26º ~ 32º 입니다"
-////        todayPopRangeMent.text = "오늘 비올 확률은 10% ~ 30% 입니다"
-////        todayItemMent.text = "혹시 모르니 우산을 챙겨주세요 ☂️"
-///
 final class NotificationViewController: UIViewController, UNNotificationContentExtension {
+    
+    //MARK: - Properties
     
     @IBOutlet weak var notiWeatherView: UIView!
     @IBOutlet weak var iconImageView: UIImageView!
@@ -31,7 +28,22 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var alertName: UILabel!
     
+    private var viewModel = HomeViewModel()
+    private var dustViewModel = DustViewModel()
+    private var todayWeather: WeatherModel?
+    private var todayDust: DustModel?
+    private var todayDetailWeather = [TodayDetailWeatherModel]()
+    private var todayRecommendItems: [String] = []
+    
+    private var realmData = NotiRealmManager.shared.readUsers()
+    
+    private let loadingMent = UILabel().then {
+        $0.text = Ments.loadingMent.rawValue
+        $0.font = UIFont.systemFont(ofSize: 10, weight: .medium)
+    }
+    
     //MARK: - Lottie
+    
     lazy var animationView = LottieAnimationView(name: LottieFiles.loadingView.rawValue).then {
         $0.frame = notiWeatherView.bounds
         $0.contentMode = .scaleAspectFit
@@ -40,18 +52,6 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     
     lazy var animationBg = UIView().then {
         $0.backgroundColor = .tertiarySystemBackground
-    }
-    
-    private var viewModel = HomeViewModel()
-    private var dustViewModel = DustViewModel()
-    private var todayWeather: WeatherModel?
-    private var todayDust: DustModel?
-    private var todayDetailWeather = [TodayDetailWeatherModel]()
-    private var todayRecommendItems: [String] = []
-    
-    private let loadingMent = UILabel().then {
-        $0.text = Ments.loadingMent.rawValue
-        $0.font = UIFont.systemFont(ofSize: 10, weight: .medium)
     }
     
     //MARK: - LifeCycle
@@ -64,36 +64,26 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     }
     
     func didReceive(_ notification: UNNotification) {
-        //사진 가져옴
-        if let attachment = notification.request.content.attachments.first,
-           attachment.url.startAccessingSecurityScopedResource(),
-           let imageData = try? Data(contentsOf: attachment.url) {
-            profileImageView.image = UIImage(data: imageData)
-        } else {
-            //시간에 따라 배경 추가
-            profileImageView.image = defaultImage()
+
+        guard let image = realmData.first?.alertImage else {
+            return profileImageView.image = defaultImage()
         }
         
-        if let userInfo = notification.request.content.userInfo as? [String: Any],
-           let alertName = userInfo["alertName"] as? String,
-           let x = userInfo["x"] as? Int,
-           let y = userInfo["y"] as? Int,
-           let administrativeArea = userInfo["administrativeArea"] as? String {
-            print("위치 값 세팅")
-            LocationDataService.x = x
-            LocationDataService.y = y
-            LocationDataService.administrativeArea = administrativeArea
-            
-            locationLabel.text = alertName != "" ? "\(alertName)님이 보내는" + " 오늘의 \(LocationDataService.administrativeArea) 날씨!" : "오늘의 \(LocationDataService.administrativeArea) 날씨입니다"
-            
-            loadData { [weak self] in
+        profileImageView.image = UIImage(data: image)
+        
+        guard let userInfo = notification.request.content.userInfo as? [String: Any],
+              let alertName = userInfo["alertName"] as? String else { return }
+        
+        locationLabel.text = (alertName != "" ? "\(alertName)님이 보내는"
+                              + " 오늘의 \(viewModel.administrativeArea ?? "") 날씨!" : "오늘의 \(viewModel.administrativeArea ?? "") 날씨입니다")
+        
+        loadData { [weak self] in
+            guard let self = self else { return }
+            // UI 업데이트를 메인 스레드에서 수행
+            DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                // UI 업데이트를 메인 스레드에서 수행
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    updateUI()
-                    stopAnimation()
-                }
+                updateUI()
+                stopAnimation()
             }
         }
     }

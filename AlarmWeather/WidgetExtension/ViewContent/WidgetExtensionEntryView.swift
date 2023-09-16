@@ -13,7 +13,7 @@ import WidgetKit
 struct WidgetExtensionEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
     var data: WidgetViewModel
-    var realmData = RealmManager.shared.readUsers()
+    var realmData = WidgetRealmManager.shared.readUsers()
     
     var body: some View {
         GeometryReader { proxy in
@@ -82,6 +82,7 @@ extension WidgetExtensionEntryView {
                 Rectangle()
                     .foregroundColor(Color.black.opacity(0.3))
             }
+            .padding(-2)
     }
     
     var todayWeatherIcon: some View {

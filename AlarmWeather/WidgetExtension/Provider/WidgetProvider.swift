@@ -46,6 +46,9 @@ struct WidgetViewModel {
  */
 
 final class Provider: TimelineProvider {
+    
+    //MARK: - Properites
+    
     private var weatherNetwork = WeatherNetwork()
     
     func placeholder(in context: Context) -> WeatherEntry {

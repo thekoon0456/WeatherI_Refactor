@@ -6,10 +6,10 @@
 //
 
 import UIKit
+
+import Lottie
 import SnapKit
 import Then
-import Lottie
-
 
 final class HomeController: UIViewController {
     
