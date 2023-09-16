@@ -90,10 +90,10 @@ final class TodayTimeWeatherCell: UICollectionViewCell {
             make.right.equalToSuperview().offset(-10)
         }
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            weatherAnimation(weatherIcon)
-        }
+//        DispatchQueue.main.async { [weak self] in
+//            guard let self = self else { return }
+//            weatherAnimation(weatherIcon)
+//        }
 
         probabilityLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

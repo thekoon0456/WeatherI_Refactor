@@ -98,7 +98,11 @@ final class WeeklyWeatherCell: UITableViewCell {
             make.width.equalTo(30)
             make.height.equalTo(30)
         }
-//        weatherAnimation(weatherIcon)
+        
+        //        DispatchQueue.main.async { [weak self] in
+        //            guard let self = self else { return }
+        //            weatherAnimation(weatherIcon)
+        //        }
         
         probabilityLabel.snp.makeConstraints { make in
             make.top.equalTo(weatherIcon.snp.bottom).offset(5)

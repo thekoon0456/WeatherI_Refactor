@@ -73,17 +73,15 @@ final class RealmService {
                 user.alertName = alertName ?? user.alertName
                 user.alertImage = alertImage  // 이미지를 Data로 변환
                 user.lastUpdated = Date()
-
+                
                 if let newAlertTimes = alertTimes {
                     user.alertTimes.removeAll()
                     user.alertTimes.append(objectsIn: newAlertTimes)
                 }
-                
             }
             
             print("DEBUG: UpdatedUser: \(user)")
         }
-        
     }
     
     //MARK: - delete

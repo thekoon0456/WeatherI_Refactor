@@ -82,6 +82,7 @@ extension WidgetExtensionEntryView {
                 Rectangle()
                     .foregroundColor(Color.black.opacity(0.3))
             }
+            .padding(-2)
     }
     
     var todayWeatherIcon: some View {
