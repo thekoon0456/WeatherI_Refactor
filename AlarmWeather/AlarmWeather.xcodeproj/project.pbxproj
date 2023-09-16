@@ -112,6 +112,8 @@
 		7CFC46502AB3E294005C087A /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7CFC464F2AB3E294005C087A /* RealmSwift */; };
 		7CFC46522AB3E376005C087A /* WidgetExtensionEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC46512AB3E376005C087A /* WidgetExtensionEntryView.swift */; };
 		7CFC46542AB3E39E005C087A /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC46532AB3E39E005C087A /* RealmManager.swift */; };
+		7CFF48F42AB5B07400E967E9 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFF48F32AB5B07400E967E9 /* WebViewController.swift */; };
+		7CFF48F62AB5C38600E967E9 /* MailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFF48F52AB5C38600E967E9 /* MailController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -262,6 +264,8 @@
 		7CE4B0032A78D43B00540FBA /* NotificationContentsExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationContentsExtensionDebug.entitlements; sourceTree = "<group>"; };
 		7CFC46512AB3E376005C087A /* WidgetExtensionEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetExtensionEntryView.swift; sourceTree = "<group>"; };
 		7CFC46532AB3E39E005C087A /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		7CFF48F32AB5B07400E967E9 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		7CFF48F52AB5C38600E967E9 /* MailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -475,8 +479,10 @@
 				7C84443E2A338F18006B76C7 /* WeatherController.swift */,
 				7C8444402A338F22006B76C7 /* DustController.swift */,
 				7C8444422A338FA5006B76C7 /* SettingController.swift */,
+				7CFF48F52AB5C38600E967E9 /* MailController.swift */,
 				7C1B4BAC2A7046DB009548CB /* UpdateSettingViewController.swift */,
 				7C7F119E2A6EA23C00C1DB05 /* SettingAddAlertViewController.swift */,
+				7CFF48F32AB5B07400E967E9 /* WebViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -800,6 +806,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CFF48F62AB5C38600E967E9 /* MailController.swift in Sources */,
 				7CBBAF2E2A6031860053035C /* WeeklyWeatherTempModel.swift in Sources */,
 				7C1A1E552A3DD07400B97209 /* SettingCell.swift in Sources */,
 				7C8275F32A5C2F2E000BEADC /* SaveButton.swift in Sources */,
@@ -837,6 +844,7 @@
 				7C2364B12A334B730026C49A /* Extension.swift in Sources */,
 				7C23640E2A3314D60026C49A /* SceneDelegate.swift in Sources */,
 				7CBBAF302A6031C30053035C /* WeeklyWeatherService.swift in Sources */,
+				7CFF48F42AB5B07400E967E9 /* WebViewController.swift in Sources */,
 				7CAF20522A46EE1B00CD4FD8 /* WeeklyWeatherCell.swift in Sources */,
 				7C2364AF2A3346640026C49A /* TodayTimeWeatherCell.swift in Sources */,
 				7C9695312A4AE2ED00F21478 /* DustViewModel.swift in Sources */,

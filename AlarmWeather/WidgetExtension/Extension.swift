@@ -16,11 +16,11 @@ protocol RetryRequest {
 extension RetryRequest {
     //통신 실패시 1초 뒤에 통신 재시도 코드
     func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> Void, retryCount: Int = 0) {
-        guard retryCount < 5 else {
+        guard retryCount < 10 else {
             fatalError("Failed to perform network request after 5 retries.")
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
             performRequest { (result: Result<[T], NetworkError>) in
                 switch result {
                 case .success:

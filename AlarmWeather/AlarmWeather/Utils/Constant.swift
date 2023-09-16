@@ -13,6 +13,7 @@ enum CellId: String {
     case todayTimeWeatherCellId = "todayTimeWeatherCell"
     case weeklyWeatherCellId = "WeeklyWeatherCell"
     case alertTimeCell = "alertTimeCell"
+    case settingCellId = "settingCellId"
 }
 
 enum WeatherModelCount: Int {

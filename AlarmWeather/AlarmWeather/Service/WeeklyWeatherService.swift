@@ -30,7 +30,7 @@ final class WeeklyWeatherService {
                     weeklyWeatherArr.append(model)
                 }
                 
-                print("DEBUG: WeeklyWeatherModel: \(weeklyWeatherArr)")
+//                print("DEBUG: WeeklyWeatherModel: \(weeklyWeatherArr)")
                 completion(weeklyWeatherArr)
                 
             case .failure(let error):

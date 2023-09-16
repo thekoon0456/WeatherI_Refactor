@@ -19,8 +19,10 @@ class UpdateSettingViewController: UIViewController {
     private var textFieldViewModel = TextFieldViewModel()
     private var lastRefreshDate: Date = Date() //백그라운드에서 오래 있으면 홈뷰로
     
-    private lazy var backGroundTapGesture = UITapGestureRecognizer(target: self,
-                                                                   action: #selector(handleTap))
+    private lazy var backGroundTapGesture = UITapGestureRecognizer(
+        target: self,
+        action: #selector(handleTap)
+    )
     
     private var alertProfileImage: UIImage? //선택한 이미지
     
@@ -109,9 +111,12 @@ class UpdateSettingViewController: UIViewController {
         getAddedTime()
         
         //앱이 백그라운드에 있다가 5분이 지나고 다시 들어오면 뷰 업데이트
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground),
-                                               name: UIApplication.willEnterForegroundNotification,
-                                               object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
     }
     
     deinit {
@@ -130,17 +135,21 @@ class UpdateSettingViewController: UIViewController {
         
         //MARK: - 유저 없으면 등록, 있으면 업데이트
         if RealmService.shared.readUsers().isEmpty {
-            RealmService.shared.createUser(userName: userName,
-                                           alertName: alertName,
-                                           alertImage: data,
-                                           alertTimes: RealmService.shared.convertToList(settingViewModel.alertTimes ?? []))
+            RealmService.shared.createUser(
+                userName: userName,
+                alertName: alertName,
+                alertImage: data,
+                alertTimes: RealmService.shared.convertToList(settingViewModel.alertTimes ?? [])
+            )
             navigationController?.popViewController(animated: true)
             
         } else {
-            RealmService.shared.updateUser(userName: userName,
-                                           alertName: alertName,
-                                           alertImage: data,
-                                           alertTimes: RealmService.shared.convertToList(settingViewModel.alertTimes ?? []))
+            RealmService.shared.updateUser(
+                userName: userName,
+                alertName: alertName,
+                alertImage: data,
+                alertTimes: RealmService.shared.convertToList(settingViewModel.alertTimes ?? [])
+            )
             
             navigationController?.popViewController(animated: true)
         }
