@@ -66,9 +66,9 @@ final class HomeViewModel {
         weeklyWeatherService.fetchWeeklyWeather { [weak self] model in
             guard let self = self else { return }
             weeklyWeather = model
-            print("DEBUG: weeklyWeather: \(String(describing: weeklyWeather))")
             weeklyWeatherIconName(model: model)
-            print("DEBUG: weeklyWeatherIconArr: \(self.weeklyWeatherIconName)")
+//            print("DEBUG: weeklyWeather: \(String(describing: weeklyWeather))")
+//            print("DEBUG: weeklyWeatherIconArr: \(self.weeklyWeatherIconName)")
             completion(weeklyWeather ?? model)
         }
     }
@@ -77,7 +77,7 @@ final class HomeViewModel {
         weeklyWeatherTempService.fetchWeeklyWeatherTemp { [weak self] model in
             guard let self = self else { return }
             weeklyWeatherTemp = model
-            print("DEBUG: weeklyWeatherTemp: \(String(describing: weeklyWeatherTemp))")
+//            print("DEBUG: weeklyWeatherTemp: \(String(describing: weeklyWeatherTemp))")
             completion(weeklyWeatherTemp ?? model)
         }
     }

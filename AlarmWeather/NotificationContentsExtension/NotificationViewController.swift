@@ -64,32 +64,15 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     }
     
     func didReceive(_ notification: UNNotification) {
-//        //사진 가져옴
-//        if let attachment = notification.request.content.attachments.first,
-//           attachment.url.startAccessingSecurityScopedResource(),
-//           let imageData = try? Data(contentsOf: attachment.url) {
-//            profileImageView.image = UIImage(data: imageData)
-//        } else {
-//            //시간에 따라 배경 추가
-//            profileImageView.image = defaultImage()
-//        }
-        
+
         guard let image = realmData.first?.alertImage else {
             return profileImageView.image = defaultImage()
         }
         
         profileImageView.image = UIImage(data: image)
         
-        guard
-            let userInfo = notification.request.content.userInfo as? [String: Any],
-            let alertName = userInfo["alertName"] as? String else { return }
-        //           let x = userInfo["x"] as? Int,
-        //           let y = userInfo["y"] as? Int,
-        //           let administrativeArea = userInfo["administrativeArea"] as? String {
-        //            print("위치 값 세팅")
-        //            LocationDataService.x = x
-        //            LocationDataService.y = y
-        //            LocationDataService.administrativeArea = administrativeArea
+        guard let userInfo = notification.request.content.userInfo as? [String: Any],
+              let alertName = userInfo["alertName"] as? String else { return }
         
         locationLabel.text = (alertName != "" ? "\(alertName)님이 보내는"
                               + " 오늘의 \(viewModel.administrativeArea ?? "") 날씨!" : "오늘의 \(viewModel.administrativeArea ?? "") 날씨입니다")

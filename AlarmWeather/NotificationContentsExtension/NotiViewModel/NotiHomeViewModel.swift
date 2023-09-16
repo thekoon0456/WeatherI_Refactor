@@ -35,8 +35,8 @@ final class HomeViewModel {
             todayWeather = model
             todayWeatherMainMent = todayWeatherMent(model: model)
             getHomeViewBackgroundImage(model: model)
-            print("DEBUG: TodayBGImage: \(todayBackgroundImage)")
-            print("DEBUG: TodayWeatherModel: \(String(describing: self.todayWeather))")
+//            print("DEBUG: TodayBGImage: \(todayBackgroundImage)")
+//            print("DEBUG: TodayWeatherModel: \(String(describing: self.todayWeather))")
             completion(todayWeather ?? model)
         }
     }
