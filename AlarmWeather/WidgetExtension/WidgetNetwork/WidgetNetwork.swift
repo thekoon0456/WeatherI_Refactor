@@ -5,39 +5,59 @@
 //  Created by Deokhun KIM on 2023/09/08.
 //
 
-import Combine
 import SwiftUI
 
-class WeatherNetwork {
+class WeatherNetwork: RetryRequest {
     //todayWeather
     let serviceKey = NetworkQuery.serviceKey
     var pageCount = "500"
 
     //사용자 좌표구해서 쿼리 날림
-    //integer는 옵셔널이 아니고, 0을 기본값으로 반환. 옵셔널 쓰려면 .object사용
-    //string은 옵셔널 반환
+    //integer는 옵셔널이 아니고, 0을 기본값으로 반환. 옵셔널 쓰려면 .object사용 / string은 옵셔널 반환
+    //본 앱에서 쿼리좌표 가져오는 구조라 처음 깔자마자 위젯먼저 설치하는경우, 서울좌표로 띄우고, 앱을 접속해달라는 안내 함
     var x: Int? = UserDefaults.shared.object(forKey: "convertedX") as? Int
     var y: Int? = UserDefaults.shared.object(forKey: "convertedY") as? Int
 
     lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 60)&ny=\(y ?? 127)"
     
-    //Fetch data from the network
-    func fetchWeatherData() -> AnyPublisher<WeatherEntity, Error> {
-        guard let url = URL(string: weatherURL) else {
-            return Fail(error: URLError(.badURL))
-                .eraseToAnyPublisher()
-        }
-        
-        return URLSession.shared.dataTaskPublisher(for: url)
-            .map(\.data)
-            .decode(type: WeatherEntity.self, decoder: JSONDecoder())
-            .mapError { error in
-                // decode 연산자 이후에 발생한 오류 처리
-                print("Decode error: \(error)")
-                return error
+    func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
+        guard let url = URL(string: weatherURL) else { return }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if error != nil {
+                print("네트워크 에러 \(String(describing: error?.localizedDescription))")
+                completion(.failure(.networkingError))
+                self.retryRequest(completion: completion)
+                return
             }
-            .retry(5) // 디코딩 이후 발생한 오류에 대한 재시도
-            .eraseToAnyPublisher()
+            
+            guard let data = data else {
+                print("데이터 에러")
+                completion(.failure(.dataError))
+                self.retryRequest(completion: completion)
+                return
+            }
+
+            if let item = self.parseWeatherJSON(data) as? [T] {
+                print("Weather JSON 파싱 성공")
+                completion(.success(item))
+            } else {
+                self.retryRequest(completion: completion)
+                completion(.failure(.parseError))
+            }
+        }.resume()
+    }
+    
+    func parseWeatherJSON(_ api: Data) -> [Item]? {
+        let decoder = JSONDecoder()
+        do {
+            let decodedData = try decoder.decode(WeatherEntity.self, from: api)
+            let item = decodedData.response.body.items.item
+            return item //[Item]
+        } catch {
+            print("DEBUG: Weather JSON 파싱 실패 \(error.localizedDescription)")
+            return nil
+        }
     }
 }
 
@@ -49,7 +69,7 @@ class DustNetwork {
     var dataGubun = "HOUR"
     var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea") ?? ""
     
-    lazy var dustUrl = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
+    lazy var dustURL = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst?itemCode=\(itemCode)&dataGubun=\(dataGubun)&pageNo=1&numOfRows=\(itemCount)&returnType=json&serviceKey=\(serviceKey)"
     
     lazy var userRegion: String = getDustRegion(region: administrativeArea)
     

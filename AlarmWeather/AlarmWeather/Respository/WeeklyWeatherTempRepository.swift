@@ -13,15 +13,13 @@ import Foundation
 //taMax3 최대기온
 
 final class WeeklyWeatherTempRepository {
-
     let serviceKey = NetworkQuery.serviceKey
     lazy var regId = getWeeklyWeatherTempRegId(currentAdministrativeArea: LocationService.shared.administrativeArea ?? "", currentLocality: LocationService.shared.localityRegion ?? "")
     
-    lazy var weatherUrl = "https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=\(serviceKey)&pageNo=1&numOfRows=1000&dataType=JSON&regId=\(regId)&tmFc=\(DateAndTime.currentTime >= "0600" ? DateAndTime.weeklyQuaryDate : DateAndTime.yesterdayweeklyQuaryDate)"
+    lazy var weatherURL = "https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=\(serviceKey)&pageNo=1&numOfRows=1000&dataType=JSON&regId=\(regId)&tmFc=\(DateAndTime.currentTime >= "0600" ? DateAndTime.weeklyQuaryDate : DateAndTime.yesterdayweeklyQuaryDate)"
     
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-
-        guard let url = URL(string: weatherUrl) else { return }
+        guard let url = URL(string: weatherURL) else { return }
         
         let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
         session.dataTask(with: url) { data, response, error in
@@ -78,7 +76,6 @@ final class WeeklyWeatherTempRepository {
         print("DEBUG: WeatherTempRegId \(String(describing: region))")
         return region ?? notContainsRegion ?? "11B10101" //nil이면 서울시 지역 코드 사용
     }
-
 }
 
 extension WeeklyWeatherTempRepository: RetryRequest { }
