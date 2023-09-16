@@ -13,12 +13,12 @@ class WeatherNetwork: RetryRequest {
     var pageCount = "500"
 
     //사용자 좌표구해서 쿼리 날림
-    //integer는 옵셔널이 아니고, 0을 기본값으로 반환. 옵셔널 쓰려면 .object사용
-    //string은 옵셔널 반환
+    //integer는 옵셔널이 아니고, 0을 기본값으로 반환. 옵셔널 쓰려면 .object사용 / string은 옵셔널 반환
+    //본 앱에서 쿼리좌표 가져오는 구조라 처음 깔자마자 위젯먼저 설치하는경우, 서울좌표로 띄우고, 앱을 접속해달라는 안내 함
     var x: Int? = UserDefaults.shared.object(forKey: "convertedX") as? Int
     var y: Int? = UserDefaults.shared.object(forKey: "convertedY") as? Int
 
-    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 0)&ny=\(y ?? 0)"
+    lazy var weatherURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(serviceKey)&pageNo=1&numOfRows=\(pageCount)&dataType=JSON&base_date=\(DateAndTime.baseTime == "2300" ? DateAndTime.yesterdayDate : DateAndTime.todayDate)&base_time=\(DateAndTime.baseTime)&nx=\(x ?? 60)&ny=\(y ?? 127)"
     
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
         guard let url = URL(string: weatherURL) else { return }

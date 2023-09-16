@@ -14,16 +14,29 @@ import Lottie
 //MARK: - 통신 재시도 Protocol
 
 protocol RetryRequest {
-    func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> Void)
+    func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> Void, retryCount: Int)
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> Void)
     func setCustomURLSession(retryRequest: Double) -> URLSession
 }
 
 extension RetryRequest {
     //통신 실패시 1초 뒤에 통신 재시도 코드
-    func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
+    func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> Void, retryCount: Int = 0) {
+        guard retryCount < 5 else {
+            // 실패 횟수가 5번에 도달하면 앱을 종료
+            fatalError("Failed to perform network request after 5 retries.")
+        }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            performRequest(completion: completion)
+            performRequest { (result: Result<[T], NetworkError>) in
+                switch result {
+                case .success:
+                    completion(result)
+                case .failure:
+                    // 실패한 경우 재시도를 수행하고 실패 횟수를 증가시킴
+                    self.retryRequest(completion: completion, retryCount: retryCount + 1)
+                }
+            }
         }
     }
     

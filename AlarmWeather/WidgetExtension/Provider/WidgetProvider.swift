@@ -29,7 +29,7 @@ struct WidgetData: Equatable {
 }
 
 struct WidgetViewModel {
-    var administrativeArea = UserDefaults.shared.string(forKey: "administrativeArea")
+    var administrativeArea: String? = UserDefaults.shared.string(forKey: "administrativeArea") //도시이름
     var todayWeatherLabel: String? //날씨 상태
     var todayWeatherIconName: String? //날씨 아이콘
     var todayTemp: String? //온도
