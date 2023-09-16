@@ -5,12 +5,11 @@
 //  Created by Deokhun KIM on 2023/06/10.
 //
 
+import MessageUI
 import UIKit
+
 import SnapKit
 import Then
-import MessageUI
-
-let settingCellId = "settingCellId"
 
 final class SettingController: UIViewController {
     
@@ -18,7 +17,7 @@ final class SettingController: UIViewController {
     var weatherViewModel: HomeViewModel?
     private var lastRefreshDate: Date = Date() //백그라운드에서 오래 있으면 홈뷰로
     
-    var settingMenus = ["유저 / 알림 설정하기", "개발자 피드백 보내기"]
+    var settingMenus = ["유저 / 알림 설정하기", "날씨의 i 페이지 보기", "자주 묻는 Q&A 보기", "개발자 피드백 보내기"]
     //TODO: - 여행 알림 설정하기 기능 추가
     
     lazy var backgoundImageView = UIImageView().then {
@@ -35,7 +34,7 @@ final class SettingController: UIViewController {
     private lazy var settingTableView = UITableView().then {
         $0.dataSource = self
         $0.delegate = self
-        $0.register(SettingCell.self, forCellReuseIdentifier: settingCellId)
+        $0.register(SettingCell.self, forCellReuseIdentifier: CellId.settingCellId.rawValue)
         $0.separatorStyle = .none //테이블뷰 구분선 제거
         $0.backgroundColor = .clear
     }
@@ -94,6 +93,12 @@ final class SettingController: UIViewController {
         case _ where row == 0:
             settingCellTapped(viewController: UpdateSettingViewController())
         case _ where row == 1:
+            let url = "https://www.notion.so/thekoon0456/i-ce0ca603f50840f99799338a948acda4"
+            qAndACellTapped(viewController: WebViewController(url: url))
+        case _ where row == 2:
+            let url = "https://www.notion.so/thekoon0456/Q-A-e366265bcdef413f850e7cbe9fdc51fe"
+            qAndACellTapped(viewController: WebViewController(url: url))
+        case _ where row == 3:
             sendEmail()
         default:
             break
@@ -103,6 +108,11 @@ final class SettingController: UIViewController {
     func settingCellTapped(viewController: UIViewController) {
         (viewController as? UpdateSettingViewController)?.weatherViewModel = weatherViewModel
         navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func qAndACellTapped(viewController: UIViewController) {
+        let nav = UINavigationController(rootViewController: viewController)
+        present(nav, animated: true)
     }
     
 }
@@ -118,53 +128,13 @@ extension SettingController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: settingCellId, for: indexPath) as! SettingCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellId.settingCellId.rawValue, for: indexPath) as! SettingCell
         cell.settingCellLabel.text = settingMenus[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        50
+        60
     }
 }
 
-
-//MARK: - MessageUI 이메일
-
-extension SettingController: MFMailComposeViewControllerDelegate {
-    func sendEmail() {
-        if MFMailComposeViewController.canSendMail() {
-            let mailController = MFMailComposeViewController()
-            mailController.mailComposeDelegate = self
-            mailController.setToRecipients(["thekoon0456@gmail.com"]) // 수신자 이메일 주소
-            mailController.setSubject("[날씨의 i] 개선 제안") // 이메일 제목
-            mailController.setMessageBody("다양한 의견을 보내주시면 앱을 만드는데 큰 보탬이 됩니다. 감사합니다.", isHTML: false) // 이메일 내용
-            present(mailController, animated: true, completion: nil)
-        } else {
-            showSendMailErrorAlert()
-        }
-    }
-    
-    func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertController(title: "메일 전송 실패", message: "이메일 설정을 확인하고 다시 시도해주세요.", preferredStyle: .alert)
-        let confirmAction = UIAlertAction(title: "확인", style: .default) { action in print("확인") }
-        sendMailErrorAlert.addAction(confirmAction)
-        self.present(sendMailErrorAlert, animated: true, completion: nil)
-    }
-    
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        switch result {
-        case .cancelled:
-            print("이메일 보내기 취소")
-        case .sent:
-            print("이메일 보내기 성공")
-        case .saved:
-            print("이메일이 저장되었습니다.")
-        case .failed:
-            print("이메일 보내기 실패")
-        @unknown default:
-            break
-        }
-        controller.dismiss(animated: true, completion: nil)
-    }
-}

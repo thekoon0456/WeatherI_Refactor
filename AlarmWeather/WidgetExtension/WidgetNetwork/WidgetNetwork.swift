@@ -23,7 +23,8 @@ class WeatherNetwork: RetryRequest {
     func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
         guard let url = URL(string: weatherURL) else { return }
 
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
+        session.dataTask(with: url) { data, response, error in
             if error != nil {
                 print("네트워크 에러 \(String(describing: error?.localizedDescription))")
                 completion(.failure(.networkingError))
