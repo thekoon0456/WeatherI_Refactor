@@ -48,16 +48,19 @@ struct WidgetViewModel {
 final class Provider: TimelineProvider {
     private var weatherNetwork = WeatherNetwork()
     
-    // 데이터를 불러오기 전(getSnapshot)에 보여줄 위젯데이터
+    // 데이터를 불러오기 전(getSnapshot)에 보여줄 미리보기
     func placeholder(in context: Context) -> WeatherEntry {
-        return WeatherEntry(date: Date(), data: WidgetViewModel(todayWeatherLabel: "맑음",
-                                                                todayWeatherIconName: "sun.max",
-                                                                todayTemp: "23",
-                                                                todayPop: "0",
-                                                                todayBackgroundImage: "sunny1"))
+        return WeatherEntry(
+            date: Date(),
+            data: WidgetViewModel(todayWeatherLabel: "맑음",
+                                  todayWeatherIconName: "sun.max",
+                                  todayTemp: "23",
+                                  todayPop: "0",
+                                  todayBackgroundImage: "sunny1")
+        )
     }
     
-    // 위젯 미리보기 스냅샷 (데이터 로드한 뒤)
+    // 위젯 미리보기 스냅샷
     func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> Void) {
         getData { [weak self] widgetData in
             guard let self else { return }
@@ -81,9 +84,7 @@ final class Provider: TimelineProvider {
         }
     }
     
-    //WidgetKit은 Provider에게 TimeLine을 요청
-    // 이 함수는 위젯의 타임라인을 정의하고 업데이트 주기를 관리합니다.
-    // 위젯의 데이터를 업데이트하고 새로운 엔트리를 생성하는 데 사용됩니다.
+    //widget 새로고침
     func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
         getData { [weak self] widgetData in
             guard let self else { return }
@@ -101,7 +102,7 @@ final class Provider: TimelineProvider {
                                                   todayBackgroundImage: todayBackgroundImage)
             
             let currentDate = Date()
-            let nextRefresh = Calendar.current.date(byAdding: .minute, value: 10, to: currentDate)!
+            let nextRefresh = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
             
             //MARK: - Test(Update 시간 확인)
             widgetViewModel.updateTime = nextRefresh

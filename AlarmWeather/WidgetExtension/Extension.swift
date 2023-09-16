@@ -17,7 +17,6 @@ extension RetryRequest {
     //통신 실패시 1초 뒤에 통신 재시도 코드
     func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> Void, retryCount: Int = 0) {
         guard retryCount < 5 else {
-            // 실패 횟수가 5번에 도달하면 앱을 종료
             fatalError("Failed to perform network request after 5 retries.")
         }
         
@@ -27,7 +26,6 @@ extension RetryRequest {
                 case .success:
                     completion(result)
                 case .failure:
-                    // 실패한 경우 재시도를 수행하고 실패 횟수를 증가시킴
                     self.retryRequest(completion: completion, retryCount: retryCount + 1)
                 }
             }
