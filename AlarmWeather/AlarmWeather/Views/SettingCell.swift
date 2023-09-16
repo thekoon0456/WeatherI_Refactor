@@ -10,7 +10,7 @@ import SnapKit
 import Then
 
 final class SettingCell: UITableViewCell {
-
+    
     //MARK: - Properties
     
     var settingCellLabel = UILabel().then {
@@ -18,18 +18,16 @@ final class SettingCell: UITableViewCell {
         $0.font = UIFont.systemFont(ofSize: 20)
     }
     
-    
     //MARK: - Lifecycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: settingCellId)
+        super.init(style: style, reuseIdentifier: CellId.settingCellId.rawValue)
         configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     //MARK: - Helpers
     
@@ -47,7 +45,4 @@ final class SettingCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    
-
-
 }

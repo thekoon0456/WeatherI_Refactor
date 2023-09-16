@@ -16,7 +16,7 @@ protocol RetryRequest {
 extension RetryRequest {
     //통신 실패시 1초 뒤에 통신 재시도 코드
     func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> Void, retryCount: Int = 0) {
-        guard retryCount < 5 else {
+        guard retryCount < 10 else {
             fatalError("Failed to perform network request after 5 retries.")
         }
         

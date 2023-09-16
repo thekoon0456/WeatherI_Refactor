@@ -48,7 +48,7 @@ final class HomeViewModel {
             todayDetailWeatherIcon(model: model)
             getRainyMent(model: model)
             todayRecommendItems = getTodayRecommendItems(model: model)
-            print("DEBUG: detailWeatherIconArr: \(todayDetailWeatherIconName)")
+//            print("DEBUG: detailWeatherIconArr: \(todayDetailWeatherIconName)")
             completion(todayDetailWeather ?? model)
         }
     }
