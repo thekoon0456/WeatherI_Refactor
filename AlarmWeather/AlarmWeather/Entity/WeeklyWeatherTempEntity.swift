@@ -27,7 +27,7 @@ struct WeeklyWeatherTempItems: Codable {
 }
 
 struct WeeklyWeatherTempItem: Codable {
-    let regID: String
+    let regID: String?
     let taMin3, taMin3Low, taMin3High, taMax3: Int?
     let taMax3Low, taMax3High, taMin4, taMin4Low: Int?
     let taMin4High, taMax4, taMax4Low, taMax4High: Int?
