@@ -27,15 +27,15 @@ struct WeeklyWeatherItems: Codable {
 }
 
 struct WeeklyWeatherItem: Codable {
-    let regID: String
-    let rnSt3Am, rnSt3Pm, rnSt4Am, rnSt4Pm: Int
-    let rnSt5Am, rnSt5Pm, rnSt6Am, rnSt6Pm: Int
-    let rnSt7Am, rnSt7Pm, rnSt8, rnSt9: Int
-    let rnSt10: Int
-    let wf3Am, wf3Pm, wf4Am, wf4Pm: String
-    let wf5Am, wf5Pm, wf6Am, wf6Pm: String
-    let wf7Am, wf7Pm, wf8, wf9: String
-    let wf10: String
+    let regID: String?
+    let rnSt3Am, rnSt3Pm, rnSt4Am, rnSt4Pm: Int?
+    let rnSt5Am, rnSt5Pm, rnSt6Am, rnSt6Pm: Int?
+    let rnSt7Am, rnSt7Pm, rnSt8, rnSt9: Int?
+    let rnSt10: Int?
+    let wf3Am, wf3Pm, wf4Am, wf4Pm: String?
+    let wf5Am, wf5Pm, wf6Am, wf6Pm: String?
+    let wf7Am, wf7Pm, wf8, wf9: String?
+    let wf10: String?
 
     enum CodingKeys: String, CodingKey {
         case regID = "regId"
