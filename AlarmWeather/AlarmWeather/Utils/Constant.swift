@@ -21,10 +21,10 @@ enum WeatherModelCount: Int {
 }
 
 enum DoubleConstant: Double {
-    case networkRequest = 8.0
+    case networkRequest = 7.0
     case loadingDelayMent = 6.0
-    case showingLoadingAlert = 16.0
-    case updateData = 600 //10분
+    case showingLoadingAlert = 23.0
+    case updateDataTime = 600 //10분
 }
 
 enum NetworkError: Error {

@@ -264,7 +264,7 @@ final class HomeController: UIViewController {
     //백그라운드 진입 시간 5분 지나면 데이터 업데이트
     @objc private func autoDataUpdate() {
         let elapsedTime = Date().timeIntervalSince(lastRefreshDate)
-        let refreshInterval: TimeInterval = DoubleConstant.updateData.rawValue
+        let refreshInterval: TimeInterval = DoubleConstant.updateDataTime.rawValue
         if elapsedTime >= refreshInterval {
             refreshData()
             // 백그라운드 진입 시간 업데이트

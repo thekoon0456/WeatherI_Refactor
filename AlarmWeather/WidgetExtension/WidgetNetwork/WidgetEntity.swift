@@ -27,9 +27,9 @@ struct Items: Codable {
 }
 
 struct Item: Codable, Equatable {
-    let baseDate, baseTime, category, fcstDate: String
-    let fcstTime, fcstValue: String
-    let nx, ny: Int
+    let baseDate, baseTime, category, fcstDate: String?
+    let fcstTime, fcstValue: String?
+    let nx, ny: Int?
 }
 
 struct Header: Codable {

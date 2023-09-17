@@ -28,10 +28,10 @@ struct Items: Codable {
 }
 
 struct Item: Codable {
-    let baseDate, baseTime: String
-    let category: Category
-    let fcstDate, fcstTime, fcstValue: String
-    let nx, ny: Int
+    let baseDate, baseTime: String?
+    let category: Category?
+    let fcstDate, fcstTime, fcstValue: String?
+    let nx, ny: Int?
 }
 
 enum Category: String, Codable {
