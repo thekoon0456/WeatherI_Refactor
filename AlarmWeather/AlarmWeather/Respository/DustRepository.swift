@@ -22,24 +22,24 @@ final class DustRepository {
         guard let url = URL(string: dustURL) else { return }
         
         let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
-        session.dataTask(with: url) { data, response, error in
+        session.dataTask(with: url) { [weak self] data, response, error in
+            guard let self else { return }
             if error != nil {
                 print("네트워크 에러 \(String(describing: error?.localizedDescription))")
                 completion(.failure(.networkingError))
-                self.retryRequest(completion: completion)
+                retryRequest(completion: completion)
                 return
             }
             
             guard let data = data else {
                 print("데이터 에러")
                 completion(.failure(.dataError))
-                self.retryRequest(completion: completion)
+                retryRequest(completion: completion)
                 return
             }
 
-            if let item = self.parseDustJSON(data) as? [T] {
+            if let item = parseDustJSON(data) as? [T] {
                 print("Dust JSON 파싱 성공")
-                print(item)
                 completion(.success(item))
             } else {
                 completion(.failure(.parseError))

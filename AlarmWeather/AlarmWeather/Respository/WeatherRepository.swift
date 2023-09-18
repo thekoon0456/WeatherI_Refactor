@@ -26,26 +26,27 @@ final class WeatherRepository {
         guard let url = URL(string: weatherURL) else { return }
 
         let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
-        session.dataTask(with: url) { data, response, error in
+        session.dataTask(with: url) { [weak self] data, response, error in
+            guard let self else { return }
             if error != nil {
                 print("네트워크 에러 \(String(describing: error?.localizedDescription))")
                 completion(.failure(.networkingError))
-                self.retryRequest(completion: completion)
+                retryRequest(completion: completion)
                 return
             }
             
             guard let data = data else {
                 print("데이터 에러")
                 completion(.failure(.dataError))
-                self.retryRequest(completion: completion)
+                retryRequest(completion: completion)
                 return
             }
 
-            if let item = self.parseWeatherJSON(data) as? [T] {
+            if let item = parseWeatherJSON(data) as? [T] {
                 print("Weather JSON 파싱 성공")
                 completion(.success(item))
             } else {
-                self.retryRequest(completion: completion)
+                retryRequest(completion: completion)
                 completion(.failure(.parseError))
             }
         }.resume()

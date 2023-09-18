@@ -16,7 +16,7 @@ extension SettingController: MFMailComposeViewControllerDelegate {
             let mailController = MFMailComposeViewController()
             mailController.mailComposeDelegate = self
             mailController.setToRecipients(["thekoon0456@gmail.com"]) // 수신자 이메일 주소
-            mailController.setSubject("[날씨의 i] 피드백입니다.") // 이메일 제목
+            mailController.setSubject("[날씨의 i] 피드백") // 이메일 제목
             mailController.setMessageBody("다양한 의견을 보내주시면 앱을 만드는데 큰 보탬이 됩니다. 감사합니다.", isHTML: false) // 이메일 내용
             
             present(mailController, animated: true, completion: nil)

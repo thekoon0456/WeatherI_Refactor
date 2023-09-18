@@ -43,20 +43,21 @@ final class LocationService {
     
     func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
         let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(
-            location,
-            preferredLocale: self.locale
-        ) { [weak self] placemarks, _ in
+        geocoder.reverseGeocodeLocation(location, preferredLocale: self.locale) { [weak self] placemarks, _ in
             guard let self = self,
                   let placemarks = placemarks else { return }
             print("DEBUG: 현재 위치는 \(location)입니다.")
             
             //주소가 구 주소일때
-            guard
-                let locality = placemarks.last?.locality,
-                let subLocality =  placemarks.last?.subLocality,
-                let administrative = placemarks.last?.administrativeArea
-            else {
+            if let locality = placemarks.last?.locality,
+               let subLocality =  placemarks.last?.subLocality,
+               let administrative = placemarks.last?.administrativeArea {
+                userRegion = locality + " " + subLocality
+                localityRegion = locality
+                subLocalityRegion = subLocality
+                administrativeArea = administrative
+                print("DEBUG: 현재 주소는 구 주소: \(String(describing: userRegion))입니다.")
+            } else {
                 //주소가 도로명 주소일때
                 if let administrative = placemarks.first?.administrativeArea,
                    let name = placemarks.first?.name {
@@ -64,15 +65,7 @@ final class LocationService {
                     administrativeArea = administrative
                     print("DEBUG: 현재 주소는 도로명: \(String(describing: userRegion))입니다.")
                 }
-                
-                return
             }
-            
-            userRegion = locality + " " + subLocality
-            localityRegion = locality
-            subLocalityRegion = subLocality
-            administrativeArea = administrative
-            print("DEBUG: 현재 주소는 구 주소: \(String(describing: userRegion))입니다.")
             
             let convertedXy = LocationService.shared.convertGRID_GPS(lat_X: latitude ?? 0, lng_Y: longitude ?? 0)
             convertedX = convertedXy.x

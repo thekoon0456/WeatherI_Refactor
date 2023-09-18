@@ -23,7 +23,7 @@ enum WeatherModelCount: Int {
 enum DoubleConstant: Double {
     case networkRequest = 7.0
     case loadingDelayMent = 6.0
-    case showingLoadingAlert = 23.0
+    case showingLoadingAlert = 25.0
     case updateDataTime = 600 //10분
 }
 

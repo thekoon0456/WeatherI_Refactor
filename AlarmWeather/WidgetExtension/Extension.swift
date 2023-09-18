@@ -15,9 +15,9 @@ protocol RetryRequest {
 
 extension RetryRequest {
     func retryRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+//        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
             performRequest(completion: completion)
-        }
+//        }
     }
 
     func setCustomURLSession(retryRequest: Double) -> URLSession {
