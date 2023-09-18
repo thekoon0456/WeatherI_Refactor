@@ -142,6 +142,7 @@ class UpdateSettingViewController: UIViewController {
                 alertImage: data,
                 alertTimes: RealmService.shared.convertToList(settingViewModel.alertTimes ?? [])
             )
+            print("DEBUG: 유저 생성")
             navigationController?.popViewController(animated: true)
             
         } else {
@@ -151,7 +152,7 @@ class UpdateSettingViewController: UIViewController {
                 alertImage: data,
                 alertTimes: RealmService.shared.convertToList(settingViewModel.alertTimes ?? [])
             )
-            
+            print("DEBUG: 유저 업데이트")
             navigationController?.popViewController(animated: true)
         }
         print("유저정보 저장됨")
