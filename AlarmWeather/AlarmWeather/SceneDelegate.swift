@@ -23,37 +23,48 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
-        //앱 종료시 실행
-  
-        // 위젯 업데이트 요청 보내기
-        WidgetCenter.shared.reloadTimelines(ofKind: "com.thekoon.NotiWeather.WidgetExtension")
+        
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
-
+        
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        // Called when the scene will move from an active state to an inactive state.
-        // This may occur due to temporary interruptions (ex. an incoming phone call).
         
+        // 위젯 업데이트 요청 보내기
+        WidgetCenter.shared.reloadTimelines(ofKind: "com.thekoon.NotiWeather.WidgetExtension")
+        
+        // 앱 종료시 임시파일 삭제
+        deleteFilesInTmpDirectory()
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
         
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        //앱 백그라운드 갈때 실행
-  
-        // 위젯 업데이트 요청 보내기
-        WidgetCenter.shared.reloadTimelines(ofKind: "com.thekoon.NotiWeather.WidgetExtension")
-    
+        
     }
     
+}
+
+extension SceneDelegate {
+    //앱 종료시 임시파일 삭제 메서드
+    func deleteFilesInTmpDirectory() {
+        let fileManager = FileManager.default
+        let tmpDirectory = NSTemporaryDirectory()
+        
+        do {
+            let tmpContents = try fileManager.contentsOfDirectory(atPath: tmpDirectory)
+            for file in tmpContents {
+                let filePath = (tmpDirectory as NSString).appendingPathComponent(file)
+                try fileManager.removeItem(atPath: filePath)
+                print("삭제된 임시 파일: \(filePath)")
+            }
+        } catch {
+            print("DEBUG: TMP 폴더 삭제 Error - \(error.localizedDescription)")
+        }
+    }
 }
 
