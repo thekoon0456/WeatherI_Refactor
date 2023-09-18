@@ -95,6 +95,9 @@ final class AlertService {
                                                           intentIdentifiers: [])
             center.setNotificationCategories([customUICategory])
             
+            //이미지 Attachment함수
+            setImageURLS(content: content, index: index)
+            
             var userInfo: [String: Any] = [:]
             userInfo["alertName"] = realmManager.readUsers().first?.alertName
             
@@ -115,6 +118,28 @@ final class AlertService {
                 }
             }
             
+        }
+    }
+    
+    func setImageURLS(content: UNMutableNotificationContent, index: Int) {
+        if let imageData = realmManager.readUsers().first?.alertImage {
+            // 이미지 데이터를 임시 파일경로로 저장
+            let tempDirectory = FileManager.default.temporaryDirectory
+            let imageURL = tempDirectory.appendingPathComponent("\(index).jpg")
+
+            do {
+                try imageData.write(to: imageURL)
+            } catch {
+                print("Error writing image data to file: \(error)")
+            }
+
+            // 이미지 파일의 로컬 경로를 attachment에 추가
+            do {
+                let attachment = try UNNotificationAttachment(identifier: "imageAttachment", url: imageURL, options: nil)
+                content.attachments = [attachment]
+            } catch {
+                print("Error - Image attachment: \(error)")
+            }
         }
     }
 
