@@ -13,8 +13,6 @@
 		7C05CCA52AAA3588000063C7 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23646D2A3318F60026C49A /* Constant.swift */; };
 		7C05CCA92AAAEE0B000063C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C2364172A3314D70026C49A /* Assets.xcassets */; };
 		7C1162DE2AB5DC4A00030E61 /* NotificationRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1162DD2AB5DC4A00030E61 /* NotificationRealmManager.swift */; };
-		7C1162E22AB5DC9900030E61 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1162E12AB5DC9900030E61 /* Realm */; };
-		7C1162E42AB5DC9E00030E61 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1162E32AB5DC9E00030E61 /* RealmSwift */; };
 		7C17E56E2AAEB9A5004813CE /* API_KEY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */; };
 		7C17E56F2AAEB9E5004813CE /* API_KEY.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7E8BD62AA5AB0A00B5822E /* API_KEY.plist */; };
 		7C1A1E552A3DD07400B97209 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A1E542A3DD07400B97209 /* SettingCell.swift */; };
@@ -107,11 +105,11 @@
 		7CE4B0092A78E02E00540FBA /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 7CE4B0082A78E02E00540FBA /* Then */; };
 		7CE4B00C2A78E03F00540FBA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7CE4B00B2A78E03F00540FBA /* SnapKit */; };
 		7CE4B00F2A78E05B00540FBA /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7CE4B00E2A78E05B00540FBA /* RealmSwift */; };
-		7CE4B0112A78E0B200540FBA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 7CE4B0102A78E0B200540FBA /* Lottie */; };
-		7CE4B0132A78E0BA00540FBA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7CE4B0122A78E0BA00540FBA /* SnapKit */; };
-		7CE4B0152A78E0BE00540FBA /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 7CE4B0142A78E0BE00540FBA /* Then */; };
-		7CFC464E2AB3E28D005C087A /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 7CFC464D2AB3E28D005C087A /* Realm */; };
-		7CFC46502AB3E294005C087A /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7CFC464F2AB3E294005C087A /* RealmSwift */; };
+		7CF73C8B2ABAAB2F00E3A199 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7CF73C8A2ABAAB2F00E3A199 /* RealmSwift */; };
+		7CF73C8D2ABAAB4B00E3A199 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7CF73C8C2ABAAB4B00E3A199 /* RealmSwift */; };
+		7CF73C8F2ABAAB5000E3A199 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7CF73C8E2ABAAB5000E3A199 /* SnapKit */; };
+		7CF73C912ABAAB9B00E3A199 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 7CF73C902ABAAB9B00E3A199 /* Lottie */; };
+		7CF73C932ABAAB9E00E3A199 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 7CF73C922ABAAB9E00E3A199 /* Then */; };
 		7CFC46522AB3E376005C087A /* WidgetExtensionEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC46512AB3E376005C087A /* WidgetExtensionEntryView.swift */; };
 		7CFC46542AB3E39E005C087A /* WidgetRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC46532AB3E39E005C087A /* WidgetRealmManager.swift */; };
 		7CFF48F42AB5B07400E967E9 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFF48F32AB5B07400E967E9 /* WebViewController.swift */; };
@@ -300,13 +298,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C1162E22AB5DC9900030E61 /* Realm in Frameworks */,
-				7CE4B0152A78E0BE00540FBA /* Then in Frameworks */,
-				7C1162E42AB5DC9E00030E61 /* RealmSwift in Frameworks */,
+				7CF73C912ABAAB9B00E3A199 /* Lottie in Frameworks */,
+				7CF73C932ABAAB9E00E3A199 /* Then in Frameworks */,
+				7CF73C8D2ABAAB4B00E3A199 /* RealmSwift in Frameworks */,
+				7CF73C8F2ABAAB5000E3A199 /* SnapKit in Frameworks */,
 				7C6585502A74472300CA9620 /* UserNotificationsUI.framework in Frameworks */,
-				7CE4B0132A78E0BA00540FBA /* SnapKit in Frameworks */,
 				7C65854F2A74472300CA9620 /* UserNotifications.framework in Frameworks */,
-				7CE4B0112A78E0B200540FBA /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,8 +311,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CFC46502AB3E294005C087A /* RealmSwift in Frameworks */,
-				7CFC464E2AB3E28D005C087A /* Realm in Frameworks */,
+				7CF73C8B2ABAAB2F00E3A199 /* RealmSwift in Frameworks */,
 				7C7E8BE12AA5CAFC00B5822E /* SwiftUI.framework in Frameworks */,
 				7C7E8BE02AA5CAFC00B5822E /* WidgetKit.framework in Frameworks */,
 			);
@@ -679,11 +675,10 @@
 			);
 			name = NotificationContentsExtension;
 			packageProductDependencies = (
-				7CE4B0102A78E0B200540FBA /* Lottie */,
-				7CE4B0122A78E0BA00540FBA /* SnapKit */,
-				7CE4B0142A78E0BE00540FBA /* Then */,
-				7C1162E12AB5DC9900030E61 /* Realm */,
-				7C1162E32AB5DC9E00030E61 /* RealmSwift */,
+				7CF73C8C2ABAAB4B00E3A199 /* RealmSwift */,
+				7CF73C8E2ABAAB5000E3A199 /* SnapKit */,
+				7CF73C902ABAAB9B00E3A199 /* Lottie */,
+				7CF73C922ABAAB9E00E3A199 /* Then */,
 			);
 			productName = NotificationContentsExtension;
 			productReference = 7C65854E2A74472300CA9620 /* NotificationContentsExtension.appex */;
@@ -703,8 +698,7 @@
 			);
 			name = WidgetExtension;
 			packageProductDependencies = (
-				7CFC464D2AB3E28D005C087A /* Realm */,
-				7CFC464F2AB3E294005C087A /* RealmSwift */,
+				7CF73C8A2ABAAB2F00E3A199 /* RealmSwift */,
 			);
 			productName = WidgetExtensionExtension;
 			productReference = 7C7E8BDE2AA5CAFC00B5822E /* WidgetExtension.appex */;
@@ -718,7 +712,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					7C2364072A3314D60026C49A = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -1015,6 +1009,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1075,6 +1070,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1265,7 +1261,7 @@
 				INFOPLIST_FILE = NotificationContentsExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationContentsExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1292,7 +1288,7 @@
 				INFOPLIST_FILE = NotificationContentsExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationContentsExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1321,7 +1317,7 @@
 				INFOPLIST_FILE = WidgetExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1350,7 +1346,7 @@
 				INFOPLIST_FILE = WidgetExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1461,16 +1457,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7C1162E12AB5DC9900030E61 /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		7C1162E32AB5DC9E00030E61 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
 		7CE4B0052A78E02200540FBA /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7CE4B0042A78E02200540FBA /* XCRemoteSwiftPackageReference "lottie-spm" */;
@@ -1491,30 +1477,30 @@
 			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
 		};
-		7CE4B0102A78E0B200540FBA /* Lottie */ = {
+		7CF73C8A2ABAAB2F00E3A199 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7CE4B0042A78E02200540FBA /* XCRemoteSwiftPackageReference "lottie-spm" */;
-			productName = Lottie;
+			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
-		7CE4B0122A78E0BA00540FBA /* SnapKit */ = {
+		7CF73C8C2ABAAB4B00E3A199 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		7CF73C8E2ABAAB5000E3A199 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7CE4B00A2A78E03F00540FBA /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
-		7CE4B0142A78E0BE00540FBA /* Then */ = {
+		7CF73C902ABAAB9B00E3A199 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CE4B0042A78E02200540FBA /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+		7CF73C922ABAAB9E00E3A199 /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7CE4B0072A78E02E00540FBA /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
-		};
-		7CFC464D2AB3E28D005C087A /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		7CFC464F2AB3E294005C087A /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7CE4B00D2A78E05B00540FBA /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
