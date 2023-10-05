@@ -306,7 +306,6 @@ final class HomeController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.snp.edges)
-            make.height.greaterThanOrEqualTo(scrollView.snp.height).priority(.low)
             make.width.equalTo(scrollView.snp.width)
         }
         
