@@ -48,6 +48,10 @@ struct WidgetExtensionEntryView : View {
     }
 }
 
+#Preview {
+    WidgetExtensionEntryView(data: WidgetViewModel())
+}
+
 //MARK: -  Widget View
 
 extension WidgetExtensionEntryView {
@@ -88,9 +92,8 @@ extension WidgetExtensionEntryView {
     var todayWeatherIcon: some View {
         Image(systemName: data.todayWeatherIconName ?? "gobackward")
             .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(width: 50, height: 50)
-            .padding(.leading, 5)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 50)
     }
     
     var administrativeAreaLabel: some View {
