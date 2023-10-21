@@ -31,7 +31,7 @@ final class DustService {
                                       dustCode: data[0].itemCode ?? "서버정보없음",
                                       dataTime: data[0].dataTime ?? "서버정보없음")
                 
-//                print("DEBUG: DustModel: \(model)")
+                print("DEBUG: DustModel: \(model)")
                 completion(model)
                 
             case .failure:

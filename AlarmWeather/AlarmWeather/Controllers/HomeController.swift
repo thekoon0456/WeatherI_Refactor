@@ -51,14 +51,14 @@ final class HomeController: UIViewController {
     private var userLabel = UILabel().then {
         $0.text = "안녕하세요 유저님!"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+        $0.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         $0.textAlignment = .left
     }
     
     private var stateLabel = UILabel().then {
         $0.text = "오늘은 맑은 날"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+        $0.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         $0.textAlignment = .left
         $0.adjustsFontSizeToFitWidth = true
         $0.minimumScaleFactor = 0.6
@@ -306,7 +306,6 @@ final class HomeController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.snp.edges)
-            make.height.greaterThanOrEqualTo(scrollView.snp.height).priority(.low)
             make.width.equalTo(scrollView.snp.width)
         }
         
@@ -321,7 +320,7 @@ final class HomeController: UIViewController {
         contentView.addSubview(stateLabel)
         stateLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
-            make.top.equalTo(userLabel.snp.bottom).offset(8)
+            make.top.equalTo(userLabel.snp.bottom).offset(9)
             make.left.equalTo(contentView.snp.left).offset(15)
             make.right.equalTo(contentView.snp.right).offset(-15)
         }
@@ -329,7 +328,7 @@ final class HomeController: UIViewController {
         contentView.addSubview(dustStateLabel)
         dustStateLabel.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
-            make.top.equalTo(stateLabel.snp.bottom).offset(8)
+            make.top.equalTo(stateLabel.snp.bottom).offset(9)
             make.left.equalTo(contentView.snp.left).offset(15)
             make.right.equalTo(contentView.snp.right).offset(-15)
         }

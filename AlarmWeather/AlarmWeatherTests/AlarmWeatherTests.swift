@@ -10,11 +10,11 @@ import XCTest
 
 final class AlarmWeatherTests: XCTestCase {
 
-    override func setUpWithError() throws {
+    override func setUpWithError() throws { //사전준비
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
-    override func tearDownWithError() throws {
+    override func tearDownWithError() throws { //정리
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 

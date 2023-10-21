@@ -35,8 +35,8 @@ final class HomeViewModel {
             todayWeather = model
             todayWeatherMainMent = todayWeatherMent(model: model)
             getHomeViewBackgroundImage(model: model)
-//            print("DEBUG: TodayBGImage: \(todayBackgroundImage)")
-//            print("DEBUG: TodayWeatherModel: \(String(describing: self.todayWeather))")
+            print("DEBUG: TodayBGImage: \(todayBackgroundImage)")
+            print("DEBUG: TodayWeatherModel: \(String(describing: self.todayWeather))")
             completion(todayWeather ?? model)
         }
     }
@@ -61,7 +61,9 @@ extension HomeViewModel {
         var weatherItemArr: Set<String> = [] //중복 없애려고 set으로
         for i in 0..<model.count {
             switch model[i] {
-            case _ where model[i].pop != "0" :
+            case _ where Int(model[i].tmp) ?? 0 < 5:
+                weatherItemArr.insert(" 🧣 🧤")
+            case _ where Int(model[i].pop) ?? 0 >= 30 :
                 weatherItemArr.insert(" 🌂")
             case _ where model[i].pty != "0":
                 weatherItemArr.insert(" 🌂")
@@ -87,7 +89,7 @@ extension HomeViewModel {
 
         if sortedWeatherPop.filter({ $0.pty == "4" }).count != 0 {
             todayRainyWeatherMent = "소나기가 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
-        } else if sortedWeatherPop.filter({ $0.pop != "0" }).count != 0 {
+        } else if sortedWeatherPop.filter({ Int($0.pop) ?? 0 >= 30 }).count != 0 {
             if sortedWeatherPop[0].pop == sortedWeatherPop[sortedWeatherPop.count - 1].pop {
                 todayRainyWeatherMent = "오늘 비 올 확률은 \(sortedWeatherPop[0].pop + "%") 입니다 🌧️"
             } else {
@@ -96,7 +98,9 @@ extension HomeViewModel {
         } else if sortedWeatherPop.filter({ $0.pty == "2" || $0.pty == "2" }).count != 0 {
             todayRainyWeatherMent = "하얀 눈이 올 수 있으니 우산 챙기시는걸 추천드려요 ☂️"
         } else {
-            todayRainyWeatherMent = ""
+            todayRainyWeatherMent = model.filter { Int($0.tmp) ?? 0 < 5 }.count != 0
+            ? "날씨가 추우니 따뜻하게 입어주세요 🧣"
+            : ""
         }
     }
     

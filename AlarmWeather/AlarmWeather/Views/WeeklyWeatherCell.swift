@@ -28,6 +28,7 @@ final class WeeklyWeatherCell: UITableViewCell {
     private lazy var weatherIcon = UIImageView().then {
         $0.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         $0.contentMode = .scaleAspectFill
+        $0.addTapZoomAnimation()
     }
     
     private var probabilityLabel = UILabel().then {
