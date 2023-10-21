@@ -68,6 +68,26 @@ extension UIView: CustomAnimation { }
 
 extension UIViewController: CustomAnimation { }
 
+// MARK: - 아이콘 터치 애니메이션
+
+extension UIView {
+    func addTapZoomAnimation() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.animateZoom))
+        self.addGestureRecognizer(tapGesture)
+        self.isUserInteractionEnabled = true
+    }
+
+    @objc func animateZoom() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        }) { _ in
+            UIView.animate(withDuration: 0.3) {
+                self.transform = .identity
+            }
+        }
+    }
+}
+
 //MARK: - Using Then
 
 extension LottieAnimation: Then { }

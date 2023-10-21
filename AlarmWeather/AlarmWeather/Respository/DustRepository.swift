@@ -42,6 +42,7 @@ final class DustRepository {
                 print("Dust JSON 파싱 성공")
                 completion(.success(item))
             } else {
+                retryRequest(completion: completion)
                 completion(.failure(.parseError))
             }
         }.resume()

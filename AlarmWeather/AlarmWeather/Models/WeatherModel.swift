@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CoreLocation
 
 //엔티티로부터 필요한것만 꺼내온 모델
 //서비스 로직에 사용됨

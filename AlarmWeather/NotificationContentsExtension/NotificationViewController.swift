@@ -99,7 +99,7 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     
     // UI 업데이트를 메인 스레드에서 처리하는 메서드
     private func updateUI() {
-        let sortedWeatherTmp = todayDetailWeather.sorted { $0.tmp < $1.tmp }
+        let sortedWeatherTmp = todayDetailWeather.sorted { Int($0.tmp) ?? 0 < Int($1.tmp) ?? 0 }
         
         alertName.text = "날씨의 i ☀️"
         todayWeatherMent?.text = viewModel.todayWeatherMainMent

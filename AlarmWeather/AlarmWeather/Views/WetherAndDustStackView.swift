@@ -58,6 +58,7 @@ final class WetherAndDustStackView: UIStackView {
         let tapweatherIcon = UITapGestureRecognizer(target: self, action: #selector(weatherIconTapped))
         $0.addGestureRecognizer(tapweatherIcon)
         $0.isUserInteractionEnabled = true
+        $0.addTapZoomAnimation()
     }
     
     private var todayWeatherLabel = UILabel().then {
@@ -107,6 +108,7 @@ final class WetherAndDustStackView: UIStackView {
         let tapdustIcon = UITapGestureRecognizer(target: self, action: #selector(dustIconTapped))
         $0.addGestureRecognizer(tapdustIcon)
         $0.isUserInteractionEnabled = true
+        $0.addTapZoomAnimation()
     }
     
     private var dustDetailLabel = UILabel().then {

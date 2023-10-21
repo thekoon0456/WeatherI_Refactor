@@ -36,6 +36,7 @@ final class TodayDetailWeatherCell: UICollectionViewCell {
     private var weatherIcon = UIImageView(frame: .zero).then {
         $0.image = UIImage(systemName: "sun.max")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         $0.contentMode = .scaleAspectFill
+        $0.addTapZoomAnimation()
     }
     
     private var weatherLabel = UILabel().then {
