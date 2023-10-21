@@ -65,21 +65,22 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     
     func didReceive(_ notification: UNNotification) {
 
-        guard let image = realmData.first?.alertImage else {
-            return profileImageView.image = defaultImage()
+        if let image = realmData.first?.alertImage {
+            profileImageView.image = UIImage(data: image)
+        } else {
+            profileImageView.image = defaultImage()
         }
         
-        profileImageView.image = UIImage(data: image)
-        
-        guard let userInfo = notification.request.content.userInfo as? [String: Any],
-              let alertName = userInfo["alertName"] as? String else { return }
+        guard
+            let userInfo = notification.request.content.userInfo as? [String: Any],
+            let alertName = userInfo["alertName"] as? String
+        else { return }
         
         locationLabel.text = (alertName != "" ? "\(alertName)님이 보내는"
                               + " 오늘의 \(viewModel.administrativeArea ?? "") 날씨!" : "오늘의 \(viewModel.administrativeArea ?? "") 날씨입니다")
         
         loadData { [weak self] in
             guard let self = self else { return }
-            // UI 업데이트를 메인 스레드에서 수행
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 updateUI()
