@@ -43,6 +43,7 @@ struct WidgetExtensionEntryView : View {
             
                     largeSizeSpacer
                 }
+                .padding(-18)
             }
         }
     }
@@ -86,7 +87,7 @@ extension WidgetExtensionEntryView {
                 Rectangle()
                     .foregroundColor(Color.black.opacity(0.3))
             }
-            .padding(-2)
+            .padding(-18)
     }
     
     var todayWeatherIcon: some View {
@@ -121,11 +122,11 @@ extension WidgetExtensionEntryView {
         
         return nil
     }
-    
-    var timeTestLabel: some View {
-        Text(getTime())
-            .font(.system(size: 10))
-    }
+//    
+//    var timeTestLabel: some View {
+//        Text(getTime())
+//            .font(.system(size: 10))
+//    }
     
     var largeSizeSpacer: Spacer? {
         //위젯 사이즈가 클때 컨텐츠 위로 올림
