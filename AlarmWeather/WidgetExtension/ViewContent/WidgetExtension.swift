@@ -21,6 +21,8 @@ struct WidgetExtension: Widget {
         .configurationDisplayName("날씨의 i") //위젯 추가시 디스플레이에 표시되는 앱 이름
         .description("현재 위치의 오늘의 날씨를 확인하세요") //앱 설명
         .supportedFamilies(supportedFamilies) //위젯 사이즈
+        // MARK: - 위젯 추가 패딩 삭제
+        .contentMarginsDisabled()
     }
 }
 
