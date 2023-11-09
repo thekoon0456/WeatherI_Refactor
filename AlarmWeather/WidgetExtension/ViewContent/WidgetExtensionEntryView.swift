@@ -16,36 +16,27 @@ struct WidgetExtensionEntryView : View {
     var realmData = WidgetRealmManager.shared.readUsers()
     
     var body: some View {
-        GeometryReader { proxy in
-            ZStack {
-                //배경 이미지
-                resizedBGImage
-                    .frame(width: proxy.size.width,
-                           height: proxy.size.height)
-                
-                //TODO: - 위젯 크기에 따라 다른 화면 구현
-                //내부 날씨 화면
-                VStack {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            administrativeAreaLabel
-                            todayWeatherIcon
-                            todayWeatherLabel
-                            todayTempLabel
-                            todayPopLabel
-//                            timeTestLabel
-                        }
-                        .foregroundColor(.white)
-                        .padding(10)
-                        
-                        Spacer()
+        ZStack {
+            //내부 날씨 화면
+            VStack {
+                HStack {
+                    VStack(alignment: .leading) {
+                        administrativeAreaLabel
+                        todayWeatherIcon
+                        todayWeatherLabel
+                        todayTempLabel
+                        todayPopLabel
+                        // timeTestLabel
                     }
-            
-                    largeSizeSpacer
+                    .foregroundColor(.white)
+                    .padding(10)
+                    
+                    Spacer()
                 }
-                .padding(-18)
+                largeSizeSpacer //위젯 사이즈 .large일때 spacer
             }
         }
+        .widgetBackground(backgroundView: resizedBGImage)
     }
 }
 
@@ -87,7 +78,6 @@ extension WidgetExtensionEntryView {
                 Rectangle()
                     .foregroundColor(Color.black.opacity(0.3))
             }
-            .padding(-18)
     }
     
     var todayWeatherIcon: some View {
@@ -179,5 +169,18 @@ extension WidgetExtensionEntryView {
         dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
         dateFormatter.dateFormat = "MM/dd HH:mm:ss"
         return dateFormatter.string(from: data.updateTime ?? Date())
+    }
+}
+
+// MARK: - 위젯 백그라운드 뷰 사이즈 조정 함수
+extension View {
+    func widgetBackground(backgroundView: some View) -> some View {
+        if #available(iOSApplicationExtension 17.0, *) {
+            return containerBackground(for: .widget) {
+                backgroundView
+            }
+        } else {
+            return background(backgroundView)
+        }
     }
 }
