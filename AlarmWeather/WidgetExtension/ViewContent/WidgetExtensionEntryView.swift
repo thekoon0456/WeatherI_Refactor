@@ -49,16 +49,39 @@ extension WidgetExtensionEntryView {
         var backgroundImage: Image
         
         guard
-            let imageData = realmData.first?.alertImage,
-            let resizedImage = UIImage(data: imageData)?.jpegData(compressionQuality: 0.4),
-            let uiImage =  UIImage(data: resizedImage)
+            let realmImage = realmData.first?.alertImage,
+            let image = resizeImage(
+                image: UIImage(data: realmImage),
+                targetSize: CGSize(width: 300, height: 300)
+            )
         else {
-            return Image(data.todayBackgroundImage ?? "sunny1")
+            let image = resizeImage(
+                image: UIImage(named: data.todayBackgroundImage ?? "sunnyNight1"),
+                targetSize: CGSize(width: 300, height: 300)
+            )
+            
+            backgroundImage = Image(uiImage: image ?? UIImage())
+            return backgroundImage
         }
         
-        backgroundImage = Image(uiImage: uiImage)
+        backgroundImage = Image(uiImage: image)
         return backgroundImage
     }
+    
+//    var widgetBackgroundImage: Image {
+//        var backgroundImage: Image
+//        
+//        guard
+//            let imageData = realmData.first?.alertImage,
+//            let resizedImage = UIImage(data: imageData)?.jpegData(compressionQuality: 0.4),
+//            let uiImage =  UIImage(data: resizedImage)
+//        else {
+//            return Image(data.todayBackgroundImage ?? "sunny1")
+//        }
+//        
+//        backgroundImage = Image(uiImage: uiImage)
+//        return backgroundImage
+//    }
     
     var resizedBGImage: some View {
         widgetBackgroundImage
