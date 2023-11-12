@@ -43,8 +43,6 @@ struct WidgetExtensionEntryView : View {
                         .frame(width: proxy.size.width,
                                height: proxy.size.height)
                     
-                    //TODO: - 위젯 크기에 따라 다른 화면 구현
-                    //내부 날씨 화면
                     VStack {
                         HStack {
                             VStack(alignment: .leading) {
@@ -53,7 +51,6 @@ struct WidgetExtensionEntryView : View {
                                 todayWeatherLabel
                                 todayTempLabel
                                 todayPopLabel
-                                //                            timeTestLabel
                             }
                             .foregroundColor(.white)
                             .padding(10)
