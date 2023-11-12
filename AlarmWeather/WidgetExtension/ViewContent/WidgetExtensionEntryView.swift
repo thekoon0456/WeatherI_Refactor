@@ -16,25 +16,23 @@ struct WidgetExtensionEntryView : View {
     var realmData = WidgetRealmManager.shared.readUsers()
     
     var body: some View {
-        ZStack {
-            //내부 날씨 화면
-            VStack {
-                HStack {
-                    VStack(alignment: .leading) {
-                        administrativeAreaLabel
-                        todayWeatherIcon
-                        todayWeatherLabel
-                        todayTempLabel
-                        todayPopLabel
-                        // timeTestLabel
-                    }
-                    .foregroundColor(.white)
-                    .padding(10)
-                    
-                    Spacer()
+        //내부 날씨 화면
+        VStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    administrativeAreaLabel
+                    todayWeatherIcon
+                    todayWeatherLabel
+                    todayTempLabel
+                    todayPopLabel
+                    // timeTestLabel
                 }
-                largeSizeSpacer //위젯 사이즈 .large일때 spacer
+                .foregroundColor(.white)
+                .padding(10)
+                
+                Spacer()
             }
+            largeSizeSpacer //위젯 사이즈 .large일때 spacer
         }
         .widgetBackground(backgroundView: resizedBGImage)
     }
