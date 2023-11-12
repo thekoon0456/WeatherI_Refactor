@@ -16,25 +16,53 @@ struct WidgetExtensionEntryView : View {
     var realmData = WidgetRealmManager.shared.readUsers()
     
     var body: some View {
-        //내부 날씨 화면
-        VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    administrativeAreaLabel
-                    todayWeatherIcon
-                    todayWeatherLabel
-                    todayTempLabel
-                    todayPopLabel
-                    // timeTestLabel
+        if #available(iOSApplicationExtension 17.0, *) {
+            VStack {
+                HStack {
+                    VStack(alignment: .leading) {
+                        administrativeAreaLabel
+                        todayWeatherIcon
+                        todayWeatherLabel
+                        todayTempLabel
+                        todayPopLabel
+                        // timeTestLabel
+                    }
+                    .foregroundColor(.white)
+                    .padding(10)
+                    
+                    Spacer()
                 }
-                .foregroundColor(.white)
-                .padding(10)
-                
-                Spacer()
+                largeSizeSpacer //위젯 사이즈 .large일때 spacer
             }
-            largeSizeSpacer //위젯 사이즈 .large일때 spacer
+            .widgetBackground(backgroundView: resizedBGImage)
+        } else {
+            GeometryReader { proxy in
+                ZStack {
+                    //배경 이미지
+                    resizedBGImage
+                        .frame(width: proxy.size.width,
+                               height: proxy.size.height)
+                    
+                    VStack {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                administrativeAreaLabel
+                                todayWeatherIcon
+                                todayWeatherLabel
+                                todayTempLabel
+                                todayPopLabel
+                            }
+                            .foregroundColor(.white)
+                            .padding(10)
+                            
+                            Spacer()
+                        }
+                        
+                        largeSizeSpacer
+                    }
+                }
+            }
         }
-        .widgetBackground(backgroundView: resizedBGImage)
     }
 }
 
@@ -46,18 +74,42 @@ struct WidgetExtensionEntryView : View {
 
 extension WidgetExtensionEntryView {
     var widgetBackgroundImage: Image {
-        var backgroundImage: Image
-        
-        guard
-            let imageData = realmData.first?.alertImage,
-            let resizedImage = UIImage(data: imageData)?.jpegData(compressionQuality: 0.4),
-            let uiImage =  UIImage(data: resizedImage)
-        else {
-            return Image(data.todayBackgroundImage ?? "sunny1")
+        if #available(iOSApplicationExtension 17.0, *) {
+            var backgroundImage: Image
+            
+            guard
+                let imageData = realmData.first?.alertImage,
+                let resizedImage = UIImage(data: imageData)?.jpegData(compressionQuality: 0.4),
+                let uiImage =  UIImage(data: resizedImage)
+            else {
+                return Image(data.todayBackgroundImage ?? "sunny1")
+            }
+            
+            backgroundImage = Image(uiImage: uiImage)
+            return backgroundImage
+        } else {
+            
+            var backgroundImage: Image
+            
+            guard
+                let realmImage = realmData.first?.alertImage,
+                let image = resizeImage(
+                    image: UIImage(data: realmImage),
+                    targetSize: CGSize(width: 300, height: 300)
+                )
+            else {
+                let image = resizeImage(
+                    image: UIImage(named: data.todayBackgroundImage ?? "sunnyNight1"),
+                    targetSize: CGSize(width: 300, height: 300)
+                )
+                
+                backgroundImage = Image(uiImage: image ?? UIImage())
+                return backgroundImage
+            }
+            
+            backgroundImage = Image(uiImage: image)
+            return backgroundImage
         }
-        
-        backgroundImage = Image(uiImage: uiImage)
-        return backgroundImage
     }
     
     var resizedBGImage: some View {
@@ -87,7 +139,7 @@ extension WidgetExtensionEntryView {
             .font(.body)
             .bold()
     }
-
+    
     var todayTempLabel: some View {
         Text((data.todayTemp ?? "온도 로딩 실패") + "º")
             .font(.callout)
@@ -102,11 +154,6 @@ extension WidgetExtensionEntryView {
         
         return nil
     }
-//    
-//    var timeTestLabel: some View {
-//        Text(getTime())
-//            .font(.system(size: 10))
-//    }
     
     var largeSizeSpacer: Spacer? {
         //위젯 사이즈가 클때 컨텐츠 위로 올림
@@ -130,7 +177,8 @@ extension WidgetExtensionEntryView {
     }
 }
 
-// MARK: - 위젯 백그라운드 뷰 사이즈 조정 함수
+// MARK: - 위젯 백그라운드 뷰 사이즈 조정 함수 (iOS 17)
+
 extension View {
     func widgetBackground(backgroundView: some View) -> some View {
         if #available(iOSApplicationExtension 17.0, *) {
@@ -140,5 +188,35 @@ extension View {
         } else {
             return background(backgroundView)
         }
+    }
+}
+
+// MARK: - 파일 사이즈 변경 함수 (iOS 16)
+
+extension View {
+    func resizeImage(image: UIImage?, targetSize: CGSize) -> UIImage? {
+        guard let size = image?.size else { return UIImage() }
+        let widthRatio = targetSize.width / size.width
+        let heightRatio = targetSize.height / size.height
+        
+        // 이미지 크기 비율에 따라 새로운 크기 계산
+        let newSize: CGSize
+        if widthRatio > heightRatio {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+        }
+        
+        // 그래픽 컨텍스트를 만들어 이미지 크기를 조정
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        image?.draw(in: CGRect(origin: .zero, size: newSize))
+        
+        guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else {
+            return UIImage(named: "sunnyNight1") ?? UIImage()
+        }
+        
+        UIGraphicsEndImageContext()
+        
+        return newImage
     }
 }
