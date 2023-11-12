@@ -130,9 +130,9 @@ class UpdateSettingViewController: UIViewController {
     @objc func saveSetting() {
         let userName = userNameTextField.text
         let alertName = alertNameTextField.text
-        
+
         //MARK: - 사진은 nil도 가능하게. 0.8로 파일 크기 줄이기
-        let data = alertProfileImage?.jpegData(compressionQuality: 0.8)
+        let data = alertProfileImage?.jpegData(compressionQuality: 0.7)
         
         //MARK: - 유저 없으면 등록, 있으면 업데이트
         if RealmService.shared.readUsers().isEmpty {

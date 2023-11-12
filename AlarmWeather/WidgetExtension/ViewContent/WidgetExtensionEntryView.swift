@@ -16,8 +16,7 @@ struct WidgetExtensionEntryView : View {
     var realmData = WidgetRealmManager.shared.readUsers()
     
     var body: some View {
-        ZStack {
-            //내부 날씨 화면
+        if #available(iOSApplicationExtension 17.0, *) {
             VStack {
                 HStack {
                     VStack(alignment: .leading) {
@@ -35,8 +34,35 @@ struct WidgetExtensionEntryView : View {
                 }
                 largeSizeSpacer //위젯 사이즈 .large일때 spacer
             }
+            .widgetBackground(backgroundView: resizedBGImage)
+        } else {
+            GeometryReader { proxy in
+                ZStack {
+                    //배경 이미지
+                    resizedBGImage
+                        .frame(width: proxy.size.width,
+                               height: proxy.size.height)
+                    
+                    VStack {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                administrativeAreaLabel
+                                todayWeatherIcon
+                                todayWeatherLabel
+                                todayTempLabel
+                                todayPopLabel
+                            }
+                            .foregroundColor(.white)
+                            .padding(10)
+                            
+                            Spacer()
+                        }
+                        
+                        largeSizeSpacer
+                    }
+                }
+            }
         }
-        .widgetBackground(backgroundView: resizedBGImage)
     }
 }
 
@@ -48,26 +74,42 @@ struct WidgetExtensionEntryView : View {
 
 extension WidgetExtensionEntryView {
     var widgetBackgroundImage: Image {
-        var backgroundImage: Image
-        
-        guard
-            let realmImage = realmData.first?.alertImage,
-            let image = resizeImage(
-                image: UIImage(data: realmImage),
-                targetSize: CGSize(width: 300, height: 300)
-            )
-        else {
-            let image = resizeImage(
-                image: UIImage(named: data.todayBackgroundImage ?? "sunnyNight1"),
-                targetSize: CGSize(width: 300, height: 300)
-            )
+        if #available(iOSApplicationExtension 17.0, *) {
+            var backgroundImage: Image
             
-            backgroundImage = Image(uiImage: image ?? UIImage())
+            guard
+                let imageData = realmData.first?.alertImage,
+                let resizedImage = UIImage(data: imageData)?.jpegData(compressionQuality: 0.4),
+                let uiImage =  UIImage(data: resizedImage)
+            else {
+                return Image(data.todayBackgroundImage ?? "sunny1")
+            }
+            
+            backgroundImage = Image(uiImage: uiImage)
+            return backgroundImage
+        } else {
+            
+            var backgroundImage: Image
+            
+            guard
+                let realmImage = realmData.first?.alertImage,
+                let image = resizeImage(
+                    image: UIImage(data: realmImage),
+                    targetSize: CGSize(width: 300, height: 300)
+                )
+            else {
+                let image = resizeImage(
+                    image: UIImage(named: data.todayBackgroundImage ?? "sunnyNight1"),
+                    targetSize: CGSize(width: 300, height: 300)
+                )
+                
+                backgroundImage = Image(uiImage: image ?? UIImage())
+                return backgroundImage
+            }
+            
+            backgroundImage = Image(uiImage: image)
             return backgroundImage
         }
-        
-        backgroundImage = Image(uiImage: image)
-        return backgroundImage
     }
     
     var resizedBGImage: some View {
@@ -97,7 +139,7 @@ extension WidgetExtensionEntryView {
             .font(.body)
             .bold()
     }
-
+    
     var todayTempLabel: some View {
         Text((data.todayTemp ?? "온도 로딩 실패") + "º")
             .font(.callout)
@@ -112,11 +154,6 @@ extension WidgetExtensionEntryView {
         
         return nil
     }
-//    
-//    var timeTestLabel: some View {
-//        Text(getTime())
-//            .font(.system(size: 10))
-//    }
     
     var largeSizeSpacer: Spacer? {
         //위젯 사이즈가 클때 컨텐츠 위로 올림
@@ -129,10 +166,34 @@ extension WidgetExtensionEntryView {
     
 }
 
-//MARK: - Image 관련 extension
+//MARK: - TestCode
+//
+extension WidgetExtensionEntryView {
+    func getTime() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        dateFormatter.dateFormat = "MM/dd HH:mm:ss"
+        return dateFormatter.string(from: data.updateTime ?? Date())
+    }
+}
+
+// MARK: - 위젯 백그라운드 뷰 사이즈 조정 함수 (iOS 17)
 
 extension View {
-    //파일 사이즈 변경 함수
+    func widgetBackground(backgroundView: some View) -> some View {
+        if #available(iOSApplicationExtension 17.0, *) {
+            return containerBackground(for: .widget) {
+                backgroundView
+            }
+        } else {
+            return background(backgroundView)
+        }
+    }
+}
+
+// MARK: - 파일 사이즈 변경 함수 (iOS 16)
+
+extension View {
     func resizeImage(image: UIImage?, targetSize: CGSize) -> UIImage? {
         guard let size = image?.size else { return UIImage() }
         let widthRatio = targetSize.width / size.width
@@ -157,30 +218,5 @@ extension View {
         UIGraphicsEndImageContext()
         
         return newImage
-    }
-}
-
-
-//MARK: - TestCode
-//
-extension WidgetExtensionEntryView {
-    func getTime() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
-        dateFormatter.dateFormat = "MM/dd HH:mm:ss"
-        return dateFormatter.string(from: data.updateTime ?? Date())
-    }
-}
-
-// MARK: - 위젯 백그라운드 뷰 사이즈 조정 함수
-extension View {
-    func widgetBackground(backgroundView: some View) -> some View {
-        if #available(iOSApplicationExtension 17.0, *) {
-            return containerBackground(for: .widget) {
-                backgroundView
-            }
-        } else {
-            return background(backgroundView)
-        }
     }
 }
