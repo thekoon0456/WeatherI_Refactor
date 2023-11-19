@@ -64,7 +64,6 @@ class OnboardingContentViewController: UIViewController {
             make.width.equalToSuperview()
         }
         
-        
         if pageIndex == 2 {
             view.addSubview(contentLabel)
             contentLabel.snp.makeConstraints { make in

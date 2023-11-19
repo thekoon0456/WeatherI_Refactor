@@ -112,8 +112,6 @@ final class RootViewController: UIViewController {
     func setLocationService() {
         LocationService.shared.manager.delegate = self
         LocationService.shared.manager.requestWhenInUseAuthorization()
-        //TODO: -위젯기능 추가시 백그라운드 위치 요청
-//        LocationService.shared.manager.requestAlwaysAuthorization()
         print("DEBUG: locationService On")
     }
     
@@ -372,21 +370,11 @@ extension RootViewController: CLLocationManagerDelegate {
 
 extension RootViewController: UNUserNotificationCenterDelegate {
     //앱이 foreground에 있을 때 push알림을 받음
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.banner, .sound, .badge])
     }
-    
-    //알림 세팅 컨트롤러 넣을때 사용
-//    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
-//        let settingsViewController = HomeController()
-//        print("DEBUG: openSettingsFor 실행됨")
-//        self.present(settingsViewController, animated: true, completion: nil)
-//    }
-//
-//    //backGround에서 push 클릭했을때 호출됨
-//    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-//        completionHandler()
-//    }
 }
 
 

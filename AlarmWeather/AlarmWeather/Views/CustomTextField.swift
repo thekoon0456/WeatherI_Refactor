@@ -47,7 +47,9 @@ class CustomTextField: UITextField {
 
 extension CustomTextField: UITextFieldDelegate {
     //입력 제한
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
         guard let currentText = textField.text else { return true }
         let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
         let maxLength = 10 //최대 10글자

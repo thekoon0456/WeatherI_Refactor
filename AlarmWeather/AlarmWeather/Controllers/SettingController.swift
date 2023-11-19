@@ -133,7 +133,8 @@ extension SettingController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellId.settingCellId.rawValue, for: indexPath) as! SettingCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellId.settingCellId.rawValue,
+                                                 for: indexPath) as! SettingCell
         cell.settingCellLabel.text = settingMenus[indexPath.row]
         return cell
     }

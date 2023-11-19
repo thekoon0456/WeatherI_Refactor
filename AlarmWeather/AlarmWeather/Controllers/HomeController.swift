@@ -106,7 +106,8 @@ final class HomeController: UIViewController {
         cv.showsVerticalScrollIndicator = false
         cv.delegate = self
         cv.dataSource = self
-        cv.register(TodayDetailWeatherCell.self, forCellWithReuseIdentifier: CellId.todayDetailWeatherCellId.rawValue)
+        cv.register(TodayDetailWeatherCell.self,
+                    forCellWithReuseIdentifier: CellId.todayDetailWeatherCellId.rawValue)
         return cv
     }()
     
@@ -126,7 +127,8 @@ final class HomeController: UIViewController {
         cv.showsHorizontalScrollIndicator = false
         cv.delegate = self
         cv.dataSource = self
-        cv.register(TodayTimeWeatherCell.self, forCellWithReuseIdentifier: CellId.todayTimeWeatherCellId.rawValue)
+        cv.register(TodayTimeWeatherCell.self,
+                    forCellWithReuseIdentifier: CellId.todayTimeWeatherCellId.rawValue)
         return cv
     }()
     
@@ -142,7 +144,8 @@ final class HomeController: UIViewController {
         $0.backgroundColor = .clear
         $0.delegate = self
         $0.dataSource = self
-        $0.register(WeeklyWeatherCell.self, forCellReuseIdentifier: CellId.weeklyWeatherCellId.rawValue)
+        $0.register(WeeklyWeatherCell.self,
+                    forCellReuseIdentifier: CellId.weeklyWeatherCellId.rawValue)
     }
     
     private let orginLabel = UILabel().then {
@@ -449,7 +452,10 @@ extension HomeController: WetherAndDustStackViewDelegate {
 //MARK: - todayDetailCollectionView
 
 extension HomeController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         if collectionView == todayDetailWeatherCollectionView {
             return CGSize(width: (view.frame.width - 30) / 2, height: 100)
         } else {
@@ -457,7 +463,9 @@ extension HomeController: UICollectionViewDataSource, UICollectionViewDelegateFl
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int
+    ) -> Int {
         if collectionView == todayDetailWeatherCollectionView {
             return 4
         } else {
@@ -465,14 +473,18 @@ extension HomeController: UICollectionViewDataSource, UICollectionViewDelegateFl
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         if collectionView == todayDetailWeatherCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellId.todayDetailWeatherCellId.rawValue, for: indexPath) as! TodayDetailWeatherCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellId.todayDetailWeatherCellId.rawValue,
+                                                          for: indexPath) as! TodayDetailWeatherCell
             cell.viewModel = viewModel
             cell.setValue(item: indexPath.item)
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellId.todayTimeWeatherCellId.rawValue, for: indexPath) as! TodayTimeWeatherCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellId.todayTimeWeatherCellId.rawValue,
+                                                          for: indexPath) as! TodayTimeWeatherCell
             cell.viewModel = viewModel
             cell.setValue(item: indexPath.item)
             return cell
@@ -485,16 +497,22 @@ extension HomeController: UICollectionViewDataSource, UICollectionViewDelegateFl
 //MARK: - WeeklyWeatherTableView extension
 
 extension HomeController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView,
+                   heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
         80
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int
+    ) -> Int {
         weeklyWeatherTemp.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellId.weeklyWeatherCellId.rawValue, for: indexPath) as! WeeklyWeatherCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellId.weeklyWeatherCellId.rawValue,
+                                                 for: indexPath) as! WeeklyWeatherCell
         cell.viewModel = viewModel
         cell.setValue(row: indexPath.row)
         return cell

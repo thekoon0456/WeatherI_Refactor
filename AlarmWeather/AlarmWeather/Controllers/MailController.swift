@@ -38,7 +38,8 @@ extension SettingController: MFMailComposeViewControllerDelegate {
         self.present(sendMailErrorAlert, animated: true, completion: nil)
     }
     
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+    func mailComposeController(_ controller: MFMailComposeViewController,
+                               didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result {
         case .cancelled:
             print("이메일 보내기 취소")

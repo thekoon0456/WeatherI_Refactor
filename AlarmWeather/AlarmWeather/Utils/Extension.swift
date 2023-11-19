@@ -118,7 +118,9 @@ extension UILabel {
         paragraphStyle.alignment = .center // 중앙 정렬 추가
         
         let attributedString = NSMutableAttributedString(string: labelText)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
+        attributedString.addAttribute(.paragraphStyle,
+                                      value: paragraphStyle,
+                                      range: NSRange(location: 0, length: attributedString.length))
         
         self.attributedText = attributedString
     }

@@ -341,7 +341,8 @@ extension UpdateSettingViewController {
 //MARK: - ImagePicker
 
 extension UpdateSettingViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as? UIImage
         clickedPhotoButton(image:image, selected: true)
         dismiss(animated: true)
@@ -386,19 +387,22 @@ extension UpdateSettingViewController: UITableViewDelegate, UITableViewDataSourc
         settingViewModel.alertTimes?.count ?? 0
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellId.alertTimeCell.rawValue, for: indexPath) as! AlertTimeCell
+    func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellId.alertTimeCell.rawValue,
+                                                 for: indexPath) as! AlertTimeCell
         cell.viewModel = settingViewModel
         cell.setValue(row: indexPath.row)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView,
+                   commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             settingViewModel.alertTimes?.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
-    
 }
 
