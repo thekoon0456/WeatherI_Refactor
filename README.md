@@ -98,7 +98,6 @@ func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Voi
 ```
 </div>
 </details>
-<br>
 
 <details>
 <summary> 사용자의 위치 파악하고, 현재 위치의 날씨 요청 </summary>
@@ -160,7 +159,6 @@ func locationToString(location: CLLocation, completion: @escaping () -> (Void)) 
 ```
 </div>
 </details>
-<br>
 
 <details>
 <summary> 데이터를 로딩, 온보딩 뷰에서 애니메이션 실행 </summary>
@@ -227,9 +225,7 @@ completion이 되기 전까지 Lottie Animation을 실행되도록 구성했습�
 ```
 </div>
 </details>
-<br>
 
-- 4개의 API를 비동기로 호출하고 데이터를 가져오는 동안 Lottie 애니메이션 뷰 실행, 모든 데이터를 받아오고 UI를 구성한 뒤 Lottie뷰를 종료시키기 위해서는?
 - 데이터를 저장하는 과정에서 CoreData로 CRUD를 구현했지만, 커스텀 타입을 다루기 어려웠고, realm으로 리팩토링한 과정
 - 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 치명적인 문제 발생 - NotificationContentsExtension 활용해서 커스텀 알림 구현
 - NotificationContentsExtension으로 사용자에게 전송할 사진을 변경할때 사진이 삭제되지 않고 로컬 저장공간에 계속 쌓이는 문제 해결
