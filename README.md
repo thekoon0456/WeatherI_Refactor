@@ -44,10 +44,191 @@
 <br>
 
 ## ✌️ 트러블 슈팅
-👉🏻 [블로그에서 험난한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/category/UIKit%20Project)
-- WeatherKit과 기상청 API 비교 후 정확한 날씨데이터 적용하는 과정
-- CoreLocation을 활용해 사용자의 위, 경도를 파악한 뒤, API에 요청해서 위치에 맞는 날씨데이터 가져오기
-- CoreLocation을 활용해 데이터를 가져왔지만, 날씨가 정확하지 않았고, 위,경도를 기상청에서 사용하는 X,Y좌표로 변환해 정확한 기상청 데이터 가져오기
+👉🏻 [블로그에서 험난한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨)
+
+<details>
+<summary> 날씨 API 채택하기 </summary>
+<div markdown="1">
+        
+```
+Apple의 WeatherKit과 기상청 API를 비교하고, 기상청 API를 채택했습니다.
+
+Apple WeatherKit는 편리했습니다.
+Apple이 만들어놓은 API를 직접 사용하고, 전 세계에서 사용 가능하다는 장점이 있었지만,
+사용하는 날씨 데이터가 한국에서 사용하는 기상청의 데이터와 조금씩 달랐습니다. 
+
+기상청의 API는 적용하기에 불편한 면이 있었습니다.
+오늘의 날씨, 미세먼지, 주간 온도, 주간 날씨등 네 가지의 다른 API를 사용해야했고, 추가적인 데이터 가공도 많이 필요했습니다.
+하지만 다양한 데이터를 처리하고 가공하며 기술적인 역량을 늘리기 위해 불친절하지만 보편적인 기상청 API를 채택했습니다.
+```
+
+```swift
+//오늘 날씨 데이터를 URLSession으로 불러오는 코드
+
+func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
+        setNxNy(nx: LocationService.shared.latitude ?? 0, ny: LocationService.shared.longitude ?? 0)
+        guard let url = URL(string: weatherURL) else { return }
+
+        let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
+        session.dataTask(with: url) { [weak self] data, response, error in
+            guard let self else { return }
+            if error != nil {
+                print("네트워크 에러 \(String(describing: error?.localizedDescription))")
+                completion(.failure(.networkingError))
+                retryRequest(completion: completion)
+                return
+            }
+            
+            guard let data = data else {
+                print("데이터 에러")
+                completion(.failure(.dataError))
+                retryRequest(completion: completion)
+                return
+            }
+
+            if let item = parseWeatherJSON(data) as? [T] {
+                print("Weather JSON 파싱 성공")
+                completion(.success(item))
+            } else {
+                retryRequest(completion: completion)
+                completion(.failure(.parseError))
+            }
+        }.resume()
+    }
+```
+</div>
+</details>
+<br>
+
+<details>
+<summary> 사용자의 위치 파악하고, 현재 위치의 날씨 요청 </summary>
+<div markdown="1">
+        
+```
+CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파악한 좌표를 바탕으로 기상청 서버에 쿼리를 요청했습니다.
+
+LocationService를 싱글톤으로 만들어 앱 진입 시점에서 사용자의 위, 경도를 얻어오고, 이를 바탕으로 데이터를 요청했습니다. 
+하지만 날씨 데이터가 정확하지 않았고, CoreLocation에서 구한 위, 경도를 기상청에서 사용하는 독자적인 X, Y좌표로 변환한 후에 정확한 데이터를 받아올 수 있었습니다. 
+
+또한 CLGeocoder()의 placemarks를 요청해 앱에서 화면에 표시할 주소를 가져왔는데, 구 주소와 도로명 주소가 혼합되어 나와서 두 가지 경우를 모두 고려해 주소를 가져오록 만들었습니다. 
+```
+
+```swift
+// 기상청 좌표와 주소를 구해오는 코드
+
+func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location, preferredLocale: self.locale) { [weak self] placemarks, _ in
+            guard
+                let self = self,
+                let placemarks = placemarks
+            else { return }
+            print("DEBUG: 현재 위치는 \(location)입니다.")
+            
+            //주소가 구 주소일때
+            if let locality = placemarks.last?.locality,
+               let subLocality =  placemarks.last?.subLocality,
+               let administrative = placemarks.last?.administrativeArea {
+                userRegion = locality + " " + subLocality
+                localityRegion = locality
+                subLocalityRegion = subLocality
+                administrativeArea = administrative
+                print("DEBUG: 현재 주소는 구 주소: \(String(describing: userRegion))입니다.")
+            }
+            
+            //주소가 도로명 주소일때
+            if let administrative = placemarks.first?.administrativeArea,
+               let name = placemarks.first?.name {
+                userRegion = administrative + " " + name
+                administrativeArea = administrative
+                print("DEBUG: 현재 주소는 도로명: \(String(describing: userRegion))입니다.")
+            }
+            
+            // 가져온 위, 경도를 기상청의 x, y 좌표로 변환
+            let convertedXy = LocationService.shared.convertGRID_GPS(lat_X: latitude ?? 0, lng_Y: longitude ?? 0)
+            convertedX = convertedXy.x
+            convertedY = convertedXy.y
+            print("converted: \(convertedX), \(convertedY)")
+            
+            //MARK: - Widget에 보내주는 데이터들
+            UserDefaults.shared.set(convertedX, forKey: "convertedX")
+            UserDefaults.shared.set(convertedY, forKey: "convertedY")
+            UserDefaults.shared.set(administrativeArea, forKey: "administrativeArea")
+            completion()
+        }
+    }
+```
+</div>
+</details>
+<br>
+
+<details>
+<summary> 데이터를 로딩, 온보딩 뷰에서 애니메이션 실행 </summary>
+<div markdown="1">
+        
+```
+앱을 처음 설치하고 온보딩뷰를 사용하거나, 데이터를 가져오는 동안 사용자의 시작적인 즐거움을 위해 Lottie를 적용했습니다.
+네 가지의 다른 API를 동시에 가져오기 위해 DispatchGroup을 사용했으며
+completion이 되기 전까지 Lottie Animation을 실행되도록 구성했습니다.
+```
+
+```swift
+//각기 다른 API 호출하고, 완료되면 Lottie Animation 종료
+    func loadData(completion: @escaping () -> Void) {
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        viewModel.loadTodayWeather { [weak self] model in
+            guard let self = self else { return }
+            todayWeather = model
+            print("DEBUG: loadTodayWeather 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        viewModel.loadTodayDetailWeather { [weak self] model in
+            guard let self = self else { return }
+            todayDetailWeather = model
+            print("DEBUG: loadTodayDetailWeather 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        dustViewModel.loadTodayDust { [weak self] model in
+            guard let self = self else { return }
+            todayDust = model
+            print("DEBUG: loadTodayDust 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        viewModel.loadWeeklyWeather { [weak self] model in
+            guard let self = self else { return }
+            weeklyWeather = model
+            print("DEBUG: loadWeeklyWeather 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        viewModel.loadWeeklyWeatherTemp { [weak self] model in
+            guard let self = self else { return }
+            weeklyWeatherTemp = model
+            print("DEBUG: loadWeeklyWeatherTemp 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            print("DEBUG: loadData완료")
+            
+            //Lottie 애니메이션 종료
+            completion()
+        }
+    }
+```
+</div>
+</details>
+<br>
+
 - 4개의 API를 비동기로 호출하고 데이터를 가져오는 동안 Lottie 애니메이션 뷰 실행, 모든 데이터를 받아오고 UI를 구성한 뒤 Lottie뷰를 종료시키기 위해서는?
 - 데이터를 저장하는 과정에서 CoreData로 CRUD를 구현했지만, 커스텀 타입을 다루기 어려웠고, realm으로 리팩토링한 과정
 - 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 치명적인 문제 발생 - NotificationContentsExtension 활용해서 커스텀 알림 구현

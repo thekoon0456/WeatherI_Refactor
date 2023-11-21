@@ -44,8 +44,10 @@ final class LocationService {
     func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location, preferredLocale: self.locale) { [weak self] placemarks, _ in
-            guard let self = self,
-                  let placemarks = placemarks else { return }
+            guard
+                let self = self,
+                let placemarks = placemarks
+            else { return }
             print("DEBUG: 현재 위치는 \(location)입니다.")
             
             //주소가 구 주소일때
@@ -96,9 +98,7 @@ extension LocationService {
         let XO:Double = 43 // 기준점 X좌표(GRID)
         let YO:Double = 136 // 기1준점 Y좌표(GRID)
         
-        //
-//        LCC DFS 좌표변환 ( code : "TO_GRID"(위경도->좌표, lat_X:위도,  lng_Y:경도), "TO_GPS"(좌표->위경도,  lat_X:x, lng_Y:y) )
-        //
+        // LCC DFS 좌표변환 ( code : "TO_GRID"(위경도->좌표, lat_X:위도,  lng_Y:경도), "TO_GPS"(좌표->위경도,  lat_X:x, lng_Y:y) )
         
         let DEGRAD = Double.pi / 180.0
         let RADDEG = 180.0 / Double.pi
@@ -165,8 +165,8 @@ extension LocationService {
             rs.lat = alat * RADDEG
             rs.lng = alon * RADDEG
         }
-        return rs
         
+        return rs
     }
     
     struct LatXLngY {
@@ -176,10 +176,9 @@ extension LocationService {
         public var x: Int
         public var y: Int
     }
-    
 }
 
-//MARK: - 커스텀 주소 확인 가능
+////MARK: - 커스텀 주소 확인 가능
 //func customLocation() {
 //        let geocoder = CLGeocoder()
 //        let locale = Locale(identifier: "Ko-kr")
@@ -197,9 +196,9 @@ extension LocationService {
 //                let sublocality = placemark.subLocality ?? ""
 //                let administrativeArea = placemark.administrativeArea ?? ""
 //
-//                            self.userRegion = locality + " " + sublocality
-//                            self.localityRegion = locality
-//                            self.subLocalityRegion = sublocality
+//                self.userRegion = locality + " " + sublocality
+//                self.localityRegion = locality
+//                self.subLocalityRegion = sublocality
 //                self.administrativeArea = administrativeArea
 //
 //                print("Locality: \(locality)")

@@ -332,7 +332,6 @@ extension RootViewController {
         loadingAlertTimer = nil
         print("DEBUG: loadingTimer: \(String(describing: loadingTimer)), loadingAlertTimer: \(String(describing: loadingAlertTimer)) 해제")
     }
-    
 }
 
 //MARK: - coreLocation
