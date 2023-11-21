@@ -1,8 +1,9 @@
 # 🌤️ 날씨의 i
-2.1.1 버전 업데이트! <br>
+2.1.1 업데이트, (UIKit, SwiftUI, MVVM,)<br>
 매일 외출하는 시간에 가족, 연인, 최애가 오늘의 날씨를 알려드려요!<br>
 🌤️ 날씨의 i 와 함께 하는 장마철. 우산도 잊지 말고 챙겨요:)<br>
-기상청 서버와 실시간으로 통신해서 정확한 날씨를 가져옵니다.<br>
+기상청 서버와 실시간으로 통신해서 정확한 날씨를 가져옵니다.
+<br>
 <br>
 
 ## 🔗 앱 스토어 다운로드 링크
@@ -28,13 +29,12 @@
 ## 📌 주요 기능
 - 기상청, 에어코리아 공공데이터 API 연동: 단기예보조회, 중기육상예보조회, 중기기온조회, 시도별 미세먼지 실시간 평균정보 조회. 총 4가지 API 동시 처리
 - 한 눈에 들어오늘 날씨 데이터: 현재 날씨, 미세먼지 상태, 상세 날씨, 시간별 날씨, 주간 날씨 등 다양한 날씨정보 제공
-- 위젯 지원: WidgetKit을 활용해 홈 화면에서 사용자가 설정한 날씨요정이 현재 날씨와 함께 제공됩니다.
-- 아름다운 배경화면: 날씨, 시간에 따라 어울리는 다양한 앱, 위젯 배경화면 제공
+- 아름다운 배경화면: 날씨, 시간에 따라 어울리는 다양한 배경화면 제공
 - 알림 기능: NotificationContentsExtension를 활용해 유저가 설정한 시간에 오늘의 날씨정보를 제공
 - 커스텀 알림 뷰: 사용자가 좋아하는 사람을 날씨요정으로 설정하고, 사진과 함께 날씨데이터를 받음
 - 날씨 아이템 추천: 우산, 모자, 선크림 등 오늘 날씨에 필요한 아이템 추천
 - 데이터 새로고침: 앱이 background에서 다시 foreground로 진입시 자동으로 데이터 새로고침, 아래로 당겨 유저가 원할때 수동으로 새로고침 가능
-- 애니메이션 뷰: 온보딩, 로딩화면 등 로티를 활용한 다양한 애니메이션 뷰 제공
+- 애니메이션 뷰: 온보딩, 로딩화면 등 로티를 활용한 다양한 애니메이션 뷰 제공 
 <br>
 
 ## 📱시연 영상
@@ -98,28 +98,143 @@ func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Voi
 ```
 </div>
 </details>
-  
-### CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파악한 좌표를 바탕으로 서버에 쿼리를 요청했습니다.<br>
+<br>
 
-### CoreLocation을 활용해 데이터를 가져왔지만 날씨가 정확하지 않았고, 위,경도를 기상청에서 사용하는 독자적인 X,Y좌표로 변환해 정확한 기상청 데이터를 요청했습니다.<br>
+<details>
+<summary> 사용자의 위치 파악하고, 현재 위치의 날씨 요청 </summary>
+<div markdown="1">
+        
+```
+CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파악한 좌표를 바탕으로 기상청 서버에 쿼리를 요청했습니다.
 
-### 4개의 날씨 관련 API를 비동기로 호출하고 데이터를 가져오는 동안 Lottie 애니메이션 뷰를 실행해 시각적 즐거움을 주었습니다.<br>
+LocationService를 싱글톤으로 만들어 앱 진입 시점에서 사용자의 위, 경도를 얻어오고, 이를 바탕으로 데이터를 요청했습니다. 
+하지만 날씨 데이터가 정확하지 않았고, CoreLocation에서 구한 위, 경도를 기상청에서 사용하는 독자적인 X, Y좌표로 변환한 후에 정확한 데이터를 받아올 수 있었습니다. 
 
-### 모든 데이터를 받아오고 UI를 구성한 뒤 Lottie뷰를 종료시키기 위해서 DispatchGroup을 사용해 모든 데이터가 받아온 뒤에 화면 전환을 하도록 만들었습니다.<br>
+또한 CLGeocoder()의 placemarks를 요청해 앱에서 화면에 표시할 주소를 가져왔는데, 구 주소와 도로명 주소가 혼합되어 나와서 두 가지 경우를 모두 고려해 주소를 가져오록 만들었습니다. 
+```
 
-### 데이터를 저장하는 과정에서 초기에 CoreData로 CRUD를 구현했지만, 커스텀 타입을 다루기 어려움이 있었고, realm으로 리팩토링했습니다.<br>
+```swift
+// 기상청 좌표와 주소를 구해오는 코드
 
-### 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없었기 때문에 NotificationContentsExtension 활용해서 커스텀 알림을 구현했습니다.<br>
+func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location, preferredLocale: self.locale) { [weak self] placemarks, _ in
+            guard
+                let self = self,
+                let placemarks = placemarks
+            else { return }
+            print("DEBUG: 현재 위치는 \(location)입니다.")
+            
+            //주소가 구 주소일때
+            if let locality = placemarks.last?.locality,
+               let subLocality =  placemarks.last?.subLocality,
+               let administrative = placemarks.last?.administrativeArea {
+                userRegion = locality + " " + subLocality
+                localityRegion = locality
+                subLocalityRegion = subLocality
+                administrativeArea = administrative
+                print("DEBUG: 현재 주소는 구 주소: \(String(describing: userRegion))입니다.")
+            }
+            
+            //주소가 도로명 주소일때
+            if let administrative = placemarks.first?.administrativeArea,
+               let name = placemarks.first?.name {
+                userRegion = administrative + " " + name
+                administrativeArea = administrative
+                print("DEBUG: 현재 주소는 도로명: \(String(describing: userRegion))입니다.")
+            }
+            
+            // 가져온 위, 경도를 기상청의 x, y 좌표로 변환
+            let convertedXy = LocationService.shared.convertGRID_GPS(lat_X: latitude ?? 0, lng_Y: longitude ?? 0)
+            convertedX = convertedXy.x
+            convertedY = convertedXy.y
+            print("converted: \(convertedX), \(convertedY)")
+            
+            //MARK: - Widget에 보내주는 데이터들
+            UserDefaults.shared.set(convertedX, forKey: "convertedX")
+            UserDefaults.shared.set(convertedY, forKey: "convertedY")
+            UserDefaults.shared.set(administrativeArea, forKey: "administrativeArea")
+            completion()
+        }
+    }
+```
+</div>
+</details>
+<br>
 
-### NotificationContentsExtension으로 사용자에게 전송할 사진을 변경할때 사진이 삭제되지 않고 로컬 저장공간에 계속 쌓이는 문제가 있어 앱을 종료할때마다 Temp 파일의 임시 파일을 삭제하도록 구현했습니다.<br>
+<details>
+<summary> 데이터를 로딩, 온보딩 뷰에서 애니메이션 실행 </summary>
+<div markdown="1">
+        
+```
+앱을 처음 설치하고 온보딩뷰를 사용하거나, 데이터를 가져오는 동안 사용자의 시작적인 즐거움을 위해 Lottie를 적용했습니다.
+네 가지의 다른 API를 동시에 가져오기 위해 DispatchGroup을 사용했으며
+completion이 되기 전까지 Lottie Animation을 실행되도록 구성했습니다.
+```
 
-### background에서 foreground로 진입시 자동으로 메인 뷰에 진입하고, 데이터 업데이트도 하기 위해 업데이트 로직을 추가했습니다.<br>
+```swift
+//각기 다른 API 호출하고, 완료되면 Lottie Animation 종료
+    func loadData(completion: @escaping () -> Void) {
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        viewModel.loadTodayWeather { [weak self] model in
+            guard let self = self else { return }
+            todayWeather = model
+            print("DEBUG: loadTodayWeather 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        viewModel.loadTodayDetailWeather { [weak self] model in
+            guard let self = self else { return }
+            todayDetailWeather = model
+            print("DEBUG: loadTodayDetailWeather 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        dustViewModel.loadTodayDust { [weak self] model in
+            guard let self = self else { return }
+            todayDust = model
+            print("DEBUG: loadTodayDust 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        viewModel.loadWeeklyWeather { [weak self] model in
+            guard let self = self else { return }
+            weeklyWeather = model
+            print("DEBUG: loadWeeklyWeather 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        viewModel.loadWeeklyWeatherTemp { [weak self] model in
+            guard let self = self else { return }
+            weeklyWeatherTemp = model
+            print("DEBUG: loadWeeklyWeatherTemp 완료")
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            print("DEBUG: loadData완료")
+            
+            //Lottie 애니메이션 종료
+            completion()
+        }
+    }
+```
+</div>
+</details>
+<br>
 
-### SwiftUI의 WidgetKit을 활용해 백그라운드에서 서버와 통신하는 위젯을 구현했습니다.<br>
-
-### 출시하면서 세 번의 리젝 사유와 AppCrash 문제 해결, 앱 출시를 하고 총 8번의 업데이트를 통해 꾸준히 서비스하고 있습니다.<br>
-
-
+- 4개의 API를 비동기로 호출하고 데이터를 가져오는 동안 Lottie 애니메이션 뷰 실행, 모든 데이터를 받아오고 UI를 구성한 뒤 Lottie뷰를 종료시키기 위해서는?
+- 데이터를 저장하는 과정에서 CoreData로 CRUD를 구현했지만, 커스텀 타입을 다루기 어려웠고, realm으로 리팩토링한 과정
+- 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 치명적인 문제 발생 - NotificationContentsExtension 활용해서 커스텀 알림 구현
+- NotificationContentsExtension으로 사용자에게 전송할 사진을 변경할때 사진이 삭제되지 않고 로컬 저장공간에 계속 쌓이는 문제 해결
+- background에서 foreground로 진입시 자동으로 메인 뷰에 진입하고, 데이터 업데이트도 하려면?
+- 출시하면서 세 번의 리젝 사유와 AppCrash 문제 해결, 앱 출시까지!
 <br>
 
 ## 📂 폴더 트리
