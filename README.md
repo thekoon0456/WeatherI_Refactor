@@ -44,18 +44,12 @@
 <br>
 
 ## ✌️ 트러블 슈팅
-👉🏻 [블로그에서 험난한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨의%20i)
-
-<details>
-<summary> ### API, 데이터 사용 </summary>
-<div markdown="1">
-
-## ✌️ 트러블 슈팅
 👉🏻 [블로그에서 험난한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨)
 
 <details>
 <summary> 날씨 API 채택하기 </summary>
 <div markdown="1">
+        
 ```
 Apple의 WeatherKit과 기상청 API를 비교하고, 기상청 API를 채택했습니다.
 
@@ -67,6 +61,7 @@ Apple이 만들어놓은 API를 직접 사용하고, 전 세계에서 사용 가
 오늘의 날씨, 미세먼지, 주간 온도, 주간 날씨등 네 가지의 다른 API를 사용해야했고, 추가적인 데이터 가공도 많이 필요했습니다.
 하지만 다양한 데이터를 처리하고 가공하며 기술적인 역량을 늘리기 위해 불친절하지만 보편적인 기상청 API를 채택했습니다.
 ```
+
 ```swift
 //오늘 날씨 데이터를 URLSession으로 불러오는 코드
 
@@ -103,8 +98,6 @@ func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Voi
 ```
 </div>
 </details>
-
-
   
 ### CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파악한 좌표를 바탕으로 서버에 쿼리를 요청했습니다.<br>
 
