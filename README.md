@@ -5,9 +5,12 @@
 기상청 서버와 실시간으로 통신해서 정확한 날씨를 가져옵니다.<br>
 <br>
 
-## 🔗 앱 스토어 다운로드 링크
-👉🏻 [앱 스토어에서 날씨의 i 다운로드하기](https://apps.apple.com/app/%EB%82%A0%EC%94%A8%EC%9D%98-i/id6458547520)<br>
-👉🏻 [날씨의 i 노션 페이지 방문하기](https://bit.ly/weatherI)
+## 🔗 Links
+## [📱 AppStore](https://bit.ly/AppStore_WeatherI)
+
+## [💻 GitHub](https://github.com/thekoon0456/WeatherI_Refactor)
+
+## [👨‍💻 Blog](https://thekoon0456.tistory.com/search/날씨)
 <br>
 <br>
 
@@ -45,8 +48,7 @@
 ## ✌️ 트러블 슈팅
 👉🏻 [블로그에서 다양한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨)
 
-<details>
-<summary> 날씨 API 채택하기 </summary>
+### 날씨 API 채택하기
 <div markdown="1">
         
 ```
@@ -96,10 +98,9 @@ func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Voi
 }
 ```
 </div>
-</details>
+<br>
 
-<details>
-<summary> 사용자의 위치 파악하고, 현재 위치의 날씨 요청 </summary>
+### 사용자의 위치 파악하고, 현재 위치의 날씨 요청
 <div markdown="1">
         
 ```
@@ -160,10 +161,9 @@ func locationToString(location: CLLocation, completion: @escaping () -> (Void)) 
 }
 ```
 </div>
-</details>
+<br>
 
-<details>
-<summary> 데이터를 로딩, 온보딩 뷰에서 애니메이션 실행 </summary>
+### 데이터를 로딩, 온보딩 뷰에서 애니메이션 실행
 <div markdown="1">
         
 ```
@@ -226,10 +226,9 @@ func loadData(completion: @escaping () -> Void) {
 }
 ```
 </div>
-</details>
+<br>
 
-<details>
-<summary> 데이터를 CRUD하고 AppExtension에서도 동일한 데이터 활용하기 </summary>
+### 데이터를 CRUD하고 AppExtension에서도 동일한 데이터 활용하기
 <div markdown="1">
         
 ```
@@ -264,10 +263,9 @@ func setRealmContainer() {
 }
 ```
 </div>
-</details>
+<br>
 
-<details>
-<summary> 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 문제 해결 </summary>
+### 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 문제 해결
 <div markdown="1">
         
 ```
@@ -307,10 +305,9 @@ func didReceive(_ notification: UNNotification) {
 }
 ```
 </div>
-</details>
+<br>
 
-<details>
-<summary> 사용자가 여러 사진을 설정하면 앱에서는 사진이 삭제되지만 시스템 폴더에 계속 용량이 쌓이는 문제 </summary>
+### 사용자가 여러 사진을 설정하면 앱에서는 사진이 삭제되지만 시스템 폴더에 계속 용량이 쌓이는 문제
 <div markdown="1">
         
 ```
@@ -351,8 +348,7 @@ func sceneWillResignActive(_ scene: UIScene) {
 }
 ```
 </div>
-</details>
-
+<br>
 <br>
 
 ## 📂 폴더 트리
