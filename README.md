@@ -1,17 +1,14 @@
 # 🌤️ 날씨의 i
-2.1.1 업데이트, (UIKit, SwiftUI, MVVM)<br><br>
+2.1.1 업데이트 (UIKit, SwiftUI, MVVM)<br><br>
 매일 외출하는 시간에 가족, 연인, 최애가 오늘의 날씨를 알려드려요!<br>
 🌤️ 날씨의 i 와 함께 하는 장마철. 우산도 잊지 말고 챙겨요:)<br>
 기상청 서버와 실시간으로 통신해서 정확한 날씨를 가져옵니다.<br>
 <br>
 
 ## 🔗 Links
-## [📱 AppStore](https://bit.ly/AppStore_WeatherI)
-
-## [💻 GitHub](https://github.com/thekoon0456/WeatherI_Refactor)
-
-## [👨‍💻 Blog](https://thekoon0456.tistory.com/search/날씨)
-<br>
+### [📱 AppStore](https://bit.ly/AppStore_WeatherI)
+### [💻 GitHub](https://github.com/thekoon0456/WeatherI_Refactor)
+### [👨‍💻 Blog](https://thekoon0456.tistory.com/search/날씨)
 <br>
 
 ## 🧑🏻‍💻 핵심 키워드
@@ -25,7 +22,6 @@
 ![Realm](https://img.shields.io/badge/realm-39477F?style=for-the-badge&logo=Realm&logoColor=white)
 ![SnapKit](https://img.shields.io/badge/SnapKit-4285F4?style=for-the-badge&logo=SnapKit&logoColor=white)
 ![NotificationContentsExtension](https://img.shields.io/badge/NotificationContentsExtension-000000?style=for-the-badge&logo=NotificationContentsExtension&logoColor=white)
-<br>
 <br>
 
 ## 📌 주요 기능
@@ -349,14 +345,14 @@ func sceneWillResignActive(_ scene: UIScene) {
 ```
 </div>
 <br>
-<br>
 
 ## 📂 폴더 트리
 <details>
 <summary>폴더 트리 열어보기 </summary>
 <div markdown=“1”>
 <pre>
-MVVM 패턴의 구조에 따라 Entity -> Respository -> Models -> Service -> ViewModels -> Views 의 단방향 데이터 흐름 구현
+// MVVM 패턴의 구조에 따라 Entity -> Respository -> Models -> Service -> ViewModels -> Views 의 단방향 데이터 흐름 구현
+
 AlarmWeather/
 ├─ AppDelegate.swift
 ├─ SceneDelegate.swift
@@ -427,6 +423,7 @@ AlarmWeather/
 │  └──── notification.json
 │  
 └── 📂 NotificationContentsExtension/
+└── 📂 WidgetExtension/
 </pre>
 </div>
 </details>
