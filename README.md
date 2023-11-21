@@ -45,7 +45,32 @@
 
 ## ✌️ 트러블 슈팅
 👉🏻 [블로그에서 험난한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨의%20i)
-### 프로토타입에서 WeatherKit과 기상청 API를 비교하고, 기상청 API를 채택해서 사용했습니다.<br>
+
+<details>
+<summary> ### API, 데이터 사용 </summary>
+<div markdown="1">
+
+```
+Apple의 WeatherKit과 기상청 API를 비교하고, 기상청 API를 채택했습니다.
+struct 대신 enum을 사용한 이유는, 생성자가 제공되지 않는 자료형을 사용하기 위해서입니다.
+일반적으로 API를 관리하는 파일은 .gitignore에 담지만 프로젝트 특성상 git에 함께 올려두었습니다
+```
+
+</div>
+</details>
+
+<details>
+<summary>API 주소 관리</summary>
+<div markdown="1">
+
+```
+API 주소를 관리하는 enum을 생성해주었습니다.
+struct 대신 enum을 사용한 이유는, 생성자가 제공되지 않는 자료형을 사용하기 위해서입니다.
+일반적으로 API를 관리하는 파일은 .gitignore에 담지만 프로젝트 특성상 git에 함께 올려두었습니다
+```
+
+</div>
+</details>
   
 ### CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파악한 좌표를 바탕으로 서버에 쿼리를 요청했습니다.<br>
 
