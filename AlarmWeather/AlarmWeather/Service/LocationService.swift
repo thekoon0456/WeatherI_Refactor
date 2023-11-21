@@ -43,9 +43,14 @@ final class LocationService {
     
     func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
         let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location, preferredLocale: self.locale) { [weak self] placemarks, _ in
-            guard let self = self,
-                  let placemarks = placemarks else { return }
+        geocoder.reverseGeocodeLocation(
+            location,
+            preferredLocale: self.locale
+        ) { [weak self] placemarks, _ in
+            guard
+                let self = self,
+                let placemarks = placemarks
+            else { return }
             print("DEBUG: 현재 위치는 \(location)입니다.")
             
             //주소가 구 주소일때

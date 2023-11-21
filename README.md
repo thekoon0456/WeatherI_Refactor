@@ -98,7 +98,6 @@ func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Voi
 ```
 </div>
 </details>
-<br>
 
 <details>
 <summary> 사용자의 위치 파악하고, 현재 위치의 날씨 요청 </summary>
@@ -118,7 +117,10 @@ LocationService를 싱글톤으로 만들어 앱 진입 시점에서 사용자�
 
 func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
         let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location, preferredLocale: self.locale) { [weak self] placemarks, _ in
+        geocoder.reverseGeocodeLocation(
+            location,
+            preferredLocale: self.locale
+        ) { [weak self] placemarks, _ in
             guard
                 let self = self,
                 let placemarks = placemarks
@@ -160,7 +162,6 @@ func locationToString(location: CLLocation, completion: @escaping () -> (Void)) 
 ```
 </div>
 </details>
-<br>
 
 <details>
 <summary> 데이터를 로딩, 온보딩 뷰에서 애니메이션 실행 </summary>
@@ -174,63 +175,98 @@ completion이 되기 전까지 Lottie Animation을 실행되도록 구성했습�
 
 ```swift
 //각기 다른 API 호출하고, 완료되면 Lottie Animation 종료
-    func loadData(completion: @escaping () -> Void) {
-        let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        viewModel.loadTodayWeather { [weak self] model in
-            guard let self = self else { return }
-            todayWeather = model
-            print("DEBUG: loadTodayWeather 완료")
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        viewModel.loadTodayDetailWeather { [weak self] model in
-            guard let self = self else { return }
-            todayDetailWeather = model
-            print("DEBUG: loadTodayDetailWeather 완료")
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        dustViewModel.loadTodayDust { [weak self] model in
-            guard let self = self else { return }
-            todayDust = model
-            print("DEBUG: loadTodayDust 완료")
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        viewModel.loadWeeklyWeather { [weak self] model in
-            guard let self = self else { return }
-            weeklyWeather = model
-            print("DEBUG: loadWeeklyWeather 완료")
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        viewModel.loadWeeklyWeatherTemp { [weak self] model in
-            guard let self = self else { return }
-            weeklyWeatherTemp = model
-            print("DEBUG: loadWeeklyWeatherTemp 완료")
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.notify(queue: .main) {
-            print("DEBUG: loadData완료")
-            
-            //Lottie 애니메이션 종료
-            completion()
-        }
+func loadData(completion: @escaping () -> Void) {
+    let dispatchGroup = DispatchGroup()
+    
+    dispatchGroup.enter()
+    viewModel.loadTodayWeather { [weak self] model in
+        guard let self = self else { return }
+        todayWeather = model
+        print("DEBUG: loadTodayWeather 완료")
+        dispatchGroup.leave()
     }
+    
+    dispatchGroup.enter()
+    viewModel.loadTodayDetailWeather { [weak self] model in
+        guard let self = self else { return }
+        todayDetailWeather = model
+        print("DEBUG: loadTodayDetailWeather 완료")
+        dispatchGroup.leave()
+    }
+        
+    dispatchGroup.enter()
+    dustViewModel.loadTodayDust { [weak self] model in
+        guard let self = self else { return }
+        todayDust = model
+        print("DEBUG: loadTodayDust 완료")
+        dispatchGroup.leave()
+    }
+    
+    dispatchGroup.enter()
+    viewModel.loadWeeklyWeather { [weak self] model in
+        guard let self = self else { return }
+        weeklyWeather = model
+        print("DEBUG: loadWeeklyWeather 완료")
+        dispatchGroup.leave()
+    }
+    
+    dispatchGroup.enter()
+    viewModel.loadWeeklyWeatherTemp { [weak self] model in
+        guard let self = self else { return }
+        weeklyWeatherTemp = model
+        print("DEBUG: loadWeeklyWeatherTemp 완료")
+        dispatchGroup.leave()
+    }
+    
+    dispatchGroup.notify(queue: .main) {
+        print("DEBUG: loadData완료")
+        
+        //Lottie 애니메이션 종료
+        completion()
+    }
+}
 ```
 </div>
 </details>
-<br>
 
-- 4개의 API를 비동기로 호출하고 데이터를 가져오는 동안 Lottie 애니메이션 뷰 실행, 모든 데이터를 받아오고 UI를 구성한 뒤 Lottie뷰를 종료시키기 위해서는?
-- 데이터를 저장하는 과정에서 CoreData로 CRUD를 구현했지만, 커스텀 타입을 다루기 어려웠고, realm으로 리팩토링한 과정
+<details>
+<summary> 데이터를 CRUD하고 AppExtension에서도 동일한 데이터 활용하기 </summary>
+<div markdown="1">
+        
+```
+realm 라이브러리를 활용해서 앱의 CRUD를 구현하고, 마이그레이션을 통해 여러 AppExtension에서 활용했습니다.
+
+프로토타입에서는 Apple의 프레임워크인 CoreData를 활용해서 CRUD를 구현했지만, 복잡한 데이터를 다루기에 불편함이 있어 realm으로 리팩토링해 CRUD를 구현했습니다.
+커스텀 알림과 위젯을 구현하면서 AppExtension인 NotificationContentsExtension과 WidgetExtension에서 데이터에 접근할 수 없는 문제가 있었는데 
+realm에서 저장한 데이터를 AppDelegate에서 RealmContainer로 만들어서 AppExtension에서도 동일한 데이터를 접근해서 사용할 수 있도록 구현했습니다.
+```
+
+```swift
+//RealmContainer를 만들어서 다양한 AppExtension에서 접근 가능하도록 구현
+
+func setRealmContainer() {
+    let defaultRealm = Realm.Configuration.defaultConfiguration.fileURL!
+    let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.weatherI.widget")
+    let realmURL = container?.appendingPathComponent("default.realm")
+    var config: Realm.Configuration!
+    
+    if FileManager.default.fileExists(atPath: defaultRealm.path) {
+        do {
+            _ = try FileManager.default.replaceItemAt(realmURL!, withItemAt: defaultRealm)
+            config = Realm.Configuration(fileURL: realmURL, schemaVersion: 1)
+        } catch {
+            print("DEBUG: Error setRealmContainer: \(error)")
+        }
+    } else {
+        config = Realm.Configuration(fileURL: realmURL, schemaVersion: 1)
+    }
+    
+    Realm.Configuration.defaultConfiguration = config
+}
+```
+</div>
+</details>
+
 - 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 치명적인 문제 발생 - NotificationContentsExtension 활용해서 커스텀 알림 구현
 - NotificationContentsExtension으로 사용자에게 전송할 사진을 변경할때 사진이 삭제되지 않고 로컬 저장공간에 계속 쌓이는 문제 해결
 - background에서 foreground로 진입시 자동으로 메인 뷰에 진입하고, 데이터 업데이트도 하려면?
