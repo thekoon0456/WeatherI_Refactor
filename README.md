@@ -222,43 +222,6 @@ func loadData(completion: @escaping () -> Void) {
 </div>
 <br>
 
-### 데이터를 CRUD하고 AppExtension에서도 동일한 데이터 활용하기
-<div markdown="1">
-        
-```
-realm 라이브러리를 활용해서 앱의 CRUD를 구현하고, 마이그레이션을 통해 여러 AppExtension에서 활용했습니다.
-
-프로토타입에서는 Apple의 프레임워크인 CoreData를 활용해서 CRUD를 구현했지만, 복잡한 데이터를 다루기에 불편함이 있어 realm으로 리팩토링해 CRUD를 구현했습니다.
-커스텀 알림과 위젯을 구현하면서 AppExtension인 NotificationContentsExtension과 WidgetExtension에서 데이터에 접근할 수 없는 문제가 있었는데 
-realm에서 저장한 데이터를 AppDelegate에서 RealmContainer로 만들어서 AppExtension에서도 동일한 데이터를 접근해서 사용할 수 있도록 구현했습니다.
-```
-
-```swift
-//RealmContainer를 만들어서 다양한 AppExtension에서 접근 가능하도록 구현
-
-func setRealmContainer() {
-    let defaultRealm = Realm.Configuration.defaultConfiguration.fileURL!
-    let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.weatherI.widget")
-    let realmURL = container?.appendingPathComponent("default.realm")
-    var config: Realm.Configuration!
-    
-    if FileManager.default.fileExists(atPath: defaultRealm.path) {
-        do {
-            _ = try FileManager.default.replaceItemAt(realmURL!, withItemAt: defaultRealm)
-            config = Realm.Configuration(fileURL: realmURL, schemaVersion: 1)
-        } catch {
-            print("DEBUG: Error setRealmContainer: \(error)")
-        }
-    } else {
-        config = Realm.Configuration(fileURL: realmURL, schemaVersion: 1)
-    }
-    
-    Realm.Configuration.defaultConfiguration = config
-}
-```
-</div>
-<br>
-
 ### 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 문제 해결
 <div markdown="1">
         
@@ -296,6 +259,88 @@ func didReceive(_ notification: UNNotification) {
             stopAnimation()
         }
     }
+}
+```
+</div>
+<br>
+
+### SwiftUI로 Widget구성하고, 백그라운드에서 서버에 주기적으로 API 요청
+<div markdown="1">
+        
+```
+날씨 앱을 기획할때부터 위젯은 필수로 구현하기로 생각했었습니다.
+SwiftUI의 WidgetKit으로 위젯을 구현하고, 백그라운드에서 서버와 통신을 하고 화면을 새로고칠 수 있도록 해야했습니다.
+getData함수로 서버에 데이터를 요청하고 widgetData를 받아와 위젯 화면에 필요한 viewModel을 만들고
+getTimeline 함수 내에서 nextRefresh를 만들어 1시간마다 주기적으로 업데이트할 수 있도록 구현했습니다.
+```
+
+```swift
+//1시간에 1번씩 서버에 데이터 요청하고 위젯 업데이트
+func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
+    getData { [weak self] widgetData in
+        guard let self else { return }
+        
+        let todayWeatherLabel = getTodayState(model: widgetData)
+        let todayWeatherIconName = getTodayIconName(model: widgetData)
+        let todayTemp = getTemp(model: widgetData)
+        let todayPop = getPop(model: widgetData)
+        let todayBackgroundImage = getHomeViewBackgroundImage(model: widgetData)
+        
+        var widgetViewModel = WidgetViewModl(todayWeatherLabel: todayWeatherLabel,
+                                            todayWeatherIconName: todayWeatherIconName,
+                                            todayTemp: todayTemp,
+                                            todayPop: todayPop,
+                                            todayBackgroundImage: todayBackgroundImage)
+    
+        let currentDate = Date()
+        let nextRefresh = Calendar.current.date(byAdding: .hour,
+                                                value: 1,
+                                                to: currentDate) ?? Date()
+        
+        let entry = WeatherEntr(date: currentDate,
+                                data: widgetViewModel)
+        
+        let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
+        print("DEBUG: timeline: \(timeline)")
+        completion(timeline)
+    }
+}
+```
+</div>
+<br>
+
+### 데이터를 CRUD하고 AppExtension에서도 동일한 데이터 활용하기
+<div markdown="1">
+        
+```
+realm 라이브러리를 활용해서 앱의 CRUD를 구현하고, 마이그레이션을 통해 여러 AppExtension에서 활용했습니다.
+
+프로토타입에서는 Apple의 프레임워크인 CoreData를 활용해서 CRUD를 구현했지만, 복잡한 데이터를 다루기에 불편함이 있어 realm으로 리팩토링해 CRUD를 구현했습니다.
+커스텀 알림과 위젯을 구현하면서 AppExtension인 NotificationContentsExtension과 WidgetExtension에서 데이터에 접근할 수 없는 문제가 있었는데 
+realm에서 저장한 데이터를 AppDelegate에서 RealmContainer로 만들어서 AppExtension에서도 동일한 데이터를 접근해서 사용할 수 있도록 구현했습니다.
+```
+
+```swift
+//RealmContainer를 만들어서 다양한 AppExtension에서 접근 가능하도록 구현
+
+func setRealmContainer() {
+    let defaultRealm = Realm.Configuration.defaultConfiguration.fileURL!
+    let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.weatherI.widget")
+    let realmURL = container?.appendingPathComponent("default.realm")
+    var config: Realm.Configuration!
+    
+    if FileManager.default.fileExists(atPath: defaultRealm.path) {
+        do {
+            _ = try FileManager.default.replaceItemAt(realmURL!, withItemAt: defaultRealm)
+            config = Realm.Configuration(fileURL: realmURL, schemaVersion: 1)
+        } catch {
+            print("DEBUG: Error setRealmContainer: \(error)")
+        }
+    } else {
+        config = Realm.Configuration(fileURL: realmURL, schemaVersion: 1)
+    }
+    
+    Realm.Configuration.defaultConfiguration = config
 }
 ```
 </div>

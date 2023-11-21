@@ -85,7 +85,7 @@ final class Provider: TimelineProvider {
             completion(entry)
         }
     }
-
+    
     //widget 새로고침
     func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
         getData { [weak self] widgetData in
@@ -104,7 +104,9 @@ final class Provider: TimelineProvider {
                                                   todayBackgroundImage: todayBackgroundImage)
             
             let currentDate = Date()
-            let nextRefresh = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
+            let nextRefresh = Calendar.current.date(byAdding: .hour,
+                                                    value: 1,
+                                                    to: currentDate) ?? Date()
             
             //MARK: - Test(Update 시간 확인)
             widgetViewModel.updateTime = nextRefresh
@@ -147,7 +149,7 @@ extension Provider {
         }
     }
 }
-    
+
 //MARK: - 뷰모델 함수
 
 extension Provider {
