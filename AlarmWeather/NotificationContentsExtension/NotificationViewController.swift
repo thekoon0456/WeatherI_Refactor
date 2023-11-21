@@ -64,7 +64,8 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     }
     
     func didReceive(_ notification: UNNotification) {
-
+        
+        //이미지가 있으면 이미지를, 없으면 기본 이미지를 알림창에 표시
         if let image = realmData.first?.alertImage {
             profileImageView.image = UIImage(data: image)
         } else {
@@ -76,14 +77,13 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
             let alertName = userInfo["alertName"] as? String
         else { return }
         
-        locationLabel.text = (alertName != "" ? "\(alertName)님이 보내는"
-                              + " 오늘의 \(viewModel.administrativeArea ?? "") 날씨!" : "오늘의 \(viewModel.administrativeArea ?? "") 날씨입니다")
-        
+        //데이터를 요청
         loadData { [weak self] in
             guard let self = self else { return }
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                updateUI()
+                //데이터 요청이 완료되면 UI를 구성하고, Animation 종료합니다.
+                updateUI(userName: alertName)
                 stopAnimation()
             }
         }
@@ -99,16 +99,21 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     }
     
     // UI 업데이트를 메인 스레드에서 처리하는 메서드
-    private func updateUI() {
+    private func updateUI(userName: String) {
         let sortedWeatherTmp = todayDetailWeather.sorted { Int($0.tmp) ?? 0 < Int($1.tmp) ?? 0 }
         
-        alertName.text = "날씨의 i ☀️"
+        self.alertName.text = "날씨의 i ☀️"
+        locationLabel.text = (userName != "" ? "\(userName)님이 보내는"
+                              + " 오늘의 \(viewModel.administrativeArea ?? "") 날씨!"
+                              : "오늘의 \(viewModel.administrativeArea ?? "") 날씨입니다")
         todayWeatherMent?.text = viewModel.todayWeatherMainMent
         todayDustMent?.text = dustViewModel.todayDustMainMent
+        
         if let tmpFirst = sortedWeatherTmp.first?.tmp,
            let tmpLast = sortedWeatherTmp.last?.tmp {
             todayTempRangeMent?.text = "오늘의 온도는 \(tmpFirst)º ~ \(tmpLast)º 입니다"
         }
+        
         todayPopRangeMent.text = viewModel.todayRainyWeatherMent
         todayItemMent?.text = viewModel.todayRecommendItems.isEmpty ? "" : "오늘의 추천 아이템:\(viewModel.todayRecommendItems.joined()) \(dustViewModel.todayDustIconName == "aqi.high" ? " 😷" : "")"
     }

@@ -65,35 +65,35 @@ Apple이 만들어놓은 API를 직접 사용하고, 전 세계에서 사용 가
 //오늘 날씨 데이터를 URLSession으로 불러오는 코드
 
 func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-        setNxNy(nx: LocationService.shared.latitude ?? 0, ny: LocationService.shared.longitude ?? 0)
-        guard let url = URL(string: weatherURL) else { return }
-
-        let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
-        session.dataTask(with: url) { [weak self] data, response, error in
-            guard let self else { return }
-            if error != nil {
-                print("네트워크 에러 \(String(describing: error?.localizedDescription))")
-                completion(.failure(.networkingError))
-                retryRequest(completion: completion)
-                return
-            }
+    setNxNy(nx: LocationService.shared.latitude ?? 0, ny: LocationService.shared.longitude ?? 0)
+    guard let url = URL(string: weatherURL) else { return }
+    
+    let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
+    session.dataTask(with: url) { [weak self] data, response, error in
+        guard let self else { return }
+        if error != nil {
+            print("네트워크 에러 \(String(describing: error?.localizedDescription))")
+            completion(.failure(.networkingError))
+            retryRequest(completion: completion)
+            return
+        }
             
-            guard let data = data else {
-                print("데이터 에러")
-                completion(.failure(.dataError))
-                retryRequest(completion: completion)
-                return
-            }
+        guard let data = data else {
+            print("데이터 에러")
+            completion(.failure(.dataError))
+            retryRequest(completion: completion)
+            return
+        }
 
-            if let item = parseWeatherJSON(data) as? [T] {
-                print("Weather JSON 파싱 성공")
-                completion(.success(item))
-            } else {
-                retryRequest(completion: completion)
-                completion(.failure(.parseError))
-            }
-        }.resume()
-    }
+        if let item = parseWeatherJSON(data) as? [T] {
+            print("Weather JSON 파싱 성공")
+            completion(.success(item))
+        } else {
+            retryRequest(completion: completion)
+            completion(.failure(.parseError))
+        }
+    }.resume()
+}
 ```
 </div>
 </details>
@@ -115,49 +115,49 @@ LocationService를 싱글톤으로 만들어 앱 진입 시점에서 사용자�
 // 기상청 좌표와 주소를 구해오는 코드
 
 func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
-        let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(
-            location,
-            preferredLocale: self.locale
-        ) { [weak self] placemarks, _ in
-            guard
-                let self = self,
-                let placemarks = placemarks
-            else { return }
-            print("DEBUG: 현재 위치는 \(location)입니다.")
-            
-            //주소가 구 주소일때
-            if let locality = placemarks.last?.locality,
-               let subLocality =  placemarks.last?.subLocality,
-               let administrative = placemarks.last?.administrativeArea {
-                userRegion = locality + " " + subLocality
-                localityRegion = locality
-                subLocalityRegion = subLocality
-                administrativeArea = administrative
-                print("DEBUG: 현재 주소는 구 주소: \(String(describing: userRegion))입니다.")
-            }
-            
-            //주소가 도로명 주소일때
-            if let administrative = placemarks.first?.administrativeArea,
-               let name = placemarks.first?.name {
-                userRegion = administrative + " " + name
-                administrativeArea = administrative
-                print("DEBUG: 현재 주소는 도로명: \(String(describing: userRegion))입니다.")
-            }
-            
-            // 가져온 위, 경도를 기상청의 x, y 좌표로 변환
-            let convertedXy = LocationService.shared.convertGRID_GPS(lat_X: latitude ?? 0, lng_Y: longitude ?? 0)
-            convertedX = convertedXy.x
-            convertedY = convertedXy.y
-            print("converted: \(convertedX), \(convertedY)")
-            
-            //MARK: - Widget에 보내주는 데이터들
-            UserDefaults.shared.set(convertedX, forKey: "convertedX")
-            UserDefaults.shared.set(convertedY, forKey: "convertedY")
-            UserDefaults.shared.set(administrativeArea, forKey: "administrativeArea")
-            completion()
+    let geocoder = CLGeocoder()
+    geocoder.reverseGeocodeLocation(
+        location,
+        preferredLocale: self.locale
+    ) { [weak self] placemarks, _ in
+        guard
+            let self = self,
+            let placemarks = placemarks
+        else { return }
+        print("DEBUG: 현재 위치는 \(location)입니다.")
+        
+        //주소가 구 주소일때
+        if let locality = placemarks.last?.locality,
+            let subLocality =  placemarks.last?.subLocality,
+            let administrative = placemarks.last?.administrativeArea {
+            userRegion = locality + " " + subLocality
+            localityRegion = locality
+            subLocalityRegion = subLocality
+            administrativeArea = administrative
+            print("DEBUG: 현재 주소는 구 주소: \(String(describing: userRegion))입니다.")
         }
+        
+        //주소가 도로명 주소일때
+        if let administrative = placemarks.first?.administrativeArea,
+            let name = placemarks.first?.name {
+            userRegion = administrative + " " + name
+            administrativeArea = administrative
+            print("DEBUG: 현재 주소는 도로명: \(String(describing: userRegion))입니다.")
+        }
+        
+        // 가져온 위, 경도를 기상청의 x, y 좌표로 변환
+        let convertedXy = LocationService.shared.convertGRID_GPS(lat_X: latitude ?? 0, lng_Y: longitude ?? 0)
+        convertedX = convertedXy.x
+        convertedY = convertedXy.y
+        print("converted: \(convertedX), \(convertedY)")
+        
+        //MARK: - Widget에 보내주는 데이터들
+        UserDefaults.shared.set(convertedX, forKey: "convertedX")
+        UserDefaults.shared.set(convertedY, forKey: "convertedY")
+        UserDefaults.shared.set(administrativeArea, forKey: "administrativeArea")
+        completion()
     }
+}
 ```
 </div>
 </details>
@@ -266,10 +266,93 @@ func setRealmContainer() {
 </div>
 </details>
 
-- 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 치명적인 문제 발생 - NotificationContentsExtension 활용해서 커스텀 알림 구현
-- NotificationContentsExtension으로 사용자에게 전송할 사진을 변경할때 사진이 삭제되지 않고 로컬 저장공간에 계속 쌓이는 문제 해결
-- background에서 foreground로 진입시 자동으로 메인 뷰에 진입하고, 데이터 업데이트도 하려면?
-- 출시하면서 세 번의 리젝 사유와 AppCrash 문제 해결, 앱 출시까지!
+<details>
+<summary> 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 문제 해결 </summary>
+<div markdown="1">
+        
+```
+백엔드 서버를 따로 사용할 수 없는 환경이었기 때문에 로컬 알림으로 오늘 날씨 알림을 구현해야 했습니다.
+로컬 알림에서 사용자가 알림을 받는 시점에서 서버와 통신한 최신 데이터를 가져올 수 없기 때문에
+App에서 날씨 알림을 등록할 때 UNCalendarNotificationTrigger와 UNMutableNotificationContent를 활용해 알림을 설정한 시간에 트리거를 보내고,
+NotificationContentsExtension를 활용해서 알림을 꾹 눌렀을때 서버에 날씨를 요청하도록 커스텀 알림 화면을 구현했습니다.
+```
+
+```swift
+//UNNotification을 받아 알림 화면에 구현하는 코드
+
+func didReceive(_ notification: UNNotification) {
+    
+    //이미지가 있으면 이미지를, 없으면 기본 이미지를 알림창에 표시
+    if let image = realmData.first?.alertImage {
+        profileImageView.image = UIImage(data: image)
+    } else {
+        profileImageView.image = defaultImage()
+    }
+    
+    guard
+        let userInfo = notification.request.content.userInfo as? [String: Any],
+        let alertName = userInfo["alertName"] as? String
+    else { return }
+    
+    //데이터를 요청
+    loadData { [weak self] in
+        guard let self = self else { return }
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            //데이터 요청이 완료되면 UI를 구성하고, Animation 종료합니다.
+            updateUI(userName: alertName)
+            stopAnimation()
+        }
+    }
+}
+```
+</div>
+</details>
+
+<details>
+<summary> 사용자가 여러 사진을 설정하면 앱에서는 사진이 삭제되지만 시스템 폴더에 계속 용량이 쌓이는 문제 </summary>
+<div markdown="1">
+        
+```
+Notification과 Widget에서 사용자가 여러 사진을 설정하면 앱 내에서는 기존의 사진을 삭제하고 새로운 사진으로 대체했지만,
+시스템 폴더의 TEMP폴더에 기존의 사진이 계속 쌓여서 불필요하게 앱의 용량이 늘어나는 문제가 있었습니다.
+
+FileManager와 NSTemporaryDirectory를 활용해서 앱을 종료할때마다 TEMP 폴더에 있는 사진을 삭제하도록 구현했고
+ 불필요하게 앱의 용량이 커지는 문제를 해결할 수 있었습니다.
+```
+
+```swift
+//앱 종료시 임시파일 삭제 메서드
+
+func deleteFilesInTmpDirectory() {
+    let fileManager = FileManager.default
+    let tmpDirectory = NSTemporaryDirectory()
+    
+    do {
+        let tmpContents = try fileManager.contentsOfDirectory(atPath: tmpDirectory)
+        for file in tmpContents {
+            let filePath = (tmpDirectory as NSString).appendingPathComponent(file)
+            try fileManager.removeItem(atPath: filePath)
+            print("삭제된 임시 파일: \(filePath)")
+        }
+    } catch {
+        print("DEBUG: TMP 폴더 삭제 Error - \(error.localizedDescription)")
+    }
+}
+
+// 앱 종료시 SceneDelegate에서 위젯 업데이트와 임시파일 삭제
+
+func sceneWillResignActive(_ scene: UIScene) {
+    // 위젯 업데이트 요청 보내기
+    WidgetCenter.shared.reloadTimelines(ofKind: "com.thekoon.NotiWeather")
+        
+    // 앱 종료시 임시파일 삭제
+    deleteFilesInTmpDirectory()
+}
+```
+</div>
+</details>
+
 <br>
 
 ## 📂 폴더 트리
