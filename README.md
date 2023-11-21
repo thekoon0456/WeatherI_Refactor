@@ -41,7 +41,7 @@
 |`알림 뷰`|`메인 뷰`|`설정 뷰`|`온보딩 뷰`|
 <br>
 
-## ✌️ 트러블 슈팅
+## ✅ 트러블 슈팅
 ### 날씨 API 채택하기
 <div markdown="1">
         
@@ -52,13 +52,13 @@ Apple WeatherKit는 편리했습니다.
 Apple이 만들어놓은 API를 직접 사용하고, 전 세계에서 사용 가능하다는 장점이 있었지만,
 사용하는 날씨 데이터가 한국에서 사용하는 기상청의 데이터와 조금씩 달랐습니다. 
 
-기상청의 API는 적용하기에 불편한 면이 있었습니다.
+반면에 기상청의 API는 적용하기에 불편한 면이 있었습니다.
 오늘의 날씨, 미세먼지, 주간 온도, 주간 날씨등 네 가지의 다른 API를 사용해야했고, 추가적인 데이터 가공도 많이 필요했습니다.
-하지만 다양한 데이터를 처리하고 가공하며 기술적인 역량을 늘리기 위해 불친절하지만 보편적인 기상청 API를 채택했습니다.
+저는 다양한 데이터를 처리하고 가공하며 기술적인 역량을 늘리기 위해 불친절하지만 보편적인 기상청 API를 채택했습니다.
 ```
 
 ```swift
-//오늘 날씨 데이터를 URLSession으로 불러오는 코드
+//오늘의 날씨 데이터를 URLSession으로 불러오는 메서드
 
 func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
     setNxNy(nx: LocationService.shared.latitude ?? 0, ny: LocationService.shared.longitude ?? 0)
@@ -94,7 +94,7 @@ func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Voi
 </div>
 <br>
 
-### 사용자의 위치 파악하고, 현재 위치의 날씨 요청
+### 사용자의 위치를 파악하고, 현재 위치의 날씨 요청
 <div markdown="1">
         
 ```
@@ -103,7 +103,7 @@ CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파�
 LocationService를 싱글톤으로 만들어 앱 진입 시점에서 사용자의 위, 경도를 얻어오고, 이를 바탕으로 데이터를 요청했습니다. 
 하지만 날씨 데이터가 정확하지 않았고, CoreLocation에서 구한 위, 경도를 기상청에서 사용하는 독자적인 X, Y좌표로 변환한 후에 정확한 데이터를 받아올 수 있었습니다. 
 
-또한 CLGeocoder()의 placemarks를 요청해 앱에서 화면에 표시할 주소를 가져왔는데, 구 주소와 도로명 주소가 혼합되어 나와서 두 가지 경우를 모두 고려해 주소를 가져오록 만들었습니다. 
+또한 CLGeocoder()의 placemarks를 요청해 앱에서 화면에 표시할 주소를 가져왔는데, 구 주소와 도로명 주소가 랜덤하게 가져와져서 두 가지 경우를 모두 고려해 주소를 가져오록 만들었습니다.
 ```
 
 ```swift
@@ -157,17 +157,18 @@ func locationToString(location: CLLocation, completion: @escaping () -> (Void)) 
 </div>
 <br>
 
-### 데이터를 로딩, 온보딩 뷰에서 애니메이션 실행
+### 데이터 로딩 화면, 온보딩 화면에서 애니메이션 실행
 <div markdown="1">
         
 ```
-앱을 처음 설치하고 온보딩뷰를 사용하거나, 데이터를 가져오는 동안 사용자의 시작적인 즐거움을 위해 Lottie를 적용했습니다.
+앱을 처음 설치하고 온보딩 뷰를 사용하거나, 데이터를 가져오는 동안 사용자의 시작적인 즐거움을 위해 Lottie를 적용했습니다.
 네 가지의 다른 API를 동시에 가져오기 위해 DispatchGroup을 사용했으며
 completion이 되기 전까지 Lottie Animation을 실행되도록 구성했습니다.
 ```
 
 ```swift
 //각기 다른 API 호출하고, 완료되면 Lottie Animation 종료
+
 func loadData(completion: @escaping () -> Void) {
     let dispatchGroup = DispatchGroup()
     
@@ -222,7 +223,7 @@ func loadData(completion: @escaping () -> Void) {
 </div>
 <br>
 
-### 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 문제 해결
+### 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 문제
 <div markdown="1">
         
 ```
@@ -269,13 +270,14 @@ func didReceive(_ notification: UNNotification) {
         
 ```
 날씨 앱을 기획할때부터 위젯은 필수로 구현하기로 생각했었습니다.
-SwiftUI의 WidgetKit으로 위젯을 구현하고, 백그라운드에서 서버와 통신을 하고 화면을 새로고칠 수 있도록 해야했습니다.
+SwiftUI의 WidgetKit으로 위젯을 구현하고, 백그라운드에서 서버와 통신을 하고 화면을 새로고칠 수 있도록 구현해야 했습니다.
 getData함수로 서버에 데이터를 요청하고 widgetData를 받아와 위젯 화면에 필요한 viewModel을 만들고
 getTimeline 함수 내에서 nextRefresh를 만들어 1시간마다 주기적으로 업데이트할 수 있도록 구현했습니다.
 ```
 
 ```swift
-//1시간에 1번씩 서버에 데이터 요청하고 위젯 업데이트
+//1시간에 1번씩 서버에 데이터를 요청하고 받아온 데이터로 위젯 업데이트
+
 func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> ()) {
     getData { [weak self] widgetData in
         guard let self else { return }
@@ -350,7 +352,7 @@ func setRealmContainer() {
 <div markdown="1">
         
 ```
-Notification과 Widget에서 사용자가 여러 사진을 설정하면 앱 내에서는 기존의 사진을 삭제하고 새로운 사진으로 대체했지만,
+Notification과 Widget에서 사용자가 여러 사진을 설정하면 앱 내에서는 기존의 사진을 삭제하고 새로운 사진으로 대체했지만
 시스템 폴더의 TEMP폴더에 기존의 사진이 계속 쌓여서 불필요하게 앱의 용량이 늘어나는 문제가 있었습니다.
 
 FileManager와 NSTemporaryDirectory를 활용해서 앱을 종료할때마다 TEMP 폴더에 있는 사진을 삭제하도록 구현했고
