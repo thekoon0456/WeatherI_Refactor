@@ -44,7 +44,7 @@
 <br>
 
 ## ✌️ 트러블 슈팅
-👉🏻 [블로그에서 험난한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/category/UIKit%20Project)
+👉🏻 [블로그에서 험난한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨의%20i)
 - 프로토타입에서 WeatherKit과 기상청 API를 비교하고, 기상청 API를 채택해서 사용했습니다.
 - CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파악한 좌표를 바탕으로 서버에 쿼리를 요청했습니다.
 - CoreLocation을 활용해 데이터를 가져왔지만 날씨가 정확하지 않았고, 위,경도를 기상청에서 사용하는 독자적인 X,Y좌표로 변환해 정확한 기상청 데이터를 요청했습니다.
