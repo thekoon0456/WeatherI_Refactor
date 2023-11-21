@@ -1,9 +1,8 @@
 # 🌤️ 날씨의 i
-2.1.1 업데이트, (UIKit, SwiftUI, MVVM,)<br>
+2.1.1 업데이트, (UIKit, SwiftUI, MVVM)<br><br>
 매일 외출하는 시간에 가족, 연인, 최애가 오늘의 날씨를 알려드려요!<br>
 🌤️ 날씨의 i 와 함께 하는 장마철. 우산도 잊지 말고 챙겨요:)<br>
-기상청 서버와 실시간으로 통신해서 정확한 날씨를 가져옵니다.
-<br>
+기상청 서버와 실시간으로 통신해서 정확한 날씨를 가져옵니다.<br>
 <br>
 
 ## 🔗 앱 스토어 다운로드 링크
@@ -17,9 +16,9 @@
 ![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)
 ![Swift](https://img.shields.io/badge/swift-F54A2A?style=for-the-badge&logo=swift&logoColor=white)
 ![UIKit](https://img.shields.io/badge/UIkit-2396F3?style=for-the-badge&logo=UIKit&logoColor=white)
+![SwiftUI](https://img.shields.io/badge/SwiftUI-000000?style=flat&logo=Swift&logoColor=blue)
 ![Xcode](https://img.shields.io/badge/Xcode-007ACC?style=for-the-badge&logo=Xcode&logoColor=white)
 
-![Xcode](https://img.shields.io/badge/Xcode-007ACC?style=for-the-badge&logo=Xcode&logoColor=white)
 ![Realm](https://img.shields.io/badge/realm-39477F?style=for-the-badge&logo=Realm&logoColor=white)
 ![SnapKit](https://img.shields.io/badge/SnapKit-4285F4?style=for-the-badge&logo=SnapKit&logoColor=white)
 ![NotificationContentsExtension](https://img.shields.io/badge/NotificationContentsExtension-000000?style=for-the-badge&logo=NotificationContentsExtension&logoColor=white)
@@ -44,7 +43,7 @@
 <br>
 
 ## ✌️ 트러블 슈팅
-👉🏻 [블로그에서 험난한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨)
+👉🏻 [블로그에서 다양한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨)
 
 <details>
 <summary> 날씨 API 채택하기 </summary>
