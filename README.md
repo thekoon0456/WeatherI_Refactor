@@ -50,27 +50,61 @@
 <summary> ### API, 데이터 사용 </summary>
 <div markdown="1">
 
-```
-Apple의 WeatherKit과 기상청 API를 비교하고, 기상청 API를 채택했습니다.
-struct 대신 enum을 사용한 이유는, 생성자가 제공되지 않는 자료형을 사용하기 위해서입니다.
-일반적으로 API를 관리하는 파일은 .gitignore에 담지만 프로젝트 특성상 git에 함께 올려두었습니다
-```
-
-</div>
-</details>
+## ✌️ 트러블 슈팅
+👉🏻 [블로그에서 험난한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨)
 
 <details>
-<summary>API 주소 관리</summary>
+<summary> 날씨 API 채택하기 </summary>
 <div markdown="1">
-
 ```
-API 주소를 관리하는 enum을 생성해주었습니다.
-struct 대신 enum을 사용한 이유는, 생성자가 제공되지 않는 자료형을 사용하기 위해서입니다.
-일반적으로 API를 관리하는 파일은 .gitignore에 담지만 프로젝트 특성상 git에 함께 올려두었습니다
-```
+Apple의 WeatherKit과 기상청 API를 비교하고, 기상청 API를 채택했습니다.
 
+Apple WeatherKit는 편리했습니다.
+Apple이 만들어놓은 API를 직접 사용하고, 전 세계에서 사용 가능하다는 장점이 있었지만,
+사용하는 날씨 데이터가 한국에서 사용하는 기상청의 데이터와 조금씩 달랐습니다. 
+
+기상청의 API는 적용하기에 불편한 면이 있었습니다.
+오늘의 날씨, 미세먼지, 주간 온도, 주간 날씨등 네 가지의 다른 API를 사용해야했고, 추가적인 데이터 가공도 많이 필요했습니다.
+하지만 다양한 데이터를 처리하고 가공하며 기술적인 역량을 늘리기 위해 불친절하지만 보편적인 기상청 API를 채택했습니다.
+```
+```swift
+//오늘 날씨 데이터를 URLSession으로 불러오는 코드
+
+func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
+        setNxNy(nx: LocationService.shared.latitude ?? 0, ny: LocationService.shared.longitude ?? 0)
+        guard let url = URL(string: weatherURL) else { return }
+
+        let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
+        session.dataTask(with: url) { [weak self] data, response, error in
+            guard let self else { return }
+            if error != nil {
+                print("네트워크 에러 \(String(describing: error?.localizedDescription))")
+                completion(.failure(.networkingError))
+                retryRequest(completion: completion)
+                return
+            }
+            
+            guard let data = data else {
+                print("데이터 에러")
+                completion(.failure(.dataError))
+                retryRequest(completion: completion)
+                return
+            }
+
+            if let item = parseWeatherJSON(data) as? [T] {
+                print("Weather JSON 파싱 성공")
+                completion(.success(item))
+            } else {
+                retryRequest(completion: completion)
+                completion(.failure(.parseError))
+            }
+        }.resume()
+    }
+```
 </div>
 </details>
+
+
   
 ### CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파악한 좌표를 바탕으로 서버에 쿼리를 요청했습니다.<br>
 
