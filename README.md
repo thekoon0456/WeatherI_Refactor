@@ -42,8 +42,6 @@
 <br>
 
 ## ✌️ 트러블 슈팅
-👉🏻 [블로그에서 다양한 트러블슈팅 과정 보기](https://thekoon0456.tistory.com/search/날씨)
-
 ### 날씨 API 채택하기
 <div markdown="1">
         
