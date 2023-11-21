@@ -23,6 +23,7 @@
 ![SnapKit](https://img.shields.io/badge/SnapKit-4285F4?style=for-the-badge&logo=SnapKit&logoColor=white)
 ![NotificationContentsExtension](https://img.shields.io/badge/NotificationContentsExtension-000000?style=for-the-badge&logo=NotificationContentsExtension&logoColor=white)
 <br>
+<br>
 
 ## 📌 주요 기능
 - 기상청, 에어코리아 공공데이터 API 연동: 단기 예보조회, 중기 육상 예보 조회, 중기 기온 조회, 시도별 미세먼지 실시간 평균 정보 조회. 총 4가지 API 동시 처리
