@@ -39,9 +39,11 @@
 <br>
 
 ## 📱시연 영상
-|<img src="https://github.com/thekoon0456/WeatherI/assets/106993057/e1bb7999-bf0f-4772-85e4-f59359ffb8c2"></img>|<img src="https://github.com/thekoon0456/WeatherI/assets/106993057/dae01aa5-0718-4967-99ca-d3d7c4a896de"></img>|<img src="https://github.com/thekoon0456/WeatherI/assets/106993057/a5752520-fe81-4297-a212-0714ba47c654"></img>|<img src="https://github.com/thekoon0456/WeatherI/assets/106993057/71612a3b-3142-4f39-9797-80ec02c0c9a6"></img>|
+|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/e2310b70-0b10-4c95-b161-731807d37950"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/87b36b00-853f-4ee3-843d-70c24fe81649"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/a0107164-28f7-416d-863a-2241aa12e7c3"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/fd86103e-c18d-4338-9d34-41dcbf62aff8"></img>|
 |:-:|:-:|:-:|:-:|
-|`알림 뷰`|`메인 뷰`|`설정 뷰`|`온보딩 뷰`|
+|`알림 뷰`|`메인 뷰`|`위젯 뷰`|`온보딩 뷰`|
+|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/e863ab80-ea5a-43c9-a999-19d638d2a5c3"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/fd86103e-c18d-4338-9d34-41dcbf62aff8"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/bf979f2d-418b-44ca-a958-fe6efb5d97d1"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/93c74b2d-29af-41e0-aa67-79220efa86b6"></img>|
+|`설정 뷰`|`웹, 메일 뷰`|`꾸준한 업데이트`|`긍정적 리뷰`|
 <br>
 
 ## ✅ 트러블 슈팅
