@@ -39,7 +39,7 @@
 <br>
 
 ## 📱시연 영상
-|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/e2310b70-0b10-4c95-b161-731807d37950"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/87b36b00-853f-4ee3-843d-70c24fe81649"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/a0107164-28f7-416d-863a-2241aa12e7c3"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/fd86103e-c18d-4338-9d34-41dcbf62aff8"></img>|
+|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/e2310b70-0b10-4c95-b161-731807d37950"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/87b36b00-853f-4ee3-843d-70c24fe81649"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/a0107164-28f7-416d-863a-2241aa12e7c3"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/41fc960e-83c0-4d95-88eb-27f4923ecfa2"></img>|
 |:-:|:-:|:-:|:-:|
 |`알림 뷰`|`메인 뷰`|`위젯 뷰`|`온보딩 뷰`|
 |<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/e863ab80-ea5a-43c9-a999-19d638d2a5c3"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/fd86103e-c18d-4338-9d34-41dcbf62aff8"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/d031ed7e-d037-4267-992e-ddca6cf91cb4"></img>|<img src="https://github.com/thekoon0456/WeatherI_Refactor/assets/106993057/bddfaf18-1453-4b21-8d60-5e000e247be9"></img>|
