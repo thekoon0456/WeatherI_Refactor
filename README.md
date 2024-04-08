@@ -1,7 +1,4 @@
 # 🌤️ 날씨의 i
-`사용자가 설정한 시간에 나만의 기상 캐스터가 오늘의 날씨를 알려주고, 바탕화면에 위젯을 추가할 수 있는 날씨 앱입니다.` <br>
-`개인 프로젝트, 2.1.1 업데이트 (UIKit, SwiftUI, MVVM)` <br>
-
 > 매일 외출하는 시간에 가족, 연인, 최애가 오늘의 날씨를 알려드려요!<br>
 > 🌤️ 날씨의 i 와 함께 하는 장마철. 우산도 잊지 말고 챙겨요:)<br>
 > 기상청 서버와 실시간으로 통신해서 정확한 날씨를 가져옵니다.<br>
@@ -46,74 +43,24 @@
 |`설정 뷰`|`웹, 메일 뷰`|`꾸준한 업데이트`|`긍정적 리뷰`|
 <br>
 
-## ✅ 트러블 슈팅
-### 날씨 API 채택하기
-<div markdown="1">
-        
-```
-Apple의 WeatherKit과 기상청 API를 비교하고, 기상청 API를 채택했습니다.
-
-Apple WeatherKit는 편리했습니다.
-Apple이 만들어놓은 API를 직접 사용하고, 전 세계에서 사용 가능하다는 장점이 있었지만,
-사용하는 날씨 데이터가 한국에서 사용하는 기상청의 데이터와 조금씩 달랐습니다. 
-
-반면에 기상청의 API는 적용하기에 불편한 면이 있었습니다.
-오늘의 날씨, 미세먼지, 주간 온도, 주간 날씨 등 네 가지의 다른 API를 사용해야 했고, 추가적인 데이터 가공도 많이 필요했습니다.
-저는 다양한 데이터를 처리하고 가공하며 기술적인 역량을 늘리기 위해 불친절하지만 보편적인 기상청 API를 채택했습니다.
-```
-
-```swift
-//오늘의 날씨 데이터를 URLSession으로 불러오는 메서드
-
-func performRequest<T>(completion: @escaping (Result<[T], NetworkError>) -> (Void)) {
-    setNxNy(nx: LocationService.shared.latitude ?? 0, ny: LocationService.shared.longitude ?? 0)
-    guard let url = URL(string: weatherURL) else { return }
-    
-    let session = setCustomURLSession(retryRequest: DoubleConstant.networkRequest.rawValue)
-    session.dataTask(with: url) { [weak self] data, response, error in
-        guard let self else { return }
-        if error != nil {
-            print("네트워크 에러 \(String(describing: error?.localizedDescription))")
-            completion(.failure(.networkingError))
-            retryRequest(completion: completion)
-            return
-        }
-            
-        guard let data = data else {
-            print("데이터 에러")
-            completion(.failure(.dataError))
-            retryRequest(completion: completion)
-            return
-        }
-
-        if let item = parseWeatherJSON(data) as? [T] {
-            print("Weather JSON 파싱 성공")
-            completion(.success(item))
-        } else {
-            retryRequest(completion: completion)
-            completion(.failure(.parseError))
-        }
-    }.resume()
-}
-```
-</div>
+## 💻 앱 개발 환경
+- 최소 지원 버전: iOS 15.0+
+- Xcode Version 14.3.1 (14E300c)
+- iPhone SE3 ~ iPhone 14 Pro Max 전 기종 호환 가능
+- 다크모드 지원, 가로모드 미지원
 <br>
 
+## ✅ 트러블 슈팅
 ### 사용자의 위치를 파악하고, 현재 위치의 날씨 요청
 <div markdown="1">
-        
-```
-CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파악한 좌표를 바탕으로 기상청 서버에 쿼리를 요청했습니다.
-
-LocationService를 싱글톤으로 만들어 앱 진입 시점에서 사용자의 위, 경도를 얻어오고, 이를 바탕으로 데이터를 요청했습니다. 
-하지만 날씨 데이터가 정확하지 않았고, CoreLocation에서 구한 위, 경도를 기상청에서 사용하는 독자적인 X, Y좌표로 변환한 후에 정확한 데이터를 받아올 수 있었습니다. 
-
-또한 CLGeocoder()의 placemarks를 요청해 앱에서 화면에 표시할 주소를 가져왔는데, 구 주소와 도로명 주소가 랜덤하게 가져와져서 두 가지 경우를 모두 고려해 주소를 가져오도록 만들었습니다.
-```
+CoreLocation을 활용해 사용자의 현재 위, 경도를 파악하고, 파악한 좌표를 바탕으로 기상청 서버에 쿼리를 요청했습니다.</br>
+LocationService를 싱글톤으로 만들어 앱 진입 시점에서 사용자의 위, 경도를 얻어오고, 이를 바탕으로 데이터를 요청했습니다. </br>
+하지만 날씨 데이터가 정확하지 않았고, CoreLocation에서 구한 위, 경도를 기상청에서 사용하는 독자적인 X, Y좌표로 변환한 후에 정확한 데이터를 받아올 수 있었습니다.</br>
+또한 CLGeocoder()의 placemarks를 요청해 앱에서 화면에 표시할 주소를 가져왔는데, 구 주소와 도로명 주소가 랜덤하게 가져와져서 두 가지 경우를 모두 고려해 주소를 가져오도록 만들었습니다.</br>
+</br>
 
 ```swift
-// 기상청 좌표와 주소를 구해오는 코드
-
+// 기상청 좌표와 주소 Load
 func locationToString(location: CLLocation, completion: @escaping () -> (Void)) {
     let geocoder = CLGeocoder()
     geocoder.reverseGeocodeLocation(
@@ -162,18 +109,16 @@ func locationToString(location: CLLocation, completion: @escaping () -> (Void)) 
 </div>
 <br>
 
-### 데이터 로딩 화면, 온 보딩 화면에서 애니메이션 실행
+### 4개의 API를 동시에 로딩하면서 로딩이 길어지는 문제
 <div markdown="1">
-        
-```
-앱을 처음 설치하고 온 보딩 뷰를 사용하거나, 데이터를 가져오는 동안 사용자의 시작적인 즐거움을 위해 Lottie를 적용했습니다.
-네 가지의 다른 API를 동시에 가져오기 위해 DispatchGroup을 사용했으며
-completion이 되기 전까지 Lottie Animation을 실행되도록 구성했습니다.
-```
+4개의 다른 API를 호출하고, 데이터를 조합하면서 시간이 걸리게 되었고<br>
+데이터를 가져오는 동안 사용자의 시작적인 즐거움을 위해 Lottie를 적용했습니다.<br>
+네 가지의 다른 API를 동시에 가져오기 위해 DispatchGroup을 사용했으며<br>
+completion이 되기 전까지 Lottie Animation을 실행되도록 구현했습니다.<br>
+<br>
 
 ```swift
 //각기 다른 API 호출하고, 완료되면 Lottie Animation 종료
-
 func loadData(completion: @escaping () -> Void) {
     let dispatchGroup = DispatchGroup()
     
@@ -230,13 +175,11 @@ func loadData(completion: @escaping () -> Void) {
 
 ### 로컬 알림으로 사용자에게 알림을 보내면서 서버와 통신한 데이터를 가져올 수 없는 문제
 <div markdown="1">
-        
-```
-백엔드 서버를 따로 사용할 수 없는 환경이었기 때문에 로컬 알림으로 오늘 날씨 알림을 구현해야 했습니다.
-로컬 알림에서 사용자가 알림을 받는 시점에서 서버와 통신한 최신 데이터를 가져올 수 없기 때문에
-App에서 날씨 알림을 등록할 때 UNCalendarNotificationTrigger와 UNMutableNotificationContent를 활용해 알림을 설정한 시간에 트리거를 보내고,
-NotificationContentsExtension를 활용해서 알림을 꾹 눌렀을 때 서버에 날씨를 요청하도록 커스텀 알림 화면을 구현했습니다.
-```
+백엔드 서버를 따로 사용할 수 없는 환경이었기 때문에 로컬 알림으로 오늘 날씨 알림을 구현해야 했습니다.<br>
+로컬 알림에서 사용자가 알림을 받는 시점에서 서버와 통신한 최신 데이터를 가져올 수 없기 때문에<br>
+App에서 날씨 알림을 등록할 때 UNCalendarNotificationTrigger와 UNMutableNotificationContent를 활용해 알림을 설정한 시간에 트리거를 보내고,<br>
+NotificationContentsExtension를 활용해서 알림을 꾹 눌렀을 때 서버에 날씨를 요청하도록 커스텀 알림 화면을 구현했습니다.<br>
+<br>
 
 ```swift
 //UNNotification을 받아 알림 화면에 구현하는 코드
@@ -270,15 +213,13 @@ func didReceive(_ notification: UNNotification) {
 </div>
 <br>
 
-### SwiftUI로 Widget구성하고, 백그라운드에서 서버에 주기적으로 API 요청
+### SwiftUI로 Widget을 구성하고, 백그라운드에서 서버에 주기적으로 API 요청
 <div markdown="1">
-        
-```
-날씨 앱을 기획할 때부터 위젯은 필수로 구현하기로 생각했었습니다.
-SwiftUI의 WidgetKit으로 위젯을 구현하고, 백그라운드에서 서버와 통신을 하고 화면을 새로 고칠 수 있도록 구현해야 했습니다.
-getData 메서드로 서버에 데이터를 요청하고 widgetData를 받아와 위젯 화면에 필요한 viewModel을 만들고
-getTimeline 함수 내에서 nextRefresh를 만들어 1시간마다 주기적으로 업데이트할 수 있도록 구현했습니다.
-```
+날씨 앱을 기획할 때부터 위젯은 필수로 구현하기로 생각했었습니다.<br>
+SwiftUI의 WidgetKit으로 위젯을 구현하고, 백그라운드에서 서버와 통신을 하고 화면을 새로 고칠 수 있도록 구현해야 했습니다.<br>
+getData 메서드로 서버에 데이터를 요청하고 widgetData를 받아와 위젯 화면에 필요한 viewModel을 만들고<br>
+getTimeline 함수 내에서 nextRefresh를 만들어 1시간마다 주기적으로 업데이트할 수 있도록 구현했습니다.<br>
+<br>
 
 ```swift
 //1시간에 1번씩 서버에 데이터를 요청하고 받아온 데이터로 위젯 업데이트
@@ -318,18 +259,13 @@ func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEnt
 
 ### 데이터를 CRUD하고 AppExtension에서도 동일한 데이터 활용하기
 <div markdown="1">
-        
-```
-realm 라이브러리를 활용해서 앱의 CRUD를 구현하고, 마이그레이션을 통해 여러 AppExtension에서 활용했습니다.
-
-프로토타입에서는 Apple의 프레임워크인 CoreData를 활용해서 CRUD를 구현했지만, 복잡한 데이터를 다루기에 불편함이 있어 realm으로 리팩토링해 CRUD를 구현했습니다.
-커스텀 알림과 위젯을 구현하면서 AppExtension인 NotificationContentsExtension과 WidgetExtension에서 데이터에 접근할 수 없는 문제가 있었는데 
-realm에서 저장한 데이터를 AppDelegate에서 RealmContainer로 만들어서 AppExtension에서도 동일한 데이터를 접근해서 사용할 수 있도록 구현했습니다.
-```
+프로토타입에서는 Apple의 프레임워크인 CoreData를 활용해서 CRUD를 구현했지만, 복잡한 데이터를 다루기에 불편함이 있어 realm으로 리팩토링해 CRUD를 구현했습니다.<br>
+커스텀 알림과 위젯을 구현하면서 AppExtension인 NotificationContentsExtension과 WidgetExtension에서 데이터에 접근할 수 없는 문제가 있었는데 <br>
+realm에서 저장한 데이터를 AppDelegate에서 RealmContainer로 만들어서 AppExtension에서도 동일한 데이터를 접근해서 사용할 수 있도록 구현했습니다.<br>
+<br>
 
 ```swift
-//RealmContainer를 만들어서 다양한 AppExtension에서 접근 가능하도록 구현
-
+//RealmContainer를 만들어서 WidgetKit과 같은 AppExtension에서 접근 가능하도록 구현
 func setRealmContainer() {
     let defaultRealm = Realm.Configuration.defaultConfiguration.fileURL!
     let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.weatherI.widget")
@@ -355,18 +291,13 @@ func setRealmContainer() {
 
 ### 사용자가 여러 사진을 설정하면 앱에서는 사진이 삭제되지만 시스템 폴더에 계속 용량이 쌓이는 문제
 <div markdown="1">
-        
-```
-Notification과 Widget에서 사용자가 여러 사진을 설정하면 앱 내에서는 기존의 사진을 삭제하고 새로운 사진으로 대체했지만
-시스템 폴더의 TEMP 폴더에 기존의 사진이 계속 쌓여서 불필요하게 앱의 용량이 늘어나는 문제가 있었습니다.
-
-FileManager와 NSTemporaryDirectory를 활용해서 앱을 종료할 때마다 TEMP 폴더에 있는 사진을 삭제하도록 구현했고
- 불필요하게 앱의 용량이 커지는 문제를 해결할 수 있었습니다.
-```
+Notification과 Widget에서 사용자가 여러 사진을 설정하면 앱 내에서는 기존의 사진을 삭제하고 새로운 사진으로 대체했지만<br>
+시스템 폴더의 TEMP 폴더에 기존의 사진이 계속 쌓여서 불필요하게 앱의 용량이 늘어나는 문제가 있었습니다.<br>
+FileManager와 NSTemporaryDirectory를 활용해서 앱을 종료할 때마다 TEMP 폴더에 있는 사진을 삭제하도록 구현했고<br>
+ 불필요하게 앱의 용량이 커지는 문제를 해결할 수 있었습니다.<br>
 
 ```swift
 //앱 종료시 임시파일 삭제 메서드
-
 func deleteFilesInTmpDirectory() {
     let fileManager = FileManager.default
     let tmpDirectory = NSTemporaryDirectory()
@@ -384,7 +315,6 @@ func deleteFilesInTmpDirectory() {
 }
 
 // 앱 종료시 SceneDelegate에서 위젯 업데이트와 임시파일 삭제
-
 func sceneWillResignActive(_ scene: UIScene) {
     // 위젯 업데이트 요청 보내기
     WidgetCenter.shared.reloadTimelines(ofKind: "com.thekoon.NotiWeather")
@@ -401,8 +331,6 @@ func sceneWillResignActive(_ scene: UIScene) {
 <summary>폴더 트리 열어보기 </summary>
 <div markdown=“1”>
 <pre>
-// MVVM 패턴의 구조에 따라 Entity -> Respository -> Models -> Service -> ViewModels -> Views 의 단방향 데이터 흐름 구현
-
 AlarmWeather/
 ├─ AppDelegate.swift
 ├─ SceneDelegate.swift
@@ -477,12 +405,4 @@ AlarmWeather/
 </pre>
 </div>
 </details>
-<br>
-
-## 💻 앱 개발 환경
-
-- 최소 지원 버전: iOS 15.0+
-- Xcode Version 14.3.1 (14E300c)
-- iPhone 14 Pro, iPhone 14 Pro + 에서 최적화됨, iPhone SE3까지 호환 가능
-- 다크모드 지원, 가로모드 미지원
 <br>
