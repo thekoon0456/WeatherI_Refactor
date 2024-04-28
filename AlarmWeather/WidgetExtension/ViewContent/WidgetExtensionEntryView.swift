@@ -79,13 +79,13 @@ extension WidgetExtensionEntryView {
             
             guard
                 let imageData = realmData.first?.alertImage,
-                let resizedImage = UIImage(data: imageData)?.jpegData(compressionQuality: 0.4),
-                let uiImage =  UIImage(data: resizedImage)
+                let resizedImage = UIImage(data: imageData)?.jpegData(compressionQuality: 0.3),
+                let image = UIImage(data: resizedImage)?.resizeImage(targetSize: .init(width: 300, height: 300))
             else {
-                return Image(data.todayBackgroundImage ?? "sunny1")
+                return Image(uiImage: UIImage(named: "sunnyNight1")?.resizeImage(targetSize: .init(width: 300, height: 300)) ?? UIImage())
             }
             
-            backgroundImage = Image(uiImage: uiImage)
+            backgroundImage = Image(uiImage: image)
             return backgroundImage
         } else {
             
@@ -93,15 +93,9 @@ extension WidgetExtensionEntryView {
             
             guard
                 let realmImage = realmData.first?.alertImage,
-                let image = resizeImage(
-                    image: UIImage(data: realmImage),
-                    targetSize: CGSize(width: 300, height: 300)
-                )
+                let image = UIImage(data: realmImage)?.resizeImage(targetSize: .init(width: 300, height: 300))
             else {
-                let image = resizeImage(
-                    image: UIImage(named: data.todayBackgroundImage ?? "sunnyNight1"),
-                    targetSize: CGSize(width: 300, height: 300)
-                )
+                let image = UIImage(named: data.todayBackgroundImage ?? "sunnyNight1")?.resizeImage(targetSize: .init(width: 300, height: 300))
                 
                 backgroundImage = Image(uiImage: image ?? UIImage())
                 return backgroundImage
@@ -125,6 +119,7 @@ extension WidgetExtensionEntryView {
     var todayWeatherIcon: some View {
         Image(systemName: data.todayWeatherIconName ?? "gobackward")
             .resizable()
+            .symbolRenderingMode(.multicolor)
             .aspectRatio(contentMode: .fit)
             .frame(width: 50)
     }
@@ -193,30 +188,30 @@ extension View {
 
 // MARK: - 파일 사이즈 변경 함수 (iOS 16)
 
-extension View {
-    func resizeImage(image: UIImage?, targetSize: CGSize) -> UIImage? {
-        guard let size = image?.size else { return UIImage() }
-        let widthRatio = targetSize.width / size.width
-        let heightRatio = targetSize.height / size.height
-        
-        // 이미지 크기 비율에 따라 새로운 크기 계산
-        let newSize: CGSize
-        if widthRatio > heightRatio {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-        } else {
-            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+extension UIImage {
+        func resizeImage(targetSize: CGSize) -> UIImage? {
+            let size = self.size
+            let widthRatio = targetSize.width / size.width
+            let heightRatio = targetSize.height / size.height
+    
+            // 이미지 크기 비율에 따라 새로운 크기 계산
+            let newSize: CGSize
+            if widthRatio > heightRatio {
+                newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+            } else {
+                newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+            }
+    
+            // 그래픽 컨텍스트를 만들어 이미지 크기를 조정
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+            self.draw(in: CGRect(origin: .zero, size: newSize))
+    
+            guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else {
+                return UIImage(named: "sunnyNight1") ?? UIImage()
+            }
+    
+            UIGraphicsEndImageContext()
+    
+            return newImage
         }
-        
-        // 그래픽 컨텍스트를 만들어 이미지 크기를 조정
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
-        image?.draw(in: CGRect(origin: .zero, size: newSize))
-        
-        guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else {
-            return UIImage(named: "sunnyNight1") ?? UIImage()
-        }
-        
-        UIGraphicsEndImageContext()
-        
-        return newImage
-    }
 }

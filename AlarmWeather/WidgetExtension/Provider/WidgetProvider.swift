@@ -55,7 +55,7 @@ final class Provider: TimelineProvider {
         return WeatherEntry(
             date: Date(),
             data: WidgetViewModel(todayWeatherLabel: "맑음",
-                                  todayWeatherIconName: "sun.max",
+                                  todayWeatherIconName: "sun.max.fill",
                                   todayTemp: "23",
                                   todayPop: "0",
                                   todayBackgroundImage: "sunny1")
@@ -185,26 +185,26 @@ extension Provider {
         if model.todayPty == "0" {
             switch model.todaySky {
             case "1":
-                return "sun.max"
+                return "sun.max.fill"
             case "3":
-                return "cloud"
+                return "cloud.fill"
             case "4":
-                return "cloud.sun"
+                return "cloud.sun.fill"
             default:
-                return "sun.max"
+                return "sun.max.trianglebadge.exclamationmark"
             }
         } else {
             switch model.todayPty {
             case "1":
-                return "cloud.rain"
+                return "cloud.rain.fill"
             case "2":
-                return "cloud.sleet"
+                return "cloud.sleet.fill"
             case "3":
-                return "cloud.snow"
+                return "cloud.snow.fill"
             case "4":
-                return "cloud.sun.rain"
+                return "cloud.sun.rain.fill"
             default:
-                return "cloud.rain"
+                return "sun.max.trianglebadge.exclamationmark"
             }
         }
     }
