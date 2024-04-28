@@ -105,15 +105,15 @@ extension HomeViewModel {
             switch model.sky {
             case "1":
                 self.todayWeatherLabel = "맑음"
-                self.todayWeatherIconName = "sun.max"
+                self.todayWeatherIconName = "sun.max.fill"
                 return WeatherMent.sunArr.randomElement()!
             case "3":
                 self.todayWeatherLabel = "구름 많음"
-                self.todayWeatherIconName = "cloud"
+                self.todayWeatherIconName = "cloud.fill"
                 return WeatherMent.cloudArr.randomElement()!
             case "4":
                 self.todayWeatherLabel = "흐림"
-                self.todayWeatherIconName = "cloud.sun"
+                self.todayWeatherIconName = "cloud.sun.fill"
                 return WeatherMent.cloudSunArr.randomElement()!
             default:
                 return "서버 오류입니다. 앱에서 자세한 날씨를 확인해주세요"
@@ -122,19 +122,19 @@ extension HomeViewModel {
             switch model.pty {
             case "1":
                 self.todayWeatherLabel = "비"
-                self.todayWeatherIconName = "cloud.rain"
+                self.todayWeatherIconName = "cloud.rain.fill"
                 return WeatherMent.rainArr.randomElement()!
             case "2":
                 self.todayWeatherLabel = "비/눈"
-                self.todayWeatherIconName = "cloud.sleet"
+                self.todayWeatherIconName = "cloud.sleet.fill"
                 return WeatherMent.rainSnowArr.randomElement()!
             case "3":
                 self.todayWeatherLabel = "눈"
-                self.todayWeatherIconName = "cloud.snow"
+                self.todayWeatherIconName = "cloud.snow.fill"
                 return WeatherMent.snowArr.randomElement()!
             case "4":
                 self.todayWeatherLabel = "소나기"
-                self.todayWeatherIconName = "cloud.sun.rain"
+                self.todayWeatherIconName = "cloud.sun.rain.fill"
                 return WeatherMent.showerArr.randomElement()!
             default:
                 return "서버 오류입니다. 앱에서 자세한 날씨를 확인해주세요"
@@ -147,24 +147,24 @@ extension HomeViewModel {
             if model[i].pty == "0" {
                 switch model[i].sky {
                 case "1":
-                    todayDetailWeatherIconName.append("sun.max")
+                    todayDetailWeatherIconName.append("sun.max.fill")
                 case "3":
-                    todayDetailWeatherIconName.append("cloud")
+                    todayDetailWeatherIconName.append("cloud.fill")
                 case "4":
-                    todayDetailWeatherIconName.append("cloud.sun")
+                    todayDetailWeatherIconName.append("cloud.sun.fill")
                 default:
                     todayDetailWeatherIconName.append("sun.max.trianglebadge.exclamationmark")
                 }
             } else {
                 switch model[i].pty {
                 case "1":
-                    todayDetailWeatherIconName.append("cloud.rain")
+                    todayDetailWeatherIconName.append("cloud.rain.fill")
                 case "2":
-                    todayDetailWeatherIconName.append("cloud.sleet")
+                    todayDetailWeatherIconName.append("cloud.sleet.fill")
                 case "3":
-                    todayDetailWeatherIconName.append("cloud.snow")
+                    todayDetailWeatherIconName.append("cloud.snow.fill")
                 case "4":
-                    todayDetailWeatherIconName.append("cloud.sun.rain")
+                    todayDetailWeatherIconName.append("cloud.sun.rain.fill")
                 default:
                     todayDetailWeatherIconName.append("sun.max.trianglebadge.exclamationmark")
                 }

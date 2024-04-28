@@ -23,7 +23,7 @@ final class TodayTimeWeatherCell: UICollectionViewCell {
     }
 
     private var weatherIcon = UIImageView().then {
-        $0.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        $0.image = UIImage(systemName: "cloud.drizzle")?.withRenderingMode(.alwaysOriginal)
         $0.contentMode = .scaleAspectFill
         $0.addTapZoomAnimation()
     }
@@ -63,7 +63,7 @@ final class TodayTimeWeatherCell: UICollectionViewCell {
             timeLabel.text = viewModel?.todayDetailWeather?[item].fcstTime
         }
         
-        weatherIcon.image = UIImage(systemName: (viewModel?.todayDetailWeatherIconName[item]) ?? "")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        weatherIcon.image = UIImage(systemName: (viewModel?.todayDetailWeatherIconName[item]) ?? "")?.withRenderingMode(.alwaysOriginal)
         if let pop = viewModel?.todayDetailWeather?[item].pop {
             probabilityLabel.text = pop != "0" ? pop + "%" : ""
         }

@@ -26,7 +26,7 @@ final class WeeklyWeatherCell: UITableViewCell {
     }
     
     private lazy var weatherIcon = UIImageView().then {
-        $0.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        $0.image = UIImage(systemName: "cloud.drizzle")?.withRenderingMode(.alwaysOriginal)
         $0.contentMode = .scaleAspectFill
         $0.addTapZoomAnimation()
     }
@@ -75,7 +75,7 @@ final class WeeklyWeatherCell: UITableViewCell {
         weeklyDate.text = viewModel?.weeklyWeatherTemp?[row].date
         lowTemperature.text = (viewModel?.weeklyWeatherTemp?[row].taMin ?? "") + "º"
         highTemperature.text = (viewModel?.weeklyWeatherTemp?[row].taMax ?? "") + "º"
-        weatherIcon.image = UIImage(systemName: viewModel?.weeklyWeatherIconName[row] ?? "")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        weatherIcon.image = UIImage(systemName: viewModel?.weeklyWeatherIconName[row] ?? "")?.withRenderingMode(.alwaysOriginal)
         probabilityLabel.text = (viewModel?.weeklyWeather?[row].rnSt ?? "") == "0" ? "" : (viewModel?.weeklyWeather?[row].rnSt ?? "") + "%"
         configureUI()
     }

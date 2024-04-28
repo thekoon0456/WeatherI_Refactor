@@ -91,15 +91,15 @@ extension HomeViewModel {
             switch model.sky {
             case "1":
                 todayWeatherLabel = "맑음"
-                todayWeatherIconName = "sun.max"
+                todayWeatherIconName = "sun.max.fill"
                 return WeatherMent.sunArr.randomElement()!
             case "3":
                 todayWeatherLabel = "구름 많음"
-                todayWeatherIconName = "cloud"
+                todayWeatherIconName = "cloud.fill"
                 return WeatherMent.cloudArr.randomElement()!
             case "4":
                 todayWeatherLabel = "흐림"
-                todayWeatherIconName = "cloud.sun"
+                todayWeatherIconName = "cloud.sun.fill"
                 return WeatherMent.cloudSunArr.randomElement()!
             default:
                 return "서버 오류입니다. 아래로 당겨 새로고침 해주세요"
@@ -108,19 +108,19 @@ extension HomeViewModel {
             switch model.pty {
             case "1":
                 todayWeatherLabel = "비"
-                todayWeatherIconName = "cloud.rain"
+                todayWeatherIconName = "cloud.rain.fill"
                 return WeatherMent.rainArr.randomElement()!
             case "2":
                 todayWeatherLabel = "비/눈"
-                todayWeatherIconName = "cloud.sleet"
+                todayWeatherIconName = "cloud.sleet.fill"
                 return WeatherMent.rainSnowArr.randomElement()!
             case "3":
                 todayWeatherLabel = "눈"
-                todayWeatherIconName = "cloud.snow"
+                todayWeatherIconName = "cloud.snow.fill"
                 return WeatherMent.snowArr.randomElement()!
             case "4":
                 todayWeatherLabel = "소나기"
-                todayWeatherIconName = "cloud.sun.rain"
+                todayWeatherIconName = "cloud.sun.rain.fill"
                 return WeatherMent.showerArr.randomElement()!
             default:
                 return "서버 오류입니다. 아래로 당겨 새로고침 해주세요"
@@ -148,24 +148,24 @@ extension HomeViewModel {
             if model[i].pty == "0" {
                 switch model[i].sky {
                 case "1":
-                    todayDetailWeatherIconName.append("sun.max")
+                    todayDetailWeatherIconName.append("sun.max.fill")
                 case "3":
-                    todayDetailWeatherIconName.append("cloud")
+                    todayDetailWeatherIconName.append("cloud.fill")
                 case "4":
-                    todayDetailWeatherIconName.append("cloud.sun")
+                    todayDetailWeatherIconName.append("cloud.sun.fill")
                 default:
                     todayDetailWeatherIconName.append("sun.max.trianglebadge.exclamationmark")
                 }
             } else {
                 switch model[i].pty {
                 case "1":
-                    todayDetailWeatherIconName.append("cloud.rain")
+                    todayDetailWeatherIconName.append("cloud.rain.fill")
                 case "2":
-                    todayDetailWeatherIconName.append("cloud.sleet")
+                    todayDetailWeatherIconName.append("cloud.sleet.fill")
                 case "3":
-                    todayDetailWeatherIconName.append("cloud.snow")
+                    todayDetailWeatherIconName.append("cloud.snow.fill")
                 case "4":
-                    todayDetailWeatherIconName.append("cloud.sun.rain")
+                    todayDetailWeatherIconName.append("cloud.sun.rain.fill")
                 default:
                     todayDetailWeatherIconName.append("sun.max.trianglebadge.exclamationmark")
                 }
@@ -177,19 +177,19 @@ extension HomeViewModel {
         for i in 0..<7 {
             switch model[i].wf {
             case "맑음":
-                weeklyWeatherIconName.append("sun.max")
+                weeklyWeatherIconName.append("sun.max.fill")
             case "구름많음":
-                weeklyWeatherIconName.append("cloud")
+                weeklyWeatherIconName.append("cloud.fill")
             case "구름많고 비", "구름많고 소나기":
-                weeklyWeatherIconName.append("cloud.rain")
+                weeklyWeatherIconName.append("cloud.rain.fill")
             case "구름많고 눈", "흐리고 눈":
-                weeklyWeatherIconName.append("cloud.snow")
+                weeklyWeatherIconName.append("cloud.snow.fill")
             case "구름많고 비/눈", "흐리고 비/눈":
-                weeklyWeatherIconName.append("cloud.sleet")
+                weeklyWeatherIconName.append("cloud.sleet.fill")
             case "흐림":
-                weeklyWeatherIconName.append("cloud.sun")
+                weeklyWeatherIconName.append("cloud.sun.fill")
             case "흐리고 비", "흐리고 소나기":
-                weeklyWeatherIconName.append("cloud.sun.rain")
+                weeklyWeatherIconName.append("cloud.sun.rain.fill")
             default:
                 self.weeklyWeatherIconName.append("sun.max.trianglebadge.exclamationmark")
                 print("DEBUG: weeklyWeatherIcon 오류")

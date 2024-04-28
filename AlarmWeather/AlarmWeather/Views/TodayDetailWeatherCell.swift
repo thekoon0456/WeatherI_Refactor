@@ -19,7 +19,7 @@ final class TodayDetailWeatherCell: UICollectionViewCell {
     private lazy var weatherIconNames = ["humidity",
                             "umbrella.percent",
                             "wind",
-                            viewModel?.todayWeather?.sno == "적설없음" ? "cloud.rain" : "cloud.snow"]
+                            viewModel?.todayWeather?.sno == "적설없음" ? "cloud.rain.fill" : "cloud.snow.fill"]
     
     private lazy var weatherLabels = ["습도",
                          "강수확률",
@@ -34,9 +34,10 @@ final class TodayDetailWeatherCell: UICollectionViewCell {
     private lazy var weatherDatasUnits = ["%", "%", "m/s", ""]
     
     private var weatherIcon = UIImageView(frame: .zero).then {
-        $0.image = UIImage(systemName: "sun.max")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        $0.image = UIImage(systemName: "sun.max")?.withRenderingMode(.alwaysOriginal)
         $0.contentMode = .scaleAspectFill
         $0.addTapZoomAnimation()
+        $0.tintColor = .white
     }
     
     private var weatherLabel = UILabel().then {
@@ -67,7 +68,7 @@ final class TodayDetailWeatherCell: UICollectionViewCell {
     //MARK: - Helpers
     
     func setValue(item: Int) {
-        weatherIcon.image = UIImage(systemName: weatherIconNames[item])?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        weatherIcon.image = UIImage(systemName: weatherIconNames[item])?.withRenderingMode(.alwaysOriginal)
         weatherLabel.text = weatherLabels[item]
         weatherValue.text = (weatherDatas[item] ?? "") + weatherDatasUnits[item]
     }

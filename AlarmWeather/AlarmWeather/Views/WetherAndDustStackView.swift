@@ -52,7 +52,7 @@ final class WetherAndDustStackView: UIStackView {
     }
     
     private lazy var weatherIcon = UIImageView().then {
-        $0.image = UIImage(systemName: "cloud.drizzle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        $0.image = UIImage(systemName: "cloud.drizzle")?.withRenderingMode(.alwaysOriginal)
         $0.contentMode = .scaleAspectFill
         
         let tapweatherIcon = UITapGestureRecognizer(target: self, action: #selector(weatherIconTapped))
@@ -102,8 +102,9 @@ final class WetherAndDustStackView: UIStackView {
     }
     
     private lazy var dustIcon = UIImageView().then {
-        $0.image = UIImage(systemName: "aqi.medium")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        $0.image = UIImage(systemName: "aqi.medium")?.withRenderingMode(.alwaysOriginal)
         $0.contentMode = .scaleAspectFill
+        $0.tintColor = .white
         
         let tapdustIcon = UITapGestureRecognizer(target: self, action: #selector(dustIconTapped))
         $0.addGestureRecognizer(tapdustIcon)
@@ -161,10 +162,10 @@ final class WetherAndDustStackView: UIStackView {
     
     //MARK: - Helper
     func setValue() {
-        weatherIcon.image = UIImage(systemName: viewModel?.todayWeatherIconName ?? "")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        weatherIcon.image = UIImage(systemName: viewModel?.todayWeatherIconName ?? "")?.withRenderingMode(.alwaysOriginal)
         todayWeatherLabel.text = viewModel?.todayWeatherLabel
         weatherLabel.text = (viewModel?.todayWeather?.tmp ?? "0") + "º"
-        dustIcon.image = UIImage(systemName: dustViewModel?.todayDustIconName ?? "")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        dustIcon.image = UIImage(systemName: dustViewModel?.todayDustIconName ?? "")?.withRenderingMode(.alwaysOriginal)
         dustDetailLabel.text = "PM10: " + (dustViewModel?.todayDust?.pm10Data ?? "")
         dustStateLabel.text = dustViewModel?.todayDust?.dustState ?? ""
         dustStateLabel.textColor = dustViewModel?.todayDustMentColor
