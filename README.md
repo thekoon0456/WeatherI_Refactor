@@ -4,6 +4,11 @@
 > 기상청 서버와 실시간으로 통신해서 정확한 날씨를 가져옵니다.<br>
 <br>
 
+## 📱 스크린샷
+<div align="center">
+<img src="https://github.com/thekoon0456/thekoon0456/assets/106993057/6d43e086-e0fd-4263-85f2-bca9163d36ec" width="1000">
+</div>
+
 ## 🔗 Links
 ### [📱 AppStore](https://bit.ly/AppStore_WeatherI)
 ### [💻 GitHub](https://github.com/thekoon0456/WeatherI_Refactor)
